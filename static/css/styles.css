@@ -189,6 +189,52 @@ a:hover {
   padding: 5rem 0 4.5rem;
   border-bottom: 1px solid var(--aquavera-border);
 }
+
+.hero-container {
+  width: 100%;
+}
+
+@media (min-width: 1200px) {
+  .hero-container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .hero-container {
+    max-width: 1380px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .hero-container {
+    max-width: 1440px;
+  }
+}
+
+.hero-text-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-video-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 992px) {
+  .hero-text-col {
+    flex: 0 0 auto;
+    width: 41.666667%;
+  }
+  .hero-video-col {
+    flex: 0 0 auto;
+    width: 58.333333%;
+  }
+}
+
 .hero-tagline-badge {
   display: inline-flex;
   align-items: center;
@@ -224,17 +270,18 @@ a:hover {
   margin-bottom: 2rem;
 }
 
-/* Hero Video Showcase */
+/* Hero Video Showcase - Expanded Size */
 .hero-video-wrapper {
   position: relative;
   width: 100%;
-  max-width: 580px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
 }
 
 .hero-video-card {
   position: relative;
   width: 100%;
+  max-width: none;
   aspect-ratio: 16 / 9;
   border-radius: var(--aquavera-radius-lg);
   overflow: hidden;
@@ -252,11 +299,22 @@ a:hover {
 
 .hero-video-element {
   width: 100%;
+  max-width: none;
   height: 100%;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   display: block;
   border-radius: inherit;
   background-color: var(--aquavera-navy);
+}
+
+.hero-video-card iframe {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  display: block;
+  border-radius: inherit;
 }
 
 /* Graceful Fallback Container */
@@ -320,15 +378,22 @@ a:hover {
 }
 
 @media (max-width: 991.98px) {
+  .hero-video-col {
+    margin-top: 2rem;
+    width: 100%;
+  }
   .hero-video-wrapper {
-    max-width: 520px;
-    margin-top: 1rem;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
 @media (max-width: 575.98px) {
-  .hero-video-wrapper {
-    max-width: 100%;
+  .hero-section {
+    padding: 3rem 0 3.5rem;
+  }
+  .hero-video-col {
+    margin-top: 1.5rem;
   }
   .hero-video-card {
     border-radius: var(--aquavera-radius-md);
