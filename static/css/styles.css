@@ -81,15 +81,31 @@ a:hover {
   top: 0;
   z-index: 1030;
   transition: var(--aquavera-transition);
+  padding: 0.65rem 0;
 }
 .aquavera-navbar.scrolled {
   box-shadow: var(--aquavera-shadow-md);
+}
+
+.aquavera-nav-container {
+  width: 100%;
+  max-width: 1720px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 28px;
+  padding-right: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .brand-logo-container {
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 0;
+  margin-right: 0;
+  flex-shrink: 0;
 }
 .brand-icon-box {
   width: 38px;
@@ -100,28 +116,143 @@ a:hover {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(25, 182, 201, 0.3);
+  flex-shrink: 0;
 }
 .brand-name {
   font-size: 1.45rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--aquavera-navy);
+  line-height: 1.15;
 }
 .brand-name span {
   color: var(--aquavera-aqua);
+}
+
+/* Center Navigation Links: Evenly spaced and vertically centered */
+.aquavera-navbar .navbar-nav {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  gap: 4px;
 }
 
 .nav-link {
   color: var(--aquavera-navy) !important;
   font-weight: 500;
   font-size: 0.94rem;
-  padding: 0.6rem 0.9rem !important;
+  padding: 0.5rem 0.85rem !important;
   border-radius: var(--aquavera-radius-sm);
   transition: var(--aquavera-transition);
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
 }
 .nav-link:hover, .nav-link.active {
   color: var(--aquavera-aqua) !important;
   background-color: var(--aquavera-cyan-soft);
+}
+
+/* Right Corner Actions: Horizontally aligned and vertically centered */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.navbar-action-btn-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+}
+
+.navbar-action-btn-account {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px !important;
+  white-space: nowrap;
+}
+
+.navbar-action-btn-cta {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 20px !important;
+  white-space: nowrap;
+}
+
+/* Large screens (>= 1200px): balanced 32px padding and comfortable link spacing */
+@media (min-width: 1200px) {
+  .aquavera-nav-container {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .aquavera-navbar .navbar-nav {
+    gap: 8px;
+  }
+  .nav-link {
+    padding: 0.5rem 0.95rem !important;
+  }
+  .navbar-actions {
+    gap: 12px;
+  }
+}
+
+/* Tablet (992px to 1199.98px): reduce gaps and padding without breaking layout */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .aquavera-nav-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .aquavera-navbar .navbar-nav {
+    gap: 2px;
+  }
+  .nav-link {
+    font-size: 0.88rem;
+    padding: 0.45rem 0.65rem !important;
+  }
+  .navbar-actions {
+    gap: 8px;
+  }
+  .navbar-action-btn-cta {
+    padding: 0 14px !important;
+    font-size: 0.88rem;
+  }
+}
+
+/* Mobile (< 992px): preserve existing mobile collapse menu */
+@media (max-width: 991.98px) {
+  .aquavera-nav-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .aquavera-navbar .navbar-collapse {
+    padding: 1rem 0 0.5rem;
+    border-top: 1px solid var(--aquavera-border);
+    margin-top: 0.5rem;
+  }
+  .aquavera-navbar .navbar-nav {
+    align-items: flex-start;
+    gap: 4px;
+    margin-bottom: 1rem !important;
+  }
+  .nav-link {
+    width: 100%;
+    padding: 0.6rem 0.75rem !important;
+  }
+  .navbar-actions {
+    width: 100%;
+    justify-content: flex-start;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--aquavera-border);
+  }
 }
 
 /* Buttons */
