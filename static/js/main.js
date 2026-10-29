@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
       return new bootstrap.Tooltip(tooltipTriggerEl);
     });
   }
+
+  // 4. Initialize Hero Video with reduced motion & fallback handling
+  initHeroVideo();
 });
 
 /**
@@ -165,5 +168,93 @@ function showToastNotification(message, type = 'info') {
     toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
   } else {
     setTimeout(() => toastEl.remove(), 4000);
+  }
+}
+
+/**
+ * Hero Video Manager
+ * Handles responsive video playback, prefers-reduced-motion compliance,
+ * accessibility controls, and fallback state if loading fails.
+ */
+function initHeroVideo() {
+  const video = document.getElementById('heroVideo');
+  const card = document.getElementById('heroVideoCard');
+  const toggleBtn = document.getElementById('heroVideoToggleBtn');
+  const toggleIcon = document.getElementById('heroVideoToggleIcon');
+  const toggleText = document.getElementById('heroVideoToggleText');
+
+  if (!video) return;
+
+  // Check user prefers-reduced-motion preference
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function applyReducedMotion(isReduced) {
+    if (isReduced) {
+      video.removeAttribute('autoplay');
+      video.pause();
+      if (toggleIcon && toggleText) {
+        toggleIcon.className = 'bi bi-play-fill';
+        toggleText.textContent = 'Play';
+      }
+    } else {
+      // If allowed to play, attempt autoplay
+      video.play().catch(function () {
+        // Autoplay policy fallback (browser requires user interaction)
+        if (toggleIcon && toggleText) {
+          toggleIcon.className = 'bi bi-play-fill';
+          toggleText.textContent = 'Play';
+        }
+      });
+      if (toggleIcon && toggleText) {
+        toggleIcon.className = 'bi bi-pause-fill';
+        toggleText.textContent = 'Pause';
+      }
+    }
+  }
+
+  // Apply on load
+  if (motionQuery.matches) {
+    applyReducedMotion(true);
+  }
+
+  // Listen for preference changes
+  if (motionQuery.addEventListener) {
+    motionQuery.addEventListener('change', function (e) {
+      applyReducedMotion(e.matches);
+    });
+  }
+
+  // Play/Pause button interaction
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function () {
+      if (video.paused) {
+        video.play().then(function () {
+          if (toggleIcon) toggleIcon.className = 'bi bi-pause-fill';
+          if (toggleText) toggleText.textContent = 'Pause';
+        }).catch(function (err) {
+          console.warn('Playback error:', err);
+        });
+      } else {
+        video.pause();
+        if (toggleIcon) toggleIcon.className = 'bi bi-play-fill';
+        if (toggleText) toggleText.textContent = 'Play';
+      }
+    });
+  }
+
+  // Error handling: gracefully reveal fallback if media fails to load
+  video.addEventListener('error', function () {
+    if (card) {
+      card.classList.add('video-failed');
+    }
+  }, true);
+
+  const source = video.querySelector('source');
+  if (source) {
+    source.addEventListener('error', function () {
+      if (card) {
+        card.classList.add('video-failed');
+      }
+    });
   }
 }

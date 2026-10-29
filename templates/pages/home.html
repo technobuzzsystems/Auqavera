@@ -47,46 +47,49 @@
                 </div>
             </div>
 
-            <!-- Right Side: Rich Abstract Water Illustration (Strictly No Purifier Photos) -->
+            <!-- Right Side: Hero Video Showcase -->
             <div class="col-lg-6">
-                <div class="hero-water-art-container">
-                    <div class="water-art-blob-bg"></div>
-                    <div class="water-art-ripple-ring ring-1"></div>
-                    <div class="water-art-ripple-ring ring-2"></div>
-                    <div class="water-art-ripple-ring ring-3"></div>
-
-                    <!-- Center Orb -->
-                    <div class="water-art-center-orb">
-                        <div class="brand-icon-box mb-2" style="width: 54px; height: 54px; border-radius: 16px;">
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 2.5C12 2.5 5.5 10.5 5.5 15.5C5.5 19.0899 8.41015 22 12 22C15.5899 22 18.5 19.0899 18.5 15.5C18.5 10.5 12 2.5 12 2.5Z" fill="#0A2540" />
-                                <path d="M12 7C12 7 8 12.5 8 15.5C8 17.7 9.8 19.5 12 19.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
-                            </svg>
+                <div class="hero-video-wrapper">
+                    <div class="hero-video-card" id="heroVideoCard">
+                        <video 
+                            id="heroVideo"
+                            class="hero-video-element"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="metadata"
+                            aria-label="AQUAVERA Pure Water Technology Demonstration Video"
+                        >
+                            <source src="{{ MEDIA_URL }}video/hero%20video.mp4" type="video/mp4">
+                            <!-- Graceful Fallback for browsers without HTML5 video support -->
+                            <div class="hero-video-fallback">
+                                <div class="brand-icon-box mb-3" style="width: 58px; height: 58px; border-radius: 16px;">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                                        <path d="M12 2.5C12 2.5 5.5 10.5 5.5 15.5C5.5 19.0899 8.41015 22 12 22C15.5899 22 18.5 19.0899 18.5 15.5C18.5 10.5 12 2.5 12 2.5Z" fill="#0A2540" />
+                                        <path d="M12 7C12 7 8 12.5 8 15.5C8 17.7 9.8 19.5 12 19.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <h5 class="fw-bold text-navy mb-1">AQUAVERA</h5>
+                                <p class="small text-muted mb-0">Pure Water. Thoughtfully Designed.</p>
+                            </div>
+                        </video>
+                        <!-- Fallback layer if video stream fails to load -->
+                        <div class="hero-video-fallback" id="heroVideoFallback" aria-hidden="true">
+                            <div class="brand-icon-box mb-3" style="width: 58px; height: 58px; border-radius: 16px;">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2.5C12 2.5 5.5 10.5 5.5 15.5C5.5 19.0899 8.41015 22 12 22C15.5899 22 18.5 19.0899 18.5 15.5C18.5 10.5 12 2.5 12 2.5Z" fill="#0A2540" />
+                                    <path d="M12 7C12 7 8 12.5 8 15.5C8 17.7 9.8 19.5 12 19.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+                                </svg>
+                            </div>
+                            <h5 class="fw-bold text-navy mb-1">AQUAVERA</h5>
+                            <p class="small text-muted mb-0">Pure Water. Thoughtfully Designed.</p>
                         </div>
-                        <span class="fw-bold fs-5 text-dark">AQUAVERA</span>
-                        <span class="small text-muted font-monospace" style="font-size: 0.75rem;">Pure Water Tech</span>
-                    </div>
-
-                    <!-- Floating Card Left -->
-                    <div class="water-art-floating-card card-left">
-                        <div class="rounded-circle bg-info bg-opacity-20 p-2 text-info">
-                            <i class="bi bi-shield-check fs-5"></i>
-                        </div>
-                        <div>
-                            <div class="fw-bold text-dark small">Multi-Stage Barrier</div>
-                            <div class="text-muted" style="font-size: 0.72rem;">Sediment • Carbon • RO • UV</div>
-                        </div>
-                    </div>
-
-                    <!-- Floating Card Right -->
-                    <div class="water-art-floating-card card-right">
-                        <div class="rounded-circle bg-success bg-opacity-20 p-2 text-success">
-                            <i class="bi bi-droplet-half fs-5"></i>
-                        </div>
-                        <div>
-                            <div class="fw-bold text-dark small">Mineral Balancer</div>
-                            <div class="text-muted" style="font-size: 0.72rem;">Restores Ca & Mg Minerals</div>
-                        </div>
+                        <!-- Accessible Play/Pause Toggle -->
+                        <button type="button" class="hero-video-control-btn" id="heroVideoToggleBtn" aria-label="Pause or play video">
+                            <i class="bi bi-pause-fill" id="heroVideoToggleIcon"></i>
+                            <span id="heroVideoToggleText">Pause</span>
+                        </button>
                     </div>
                 </div>
             </div>

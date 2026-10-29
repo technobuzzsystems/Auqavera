@@ -224,86 +224,121 @@ a:hover {
   margin-bottom: 2rem;
 }
 
-/* Abstract Water Art Illustration (No Purifier Photo) */
-.hero-water-art-container {
+/* Hero Video Showcase */
+.hero-video-wrapper {
   position: relative;
   width: 100%;
-  max-width: 520px;
-  height: 440px;
+  max-width: 580px;
   margin: 0 auto;
+}
+
+.hero-video-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--aquavera-radius-lg);
+  overflow: hidden;
+  background-color: var(--aquavera-navy);
+  box-shadow: 0 20px 45px rgba(16, 42, 67, 0.16), 0 0 0 1px rgba(25, 182, 201, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: var(--aquavera-transition);
 }
-.water-art-blob-bg {
-  position: absolute;
-  width: 360px;
-  height: 360px;
-  border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-  background: linear-gradient(135deg, rgba(22, 184, 200, 0.22) 0%, rgba(101, 214, 208, 0.4) 100%);
-  filter: blur(8px);
-  animation: morphBlob 12s ease-in-out infinite alternate;
-}
-.water-art-ripple-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 2px dashed rgba(25, 182, 201, 0.35);
-  animation: rotateRipple 30s linear infinite;
-}
-.water-art-ripple-ring.ring-1 { width: 380px; height: 380px; }
-.water-art-ripple-ring.ring-2 { width: 310px; height: 310px; border-style: solid; border-color: rgba(25, 182, 201, 0.2); }
-.water-art-ripple-ring.ring-3 { width: 240px; height: 240px; }
 
-.water-art-center-orb {
-  position: relative;
-  z-index: 2;
-  width: 210px;
-  height: 210px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #FFFFFF, #E0F7F8);
-  box-shadow: 0 20px 45px rgba(25, 182, 201, 0.25), inset 0 2px 6px rgba(255, 255, 255, 0.9);
-  display: flex;
+.hero-video-card:hover {
+  box-shadow: 0 24px 50px rgba(16, 42, 67, 0.22), 0 0 0 1px rgba(25, 182, 201, 0.35);
+}
+
+.hero-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: inherit;
+  background-color: var(--aquavera-navy);
+}
+
+/* Graceful Fallback Container */
+.hero-video-fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-}
-.water-art-floating-card {
-  position: absolute;
-  z-index: 3;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--aquavera-border);
-  padding: 10px 18px;
-  border-radius: var(--aquavera-radius-md);
-  box-shadow: var(--aquavera-shadow-md);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: floatBadge 4s ease-in-out infinite alternate;
-}
-.water-art-floating-card.card-left {
-  top: 15%;
-  left: -10px;
-}
-.water-art-floating-card.card-right {
-  bottom: 12%;
-  right: -10px;
-  animation-delay: -2s;
+  background: radial-gradient(circle at 50% 40%, #FFFFFF 0%, #DDF7F7 100%);
+  color: var(--aquavera-navy);
+  text-align: center;
+  padding: 2rem;
+  z-index: 2;
+  border-radius: inherit;
 }
 
-@keyframes morphBlob {
-  0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: rotate(0deg); }
-  50% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  100% { border-radius: 35% 65% 50% 50% / 40% 60% 40% 60%; transform: rotate(180deg); }
+.hero-video-card.video-failed .hero-video-fallback {
+  display: flex;
 }
-@keyframes rotateRipple {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+
+.hero-video-card.video-failed .hero-video-element,
+.hero-video-card.video-failed .hero-video-control-btn {
+  display: none !important;
 }
-@keyframes floatBadge {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-8px); }
+
+/* Accessible Play/Pause Toggle */
+.hero-video-control-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 5;
+  background: rgba(16, 42, 67, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--aquavera-radius-pill);
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: var(--aquavera-transition);
+  user-select: none;
+}
+
+.hero-video-control-btn:hover {
+  background: rgba(16, 42, 67, 0.95);
+  color: #65D6D0;
+  border-color: rgba(101, 214, 208, 0.45);
+}
+
+.hero-video-control-btn:focus-visible {
+  outline: 2px solid var(--aquavera-aqua);
+  outline-offset: 2px;
+}
+
+@media (max-width: 991.98px) {
+  .hero-video-wrapper {
+    max-width: 520px;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .hero-video-wrapper {
+    max-width: 100%;
+  }
+  .hero-video-card {
+    border-radius: var(--aquavera-radius-md);
+  }
+  .hero-video-control-btn {
+    bottom: 8px;
+    right: 8px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+  }
 }
 
 /* Trust Stats Strip */
