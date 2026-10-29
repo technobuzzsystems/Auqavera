@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign In — AQUAVERA{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+                    <div class="text-center mb-4">
+                        <div class="brand-icon-box mx-auto mb-2" style="width: 48px; height: 48px;">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2.5C12 2.5 5.5 10.5 5.5 15.5C5.5 19.0899 8.41015 22 12 22C15.5899 22 18.5 19.0899 18.5 15.5C18.5 10.5 12 2.5 12 2.5Z" fill="#0A2540" />
+                                <path d="M12 7C12 7 8 12.5 8 15.5C8 17.7 9.8 19.5 12 19.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <h2 class="fw-bold mb-1">Welcome Back</h2>
+                        <p class="text-secondary small">Sign in to your AQUAVERA customer account or staff dashboard.</p>
+                    </div>
+
+                    <!-- Helpful demo accounts hint box -->
+                    <div class="alert alert-info border-0 rounded-3 p-3 small mb-4">
+                        <div class="fw-bold mb-1"><i class="bi bi-key-fill me-1"></i> Quick Demo Logins:</div>
+                        <div><strong>Staff Admin:</strong> <code>admin</code> / <code>Admin@12345</code></div>
+                        <div><strong>Customer:</strong> <code>customer</code> / <code>Customer@12345</code></div>
+                    </div>
+
+                    <form action="{% url 'accounts:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="POST" novalidate>
+                        {% csrf_token %}
+                        {% if form.errors %}
+                            <div class="alert alert-danger border-0 rounded-3 small mb-3">
+                                <i class="bi bi-exclamation-triangle-fill me-1"></i> Invalid username or password.
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Username</label>
+                            {{ form.username }}
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label class="form-label small fw-bold">Password</label>
+                                <a href="{% url 'accounts:password_reset' %}" class="small text-muted text-decoration-none">Forgot?</a>
+                            </div>
+                            {{ form.password }}
+                        </div>
+
+                        <button type="submit" class="btn btn-aquavera w-100 py-2 justify-content-center">
+                            Sign In
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4 pt-3 border-top small text-muted">
+                        Don't have an account yet? <a href="{% url 'accounts:register' %}" class="fw-semibold text-info">Register Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

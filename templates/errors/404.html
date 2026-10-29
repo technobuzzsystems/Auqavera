@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Page Not Found (404) — AQUAVERA{% endblock %}
+
+{% block content %}
+<section class="py-5 text-center" style="background-color: var(--aquavera-white-soft);">
+    <div class="container py-5">
+        <div class="max-w-500 mx-auto bg-white p-5 rounded-4 border shadow-sm">
+            <div class="text-info fs-1 mb-3"><i class="bi bi-droplet-slash"></i></div>
+            <h1 class="display-4 fw-bold text-navy mb-2">404</h1>
+            <h4 class="fw-bold mb-3">Page Not Found</h4>
+            <p class="text-secondary small mb-4">
+                The water purifier page or resource you are looking for may have been moved or is unavailable.
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+                <a href="{% url 'pages:home' %}" class="btn btn-aquavera">
+                    Return to Home
+                </a>
+                <a href="{% url 'catalog:product_list' %}" class="btn btn-aquavera-outline">
+                    Browse Purifiers
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

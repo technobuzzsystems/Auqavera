@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Product Consultation & Enquiry — AQUAVERA{% endblock %}
+{% block meta_description %}Submit an enquiry for AQUAVERA water purifiers. Request a free demo, water test assessment, or price quote.{% endblock %}
+
+{% block content %}
+<section class="bg-white border-bottom py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2 small">
+                <li class="breadcrumb-item"><a href="{% url 'pages:home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Request Enquiry</li>
+            </ol>
+        </nav>
+        <h1 class="h2 fw-bold mb-1">Product Consultation & Demo Enquiry</h1>
+        <p class="text-secondary small mb-0">Speak with our water quality consultants to choose the right purifier architecture.</p>
+    </div>
+</section>
+
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-7">
+                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+                    <form action="{% url 'enquiries:submit_enquiry' %}" method="POST" novalidate>
+                        {% csrf_token %}
+                        <input type="text" name="honeypot" style="display:none;" tabindex="-1" autocomplete="off">
+
+                        {% if form.errors %}
+                            <div class="alert alert-danger border-0 rounded-3 small mb-4">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i> Please correct the highlighted errors below.
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Full Name *</label>
+                            {{ form.customer_name }}
+                            {% if form.customer_name.errors %}<div class="text-danger small mt-1">{{ form.customer_name.errors }}</div>{% endif %}
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Email Address *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Mobile Number (10 digits) *</label>
+                                {{ form.mobile }}
+                                {% if form.mobile.errors %}<div class="text-danger small mt-1">{{ form.mobile.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">City / Location *</label>
+                                {{ form.city }}
+                                {% if form.city.errors %}<div class="text-danger small mt-1">{{ form.city.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Interested Purifier (Optional)</label>
+                                {{ form.product }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Enquiry Type *</label>
+                            {{ form.enquiry_type }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Message / Water Quality Notes *</label>
+                            {{ form.message }}
+                            {% if form.message.errors %}<div class="text-danger small mt-1">{{ form.message.errors }}</div>{% endif %}
+                        </div>
+
+                        <div class="form-check mb-4">
+                            {{ form.consent }}
+                            <label class="form-check-label small text-muted" for="{{ form.consent.id_for_label }}">
+                                I consent to receive demo product information and follow-up communication from AQUAVERA.
+                            </label>
+                            {% if form.consent.errors %}<div class="text-danger small mt-1">{{ form.consent.errors }}</div>{% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-aquavera w-100 py-2 justify-content-center">
+                            <i class="bi bi-send-fill me-1"></i> Submit Enquiry
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

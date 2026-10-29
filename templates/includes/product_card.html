@@ -1,0 +1,85 @@
+{% load static %}
+<div class="product-card">
+    <!-- Image Area: Strictly No Real Water Purifier Photos -->
+    <div class="product-image-container">
+        <!-- Floating Badges -->
+        <div class="product-badge-overlay">
+            {% if product.is_featured %}
+                <span class="badge-featured"><i class="bi bi-star-fill text-warning me-1"></i> Featured</span>
+            {% endif %}
+            {% if product.discount_percentage > 0 %}
+                <span class="badge-discount">{{ product.discount_percentage }}% OFF (Demo)</span>
+            {% endif %}
+        </div>
+
+        {% if product.image %}
+            <!-- Real uploaded product image (if uploaded via admin in future) -->
+            <img src="{{ product.image.url }}" alt="{{ product.image_alt_text|default:product.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
+        {% else %}
+            <!-- Stylized CSS Abstract Water Gradient Placeholder -->
+            <div class="product-css-placeholder">
+                <div class="placeholder-water-rings"></div>
+                <div class="placeholder-core-badge">
+                    <i class="bi bi-water"></i>
+                </div>
+                <!-- Abstract Wave Vector -->
+                <svg class="placeholder-water-waves" viewBox="0 0 500 150" preserveAspectRatio="none">
+                    <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" fill="rgba(25, 182, 201, 0.15)"></path>
+                    <path d="M0.00,80.00 C180.00,140.00 310.00,20.00 500.00,80.00 L500.00,150.00 L0.00,150.00 Z" fill="rgba(101, 214, 208, 0.25)"></path>
+                </svg>
+                <div class="placeholder-label-pill">
+                    <i class="bi bi-camera me-1"></i> Preview Concept
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Card Content -->
+    <div class="product-card-body">
+        <div class="product-card-cat">{{ product.category.name }}</div>
+        <h3 class="product-card-title">
+            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+        </h3>
+
+        <!-- Specification Summary Pills -->
+        <div class="product-spec-pills">
+            <span class="spec-pill" title="Technology">
+                <i class="bi bi-cpu text-info"></i> {{ product.technology }}
+            </span>
+            <span class="spec-pill" title="Capacity">
+                <i class="bi bi-droplet-half text-primary"></i> {{ product.storage_capacity_liters }} Liters
+            </span>
+            <span class="spec-pill text-truncate" style="max-width: 100%;" title="Intended Use">
+                <i class="bi bi-house-door text-muted"></i> {{ product.intended_use }}
+            </span>
+        </div>
+
+        <!-- Pricing Block -->
+        <div class="product-pricing-box">
+            <span class="price-current">{{ product.formatted_price }}</span>
+            {% if product.original_price %}
+                <span class="price-original">{{ product.formatted_original_price }}</span>
+            {% endif %}
+            <span class="price-demo-tag ms-auto">Demo Price</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex flex-column gap-2 mt-2">
+            <div class="d-flex gap-2">
+                <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-aquavera-navy flex-grow-1 justify-content-center">
+                    View Details
+                </a>
+                <button type="button" 
+                        class="btn btn-sm btn-aquavera-outline btn-add-compare" 
+                        data-product-id="{{ product.id }}" 
+                        data-product-name="{{ product.name }}"
+                        title="Add to comparison tray">
+                    <i class="bi bi-arrow-left-right"></i>
+                </button>
+            </div>
+            <a href="{% url 'enquiries:enquiry_form' %}?product={{ product.id }}" class="btn btn-sm btn-outline-info text-dark justify-content-center border-opacity-50" style="border-radius: var(--aquavera-radius-pill);">
+                <i class="bi bi-chat-dots me-1 text-info"></i> Request Enquiry
+            </a>
+        </div>
+    </div>
+</div>

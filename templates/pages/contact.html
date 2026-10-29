@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us & Regional Support — AQUAVERA{% endblock %}
+{% block meta_description %}Contact AQUAVERA Customer Care for product queries, water TDS audits, filter replacements, and corporate installations.{% endblock %}
+
+{% block content %}
+<section class="bg-white border-bottom py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2 small">
+                <li class="breadcrumb-item"><a href="{% url 'pages:home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+            </ol>
+        </nav>
+        <h1 class="h2 fw-bold mb-1">Contact AQUAVERA Care</h1>
+        <p class="text-secondary small mb-0">Have a question regarding product specifications or technician service? Reach out to us.</p>
+    </div>
+</section>
+
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Contact Form -->
+            <div class="col-lg-7">
+                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+                    <h3 class="fw-bold mb-4">Send Us a Message</h3>
+
+                    <form action="{% url 'pages:contact' %}" method="POST" novalidate>
+                        {% csrf_token %}
+                        <input type="text" name="honeypot" style="display:none;" tabindex="-1" autocomplete="off">
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Full Name *</label>
+                                {{ form.full_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Email Address *</label>
+                                {{ form.email }}
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Phone Number *</label>
+                                {{ form.phone }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Subject *</label>
+                                {{ form.subject }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Message / Query Details *</label>
+                            {{ form.message }}
+                        </div>
+
+                        <button type="submit" class="btn btn-aquavera px-4 py-2">
+                            <i class="bi bi-send-fill me-1"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Demo Business Details & Fast Actions -->
+            <div class="col-lg-5">
+                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm mb-4">
+                    <h5 class="fw-bold text-navy mb-3">Customer Support Desk</h5>
+
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <i class="bi bi-telephone-fill text-info fs-5 mt-1"></i>
+                        <div>
+                            <strong class="d-block text-dark">Toll-Free Helpline (Demo)</strong>
+                            <div class="small text-secondary">{{ site_settings.support_phone|default:"+91 1800 200 4567" }}</div>
+                            <small class="text-muted">Mon - Sat: 9:00 AM to 7:00 PM IST</small>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <i class="bi bi-envelope-fill text-info fs-5 mt-1"></i>
+                        <div>
+                            <strong class="d-block text-dark">Email Support</strong>
+                            <div class="small text-secondary">{{ site_settings.support_email|default:"care@aquavera.demo" }}</div>
+                            <small class="text-muted">Expected response within 24 business hours</small>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3 mb-4">
+                        <i class="bi bi-geo-alt-fill text-info fs-5 mt-1"></i>
+                        <div>
+                            <strong class="d-block text-dark">Headquarters & Innovation Hub</strong>
+                            <div class="small text-secondary">{{ site_settings.address|default:"AQUAVERA Water Innovation Center, Sector 62, Noida, NCR 201309" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 border-top pt-3">
+                        <a href="{% url 'services:service_request_form' %}" class="btn btn-sm btn-aquavera-navy text-center">
+                            <i class="bi bi-wrench-adjustable me-1"></i> Book Doorstep Service
+                        </a>
+                        <a href="{% url 'catalog:product_finder' %}" class="btn btn-sm btn-aquavera-outline text-center">
+                            <i class="bi bi-funnel me-1"></i> Try Product Finder
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Demo FAQ Quick links -->
+                <div class="bg-white p-4 rounded-4 border shadow-sm">
+                    <h6 class="fw-bold text-navy mb-3">Common Inquiries</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small mb-0">
+                        {% for f in faqs %}
+                        <li>
+                            <i class="bi bi-question-circle text-info me-1"></i>
+                            <strong>{{ f.question }}</strong>
+                            <p class="text-muted mb-1">{{ f.answer|truncatewords:15 }}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

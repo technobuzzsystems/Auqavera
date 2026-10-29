@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Staff Operations Dashboard — AQUAVERA{% endblock %}
+
+{% block content %}
+<!-- Top Bar -->
+<section class="bg-white border-bottom py-4">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <div>
+                <span class="badge bg-primary px-3 py-1 rounded-pill small mb-2">Staff Administration Portal</span>
+                <h1 class="h2 fw-bold mb-1">AQUAVERA Command Center</h1>
+                <p class="text-secondary small mb-0">Overview of active catalogue products, customer inquiries, and technician service tickets.</p>
+            </div>
+            <div class="d-flex gap-2 mt-3 mt-md-0">
+                <a href="{% url 'dashboard:product_create' %}" class="btn btn-sm btn-aquavera">
+                    <i class="bi bi-plus-circle me-1"></i> Add Product
+                </a>
+                <a href="/admin/" target="_blank" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-gear-fill me-1"></i> Django Admin
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Dashboard Metrics Cards -->
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container">
+        <div class="row g-4 mb-5">
+            <!-- Total Products -->
+            <div class="col-md-4 col-sm-6">
+                <div class="dashboard-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted small fw-bold text-uppercase">Total Products</span>
+                        <div class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary"><i class="bi bi-grid-fill"></i></div>
+                    </div>
+                    <div class="dashboard-stat-val">{{ total_products }}</div>
+                    <small class="text-success"><i class="bi bi-check-circle"></i> {{ active_products }} active in catalogue</small>
+                </div>
+            </div>
+
+            <!-- Customer Enquiries -->
+            <div class="col-md-4 col-sm-6">
+                <div class="dashboard-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted small fw-bold text-uppercase">Customer Enquiries</span>
+                        <div class="p-2 rounded-circle bg-info bg-opacity-10 text-info"><i class="bi bi-chat-dots-fill"></i></div>
+                    </div>
+                    <div class="dashboard-stat-val">{{ total_enquiries }}</div>
+                    <small class="text-primary fw-bold"><i class="bi bi-bell-fill"></i> {{ new_enquiries }} new unreviewed</small>
+                </div>
+            </div>
+
+            <!-- Service Tickets -->
+            <div class="col-md-4 col-sm-6">
+                <div class="dashboard-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted small fw-bold text-uppercase">Service Tickets</span>
+                        <div class="p-2 rounded-circle bg-warning bg-opacity-10 text-warning"><i class="bi bi-wrench-adjustable"></i></div>
+                    </div>
+                    <div class="dashboard-stat-val">{{ pending_services }}</div>
+                    <small class="text-muted">{{ completed_services }} completed tickets</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Navigation Tabs for Dashboard -->
+        <div class="d-flex gap-2 mb-4 border-bottom pb-2">
+            <a href="{% url 'dashboard:home' %}" class="btn btn-sm btn-aquavera-navy">Overview</a>
+            <a href="{% url 'dashboard:products' %}" class="btn btn-sm btn-outline-secondary">Products ({{ total_products }})</a>
+            <a href="{% url 'dashboard:enquiries' %}" class="btn btn-sm btn-outline-secondary">Enquiries ({{ total_enquiries }})</a>
+            <a href="{% url 'dashboard:service_requests' %}" class="btn btn-sm btn-outline-secondary">Service Requests</a>
+        </div>
+
+        <!-- Recent Activity Rows -->
+        <div class="row g-4">
+            <!-- Recent Enquiries -->
+            <div class="col-lg-6">
+                <div class="bg-white p-4 rounded-4 border shadow-sm h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-navy mb-0">Recent Customer Enquiries</h5>
+                        <a href="{% url 'dashboard:enquiries' %}" class="small text-info text-decoration-none">View All &raquo;</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 small">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Product</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for enq in recent_enquiries %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ enq.customer_name }}</strong>
+                                        <div class="text-muted" style="font-size: 0.72rem;">{{ enq.city }} • {{ enq.mobile }}</div>
+                                    </td>
+                                    <td>{{ enq.product.name|default:"General Consultation"|truncatechars:24 }}</td>
+                                    <td>
+                                        <span class="badge {% if enq.status == 'new' %}bg-primary{% elif enq.status == 'converted' %}bg-success{% else %}bg-secondary{% endif %} rounded-pill">
+                                            {{ enq.get_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="3" class="text-center text-muted py-3">No enquiries yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Service Requests -->
+            <div class="col-lg-6">
+                <div class="bg-white p-4 rounded-4 border shadow-sm h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-navy mb-0">Recent Service Requests</h5>
+                        <a href="{% url 'dashboard:service_requests' %}" class="small text-info text-decoration-none">View All &raquo;</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 small">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Service Type</th>
+                                    <th>Preferred Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for srv in recent_services %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ srv.customer_name }}</strong>
+                                        <div class="text-muted" style="font-size: 0.72rem;">{{ srv.city }} • {{ srv.mobile }}</div>
+                                    </td>
+                                    <td>{{ srv.get_service_type_display }}</td>
+                                    <td class="text-muted">{{ srv.preferred_date|date:"M d" }}</td>
+                                    <td>
+                                        <span class="badge {% if srv.status == 'pending' %}bg-warning text-dark{% elif srv.status == 'completed' %}bg-success{% else %}bg-info text-dark{% endif %} rounded-pill">
+                                            {{ srv.get_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="4" class="text-center text-muted py-3">No service requests yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

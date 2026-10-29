@@ -1,0 +1,87 @@
+{% load static %}
+<footer class="aquavera-footer">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <!-- Brand Column -->
+            <div class="col-lg-4 col-md-6">
+                <div class="brand-logo-container mb-3">
+                    <div class="brand-icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2.5C12 2.5 5.5 10.5 5.5 15.5C5.5 19.0899 8.41015 22 12 22C15.5899 22 18.5 19.0899 18.5 15.5C18.5 10.5 12 2.5 12 2.5Z" fill="#0A2540" />
+                            <path d="M12 7C12 7 8 12.5 8 15.5C8 17.7 9.8 19.5 12 19.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <span class="brand-name text-white">{{ site_settings.website_name|default:"AQUAVERA" }}</span>
+                </div>
+                <p class="text-secondary small pe-lg-4">
+                    {{ site_settings.tagline|default:"Pure Water. Thoughtfully Designed." }}
+                </p>
+                <p class="text-secondary small">
+                    A demonstration water purification platform combining advanced filtration concepts, digital TDS balancing, and responsive customer care.
+                </p>
+                <!-- Demo Badge -->
+                <div class="p-2 px-3 rounded-3 bg-dark border border-secondary border-opacity-25 d-inline-block small text-light">
+                    <i class="bi bi-shield-lock-fill text-info me-1"></i> Demo Portfolio Website — No Real Transactions
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6 col-6">
+                <h5>Categories</h5>
+                <ul class="list-unstyled d-flex flex-column gap-2 small">
+                    <li><a href="{% url 'catalog:product_list' %}?category=ro-water-purifiers">RO Purifiers</a></li>
+                    <li><a href="{% url 'catalog:product_list' %}?category=uv-water-purifiers">UV Purifiers</a></li>
+                    <li><a href="{% url 'catalog:product_list' %}?category=uf-water-purifiers">UF Purifiers</a></li>
+                    <li><a href="{% url 'catalog:product_list' %}?category=gravity-water-purifiers">Gravity Purifiers</a></li>
+                    <li><a href="{% url 'catalog:product_list' %}?category=commercial-water-purifiers">Commercial RO</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Care -->
+            <div class="col-lg-2 col-md-6 col-6">
+                <h5>Support</h5>
+                <ul class="list-unstyled d-flex flex-column gap-2 small">
+                    <li><a href="{% url 'services:service_request_form' %}">Book Service</a></li>
+                    <li><a href="{% url 'catalog:product_finder' %}">Product Finder</a></li>
+                    <li><a href="{% url 'catalog:product_compare' %}">Compare Models</a></li>
+                    <li><a href="{% url 'pages:about' %}">About AQUAVERA</a></li>
+                    <li><a href="{% url 'pages:contact' %}">Contact Care</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter & Demo Contact -->
+            <div class="col-lg-4 col-md-6">
+                <h5>Stay Hydrated with Knowledge</h5>
+                <p class="small text-secondary">Subscribe for seasonal water testing advice and purifier maintenance tips.</p>
+                
+                <form action="{% url 'pages:newsletter_subscribe' %}" method="POST" class="mb-3">
+                    {% csrf_token %}
+                    <input type="text" name="honeypot" style="display:none;" tabindex="-1" autocomplete="off">
+                    <div class="input-group">
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email" required aria-label="Newsletter email">
+                        <button class="btn btn-aquavera" type="submit">Subscribe</button>
+                    </div>
+                </form>
+
+                <div class="mt-3 small text-secondary">
+                    <div><i class="bi bi-telephone-fill text-info me-2"></i> {{ site_settings.support_phone|default:"+91 1800 200 4567" }} (Demo Toll-Free)</div>
+                    <div><i class="bi bi-envelope-fill text-info me-2"></i> {{ site_settings.support_email|default:"care@aquavera.demo" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center text-secondary">
+            <div>
+                &copy; 2026 {{ site_settings.website_name|default:"AQUAVERA" }}. Pure Water. Thoughtfully Designed.
+            </div>
+            <div class="d-flex gap-3 mt-2 mt-md-0">
+                <span class="text-muted-50">Demo Version 1.0</span>
+                <span>•</span>
+                <a href="{% url 'pages:about' %}">Privacy & Demo Disclaimers</a>
+                <span>•</span>
+                <a href="{% url 'pages:contact' %}">Terms</a>
+            </div>
+        </div>
+    </div>
+</footer>

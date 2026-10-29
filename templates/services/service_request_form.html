@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book a Service Request — AQUAVERA Care{% endblock %}
+{% block meta_description %}Book professional doorstep installation, routine maintenance, filter exchange, or repair for your AQUAVERA water purifier.{% endblock %}
+
+{% block content %}
+<section class="bg-white border-bottom py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2 small">
+                <li class="breadcrumb-item"><a href="{% url 'pages:home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Service Request</li>
+            </ol>
+        </nav>
+        <h1 class="h2 fw-bold mb-1">Book a Technician Service Visit</h1>
+        <p class="text-secondary small mb-0">Schedule doorstep purifier installation, filter exchange, or diagnostic maintenance.</p>
+    </div>
+</section>
+
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-7">
+                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+                    <form action="{% url 'services:service_request_form' %}" method="POST" novalidate>
+                        {% csrf_token %}
+                        <input type="text" name="honeypot" style="display:none;" tabindex="-1" autocomplete="off">
+
+                        {% if form.errors %}
+                            <div class="alert alert-danger border-0 rounded-3 small mb-4">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i> Please correct the highlighted errors below.
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Customer Name *</label>
+                            {{ form.customer_name }}
+                            {% if form.customer_name.errors %}<div class="text-danger small mt-1">{{ form.customer_name.errors }}</div>{% endif %}
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Mobile Number (10 digits) *</label>
+                                {{ form.mobile }}
+                                {% if form.mobile.errors %}<div class="text-danger small mt-1">{{ form.mobile.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Email Address (Optional)</label>
+                                {{ form.email }}
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Installation City / Location *</label>
+                                {{ form.city }}
+                                {% if form.city.errors %}<div class="text-danger small mt-1">{{ form.city.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Product Model / Serial *</label>
+                                {{ form.product_model }}
+                                {% if form.product_model.errors %}<div class="text-danger small mt-1">{{ form.product_model.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Service Type *</label>
+                                {{ form.service_type }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Preferred Visit Date *</label>
+                                {{ form.preferred_date }}
+                                {% if form.preferred_date.errors %}<div class="text-danger small mt-1">{{ form.preferred_date.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Describe Issue / Service Requirements *</label>
+                            {{ form.issue_description }}
+                            {% if form.issue_description.errors %}<div class="text-danger small mt-1">{{ form.issue_description.errors }}</div>{% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-aquavera w-100 py-2 justify-content-center">
+                            <i class="bi bi-calendar2-check-fill me-1"></i> Book Service Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us — AQUAVERA{% endblock %}
+{% block meta_description %}Learn about AQUAVERA's original engineering philosophy, commitment to mineral-balanced water, and modern multi-barrier purification.{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="py-5" style="background: var(--aquavera-hero-gradient); border-bottom: 1px solid var(--aquavera-border);">
+    <div class="container py-4">
+        <div class="max-w-700 mx-auto text-center">
+            <div class="hero-tagline-badge mb-3">Our Mission & Engineering Story</div>
+            <h1 class="display-5 fw-bold text-navy mb-3">Pure Water. Thoughtfully Designed.</h1>
+            <p class="text-secondary lead mb-0">
+                AQUAVERA was conceived to rethink everyday water purification — balancing robust contaminant removal with essential mineral retention, modern home ergonomics, and dependable service.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Story & Core Philosophy -->
+<section class="py-5 bg-white border-bottom">
+    <div class="container py-3">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="text-uppercase text-info fw-bold small">The AQUAVERA Story</span>
+                <h2 class="fw-bold mt-1 mb-3">Designed for Real Water Realities</h2>
+                <p class="text-secondary leading-relaxed">
+                    Across Indian urban and semi-urban communities, drinking water fluctuates between high-hardness borewells, aging municipal pipelines, and seasonal tanker deliveries. A single, one-size-fits-all purifier cannot address all water conditions effectively.
+                </p>
+                <p class="text-secondary leading-relaxed">
+                    At AQUAVERA, our technical architecture is built around source-specific multi-barrier filtration. Whether your home needs high-rejection Reverse Osmosis with intelligent mineral restoration or zero-wastage Ultraviolet disinfection, our systems are calibrated to purify effectively without stripping water of its vital minerals.
+                </p>
+                <div class="p-3 rounded-3 bg-light border border-info border-opacity-25 small text-secondary">
+                    <i class="bi bi-shield-check text-info me-1"></i>
+                    <strong>Original Demonstration Brand:</strong> AQUAVERA is an original, independent portfolio concept created to demonstrate high-standard full-stack web engineering and water purifier category design.
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="p-4 rounded-4 bg-light border">
+                    <h5 class="fw-bold text-navy mb-3">Our Core Principles</h5>
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <div class="rounded-circle bg-info bg-opacity-20 text-info p-2 fs-5"><i class="bi bi-droplet-half"></i></div>
+                        <div>
+                            <strong class="d-block text-dark">Mineral Harmony</strong>
+                            <small class="text-secondary">We believe clean water should be healthy water. Our controllers preserve calcium and magnesium for natural taste and vitality.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <div class="rounded-circle bg-info bg-opacity-20 text-info p-2 fs-5"><i class="bi bi-layers-half"></i></div>
+                        <div>
+                            <strong class="d-block text-dark">Multi-Barrier Defense</strong>
+                            <small class="text-secondary">Micro-spun sediment filters, high-surface carbon blocks, thin-film membranes, and germicidal UV work synergistically.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-circle bg-info bg-opacity-20 text-info p-2 fs-5"><i class="bi bi-headset"></i></div>
+                        <div>
+                            <strong class="d-block text-dark">Responsive Service Architecture</strong>
+                            <small class="text-secondary">A purifier is only as dependable as its maintenance. We streamline booking, filter dispatch, and technician visits.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Strip -->
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container py-3">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-uppercase text-info fw-bold small">Our Commitment</span>
+            <h2 class="fw-bold mt-1">Responsible Water Stewardship</h2>
+            <p class="text-secondary">Prioritizing efficient membrane recovery, antibacterial food-grade storage, and transparent filter lifecycles.</p>
+        </div>
+
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 bg-white border h-100 shadow-sm">
+                    <i class="bi bi-recycle text-info fs-1 mb-3 d-block"></i>
+                    <h5 class="fw-bold">Reduced Water Discharge</h5>
+                    <p class="text-secondary small mb-0">High-recovery RO engineering and zero-wastage UV modes to minimize household water waste.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 bg-white border h-100 shadow-sm">
+                    <i class="bi bi-shield-lock text-info fs-1 mb-3 d-block"></i>
+                    <h5 class="fw-bold">Certified Food-Grade Materials</h5>
+                    <p class="text-secondary small mb-0">Virgin ABS storage tanks shielded from sunlight and secondary airborne bacterial regrowth.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 rounded-4 bg-white border h-100 shadow-sm">
+                    <i class="bi bi-speedometer2 text-info fs-1 mb-3 d-block"></i>
+                    <h5 class="fw-bold">Digital Diagnostics</h5>
+                    <p class="text-secondary small mb-0">Real-time alerts for filter exhaustion and UV bulb failure so you are never left unprotected.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

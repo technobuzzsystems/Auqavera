@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Compare Water Purifiers — AQUAVERA{% endblock %}
+{% block meta_description %}Compare up to 3 AQUAVERA water purifiers side-by-side on filtration technology, storage capacity, price, and maintenance intervals.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Header -->
+<section class="bg-white border-bottom py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2 small">
+                <li class="breadcrumb-item"><a href="{% url 'pages:home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'catalog:product_list' %}">Water Purifiers</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Compare</li>
+            </ol>
+        </nav>
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <div>
+                <h1 class="h2 fw-bold mb-1">Product Comparison</h1>
+                <p class="text-secondary small mb-0">Evaluate up to 3 models side-by-side across key parameters.</p>
+            </div>
+            <div class="d-flex gap-2 mt-2 mt-sm-0">
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearCompareList(); location.href='{% url 'catalog:product_compare' %}';">
+                    <i class="bi bi-trash"></i> Clear All
+                </button>
+                <a href="{% url 'catalog:product_list' %}" class="btn btn-sm btn-aquavera">
+                    <i class="bi bi-plus-circle"></i> Add More Purifiers
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Comparison Table Section -->
+<section class="py-5">
+    <div class="container">
+        {% if products %}
+            <div class="bg-white rounded-4 border shadow-sm p-4 overflow-x-auto">
+                <table class="table table-bordered align-middle text-center mb-0" style="min-width: 700px;">
+                    <thead>
+                        <tr class="bg-light">
+                            <th class="text-start" style="width: 25%;">Feature / Spec</th>
+                            {% for p in products %}
+                            <th style="width: 25%;">
+                                <div class="position-relative p-2">
+                                    <button type="button" class="btn-close position-absolute top-0 end-0" aria-label="Remove" onclick="removeFromCompare({{ p.id }}); location.href='?ids=' + getCompareList().map(i => i.id).join(',');"></button>
+                                    
+                                    <!-- CSS Placeholder for comparison header -->
+                                    <div class="product-image-container mx-auto mb-2" style="height: 140px; max-width: 180px; border-radius: 12px;">
+                                        {% if p.image %}
+                                            <img src="{{ p.image.url }}" alt="{{ p.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
+                                        {% else %}
+                                            <div class="product-css-placeholder">
+                                                <div class="placeholder-core-badge" style="width: 50px; height: 50px; border-radius: 14px;">
+                                                    <i class="bi bi-water fs-4"></i>
+                                                </div>
+                                                <div class="placeholder-label-pill" style="font-size: 0.65rem;">Demo Placeholder</div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <h5 class="fw-bold fs-6 mb-1">{{ p.name }}</h5>
+                                    <div class="text-info fw-bold">{{ p.formatted_price }}</div>
+                                    <small class="text-muted text-decoration-line-through">{{ p.formatted_original_price }}</small>
+                                </div>
+                            </th>
+                            {% endfor %}
+                            
+                            <!-- If less than 3 products, show slot to add -->
+                            {% if products|length < 3 %}
+                                <th style="width: 25%;" class="bg-light text-muted">
+                                    <div class="p-4 d-flex flex-column align-items-center justify-content-center">
+                                        <i class="bi bi-plus-circle-dotted fs-1 mb-2 text-secondary"></i>
+                                        <div class="small fw-semibold mb-2">Slot Available</div>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Select Purifier
+                                            </button>
+                                            <ul class="dropdown-menu shadow border-0" style="max-height: 250px; overflow-y: auto;">
+                                                {% for item in all_active_products %}
+                                                    {% if item.id not in selected_ids %}
+                                                        <li>
+                                                            <a class="dropdown-item small" href="#" onclick="addToCompare({{ item.id }}, '{{ item.name|escapejs }}'); location.href='?ids=' + getCompareList().map(i => i.id).join(',');">
+                                                                {{ item.name }} ({{ item.formatted_price }})
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-start bg-light">Category</th>
+                            {% for p in products %}
+                                <td><span class="badge bg-light text-dark border">{{ p.category.name }}</span></td>
+                            {% endfor %}
+                            {% if products|length < 3 %}<td>-</td>{% endif %}
+                        </tr>
+                        <tr>
+                            <th class="text-start bg-light">Technology</th>
+                            {% for p in products %}
+                                <td class="fw-semibold text-navy">{{ p.technology }}</td>
+                            {% endfor %}
+                            {% if products|length < 3 %}<td>-</td>{% endif %}
+                        </tr>
+                        <tr>
+                            <th class="text-start bg-light">Storage Tank Capacity</th>
+                            {% for p in products %}
+                                <td><strong>{{ p.storage_capacity_liters }} Liters</strong></td>
+                            {% endfor %}
+                            {% if products|length < 3 %}<td>-</td>{% endif %}
+                        </tr>
+                        <tr>
+                            <th class="text-start bg-light">Intended Water Source</th>
+                            {% for p in products %}
+                                <td class="small">{{ p.intended_use }}</td>
+                            {% endfor %}
+                            {% if products|length < 3 %}<td>-</td>{% endif %}
+                        </tr>
+                        <tr>
+                            <th class="text-start bg-light">Purification Stages</th>
+                            {% for p in products %}
+                                <td class="small">{{ p.purification_stages }}</td>
+                            {% endfor %}
+                            {% if products|length < 3 %}<td>-</td>{% endif %}
+                        </tr>
+                        <tr>
+                            <th class="text-start bg-light">Maintenance Guide</th>
+                            {% for p in products %}
+                                <td class="small text-secondary">{{ p.maintenance_information }}</td>
+                            {% endfor %}
+                            {% if products|length < 3 %}<td>-</td>{% endif %}
+                        </tr>
+                        <tr>
+                            <th class="text-start bg-light">Action</th>
+                            {% for p in products %}
+                                <td>
+                                    <div class="d-flex flex-column gap-2 p-2">
+                                        <a href="{{ p.get_absolute_url }}" class="btn btn-sm btn-aquavera-navy">View Full Specs</a>
+                                        <a href="{% url 'enquiries:enquiry_form' %}?product={{ p.id }}" class="btn btn-sm btn-outline-info text-dark">Enquire</a>
+                                    </div>
+                                </td>
+                            {% endfor %}
+                            {% if products|length < 3 %}<td>-</td>{% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <!-- Empty state when no products selected for compare -->
+            <div class="text-center py-5 bg-white rounded-4 border shadow-sm p-4">
+                <div class="text-info fs-1 mb-3"><i class="bi bi-arrow-left-right"></i></div>
+                <h3 class="fw-bold">No Purifiers in Comparison Tray</h3>
+                <p class="text-secondary small max-w-500 mx-auto mb-4">
+                    Select up to 3 water purifiers from the catalogue to compare specifications, pricing, and filtration technology side-by-side.
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'catalog:product_list' %}" class="btn btn-aquavera">
+                        <i class="bi bi-grid-fill me-1"></i> Browse Purifier Catalogue
+                    </a>
+                    <a href="{% url 'catalog:product_finder' %}" class="btn btn-aquavera-outline">
+                        <i class="bi bi-funnel me-1"></i> Try Product Finder
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

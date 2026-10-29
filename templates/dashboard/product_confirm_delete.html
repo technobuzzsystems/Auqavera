@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Product — AQUAVERA Staff{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container py-4 text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="bg-white p-5 rounded-4 border shadow-sm">
+                    <div class="rounded-circle bg-danger bg-opacity-10 text-danger p-3 d-inline-flex align-items-center justify-content-center mb-3">
+                        <i class="bi bi-trash fs-2"></i>
+                    </div>
+                    <h3 class="fw-bold text-navy mb-2">Delete Product?</h3>
+                    <p class="text-secondary small mb-4">
+                        Are you sure you want to permanently delete <strong>"{{ product.name }}"</strong>? This action cannot be reversed.
+                    </p>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{% url 'dashboard:products' %}" class="btn btn-outline-secondary px-4">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger px-4">
+                                Yes, Delete Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

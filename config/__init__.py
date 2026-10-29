@@ -1,0 +1,1 @@
+"""AQUAVERA Django Configuration Package."""

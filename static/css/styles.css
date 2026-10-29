@@ -1,0 +1,675 @@
+/* ==========================================================================
+   AQUAVERA — Premium Water Purifier E-Commerce Platform
+   Design System & Custom Stylesheet
+   ========================================================================== */
+
+:root {
+  --aquavera-navy: #102A43;
+  --aquavera-navy-dark: #0B1D2F;
+  --aquavera-navy-light: #243B53;
+  --aquavera-aqua: #19B6C9;
+  --aquavera-aqua-hover: #149AA9;
+  --aquavera-cyan-light: #DDF7F7;
+  --aquavera-cyan-soft: #EEFAFA;
+  --aquavera-white-soft: #F8FBFC;
+  --aquavera-slate: #526477;
+  --aquavera-dark: #172B3A;
+  --aquavera-border: #E3EDF0;
+  --aquavera-card-bg: #FFFFFF;
+  --aquavera-accent-gradient: linear-gradient(135deg, #16B8C8 0%, #65D6D0 100%);
+  --aquavera-navy-gradient: linear-gradient(135deg, #102A43 0%, #1A365D 100%);
+  --aquavera-hero-gradient: linear-gradient(160deg, #F8FBFC 0%, #E6F7F8 50%, #D8F3F4 100%);
+  --aquavera-shadow-sm: 0 2px 8px rgba(16, 42, 67, 0.05);
+  --aquavera-shadow-md: 0 8px 24px rgba(16, 42, 67, 0.08);
+  --aquavera-shadow-lg: 0 16px 40px rgba(16, 42, 67, 0.12);
+  --aquavera-radius-sm: 8px;
+  --aquavera-radius-md: 14px;
+  --aquavera-radius-lg: 22px;
+  --aquavera-radius-pill: 9999px;
+  --aquavera-transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base & Typography */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--aquavera-dark);
+  background-color: var(--aquavera-white-soft);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--aquavera-navy);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--aquavera-aqua);
+  text-decoration: none;
+  transition: var(--aquavera-transition);
+}
+
+a:hover {
+  color: var(--aquavera-aqua-hover);
+}
+
+/* Announcement Bar */
+.announcement-bar {
+  background-color: var(--aquavera-navy-dark);
+  color: #D1E5EE;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  padding: 6px 0;
+}
+.announcement-bar .badge-demo {
+  background: rgba(25, 182, 201, 0.25);
+  color: #65D6D0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--aquavera-radius-pill);
+}
+
+/* Navigation & Header */
+.aquavera-navbar {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--aquavera-border);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  transition: var(--aquavera-transition);
+}
+.aquavera-navbar.scrolled {
+  box-shadow: var(--aquavera-shadow-md);
+}
+
+.brand-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--aquavera-accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(25, 182, 201, 0.3);
+}
+.brand-name {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--aquavera-navy);
+}
+.brand-name span {
+  color: var(--aquavera-aqua);
+}
+
+.nav-link {
+  color: var(--aquavera-navy) !important;
+  font-weight: 500;
+  font-size: 0.94rem;
+  padding: 0.6rem 0.9rem !important;
+  border-radius: var(--aquavera-radius-sm);
+  transition: var(--aquavera-transition);
+}
+.nav-link:hover, .nav-link.active {
+  color: var(--aquavera-aqua) !important;
+  background-color: var(--aquavera-cyan-soft);
+}
+
+/* Buttons */
+.btn-aquavera {
+  background: var(--aquavera-accent-gradient);
+  color: #0A2540 !important;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--aquavera-radius-pill);
+  padding: 0.62rem 1.45rem;
+  box-shadow: 0 4px 14px rgba(25, 182, 201, 0.25);
+  transition: var(--aquavera-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-aquavera:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(25, 182, 201, 0.38);
+  color: #0A2540 !important;
+}
+
+.btn-aquavera-navy {
+  background: var(--aquavera-navy);
+  color: #FFFFFF !important;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: var(--aquavera-radius-pill);
+  padding: 0.62rem 1.45rem;
+  transition: var(--aquavera-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-aquavera-navy:hover {
+  background: var(--aquavera-navy-dark);
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+  box-shadow: var(--aquavera-shadow-md);
+}
+
+.btn-aquavera-outline {
+  background: transparent;
+  color: var(--aquavera-navy) !important;
+  font-weight: 600;
+  border: 1.5px solid var(--aquavera-border);
+  border-radius: var(--aquavera-radius-pill);
+  padding: 0.6rem 1.4rem;
+  transition: var(--aquavera-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-aquavera-outline:hover {
+  border-color: var(--aquavera-aqua);
+  background: var(--aquavera-cyan-soft);
+  color: var(--aquavera-aqua-hover) !important;
+}
+
+/* Hero Section */
+.hero-section {
+  background: var(--aquavera-hero-gradient);
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 0 4.5rem;
+  border-bottom: 1px solid var(--aquavera-border);
+}
+.hero-tagline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid var(--aquavera-cyan-light);
+  color: var(--aquavera-navy);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: var(--aquavera-radius-pill);
+  box-shadow: var(--aquavera-shadow-sm);
+  margin-bottom: 1.25rem;
+}
+.hero-headline {
+  font-size: clamp(2.3rem, 4.5vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--aquavera-navy);
+  margin-bottom: 1.25rem;
+}
+.hero-headline .accent-text {
+  background: var(--aquavera-accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-subtext {
+  font-size: 1.15rem;
+  color: var(--aquavera-slate);
+  max-width: 540px;
+  margin-bottom: 2rem;
+}
+
+/* Abstract Water Art Illustration (No Purifier Photo) */
+.hero-water-art-container {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  height: 440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.water-art-blob-bg {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+  background: linear-gradient(135deg, rgba(22, 184, 200, 0.22) 0%, rgba(101, 214, 208, 0.4) 100%);
+  filter: blur(8px);
+  animation: morphBlob 12s ease-in-out infinite alternate;
+}
+.water-art-ripple-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px dashed rgba(25, 182, 201, 0.35);
+  animation: rotateRipple 30s linear infinite;
+}
+.water-art-ripple-ring.ring-1 { width: 380px; height: 380px; }
+.water-art-ripple-ring.ring-2 { width: 310px; height: 310px; border-style: solid; border-color: rgba(25, 182, 201, 0.2); }
+.water-art-ripple-ring.ring-3 { width: 240px; height: 240px; }
+
+.water-art-center-orb {
+  position: relative;
+  z-index: 2;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #FFFFFF, #E0F7F8);
+  box-shadow: 0 20px 45px rgba(25, 182, 201, 0.25), inset 0 2px 6px rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+.water-art-floating-card {
+  position: absolute;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--aquavera-border);
+  padding: 10px 18px;
+  border-radius: var(--aquavera-radius-md);
+  box-shadow: var(--aquavera-shadow-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: floatBadge 4s ease-in-out infinite alternate;
+}
+.water-art-floating-card.card-left {
+  top: 15%;
+  left: -10px;
+}
+.water-art-floating-card.card-right {
+  bottom: 12%;
+  right: -10px;
+  animation-delay: -2s;
+}
+
+@keyframes morphBlob {
+  0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: rotate(0deg); }
+  50% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  100% { border-radius: 35% 65% 50% 50% / 40% 60% 40% 60%; transform: rotate(180deg); }
+}
+@keyframes rotateRipple {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes floatBadge {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+/* Trust Stats Strip */
+.trust-stats-strip {
+  background: var(--aquavera-navy);
+  color: #FFFFFF;
+  padding: 2.2rem 0;
+  border-bottom: 1px solid var(--aquavera-navy-dark);
+}
+.stat-item {
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 1.5rem;
+}
+.stat-item:last-child {
+  border-right: none;
+}
+.stat-number {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #65D6D0;
+  line-height: 1.2;
+}
+.stat-label {
+  font-size: 0.86rem;
+  color: #CBD5E1;
+  margin-bottom: 0;
+}
+
+/* Product Card & CSS Image Placeholder System */
+.product-card {
+  background: var(--aquavera-card-bg);
+  border: 1px solid var(--aquavera-border);
+  border-radius: var(--aquavera-radius-md);
+  transition: var(--aquavera-transition);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--aquavera-shadow-lg);
+  border-color: #BBEBEB;
+}
+
+/* The CSS Image Area - Strictly No Purifier Photos */
+.product-image-container {
+  height: 240px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #F0FBFB 0%, #DFF6F6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.product-image-container.large-detail {
+  height: 380px;
+  border-radius: var(--aquavera-radius-md);
+}
+
+.product-css-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.95), rgba(221, 247, 247, 0.6) 75%);
+}
+.placeholder-water-rings {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(25, 182, 201, 0.4);
+}
+.placeholder-core-badge {
+  width: 84px;
+  height: 84px;
+  border-radius: 20px;
+  background: var(--aquavera-accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0A2540;
+  box-shadow: 0 8px 20px rgba(25, 182, 201, 0.3);
+  z-index: 2;
+  position: relative;
+}
+.placeholder-core-badge i {
+  font-size: 2.2rem;
+}
+.placeholder-water-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  opacity: 0.6;
+}
+.placeholder-label-pill {
+  position: absolute;
+  bottom: 12px;
+  background: rgba(16, 42, 67, 0.85);
+  color: #E0F2FE;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: var(--aquavera-radius-pill);
+  z-index: 3;
+}
+
+.product-badge-overlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.badge-featured {
+  background: var(--aquavera-navy);
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--aquavera-radius-pill);
+}
+.badge-discount {
+  background: #E11D48;
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--aquavera-radius-pill);
+}
+
+.product-card-body {
+  padding: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.product-card-cat {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--aquavera-aqua);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.product-card-title {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--aquavera-navy);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+.product-card-title a {
+  color: inherit;
+}
+.product-card-title a:hover {
+  color: var(--aquavera-aqua);
+}
+
+.product-spec-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+.spec-pill {
+  font-size: 0.74rem;
+  background: #F1F5F9;
+  color: var(--aquavera-slate);
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.product-pricing-box {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F1F5F9;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+.price-current {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--aquavera-navy);
+}
+.price-original {
+  font-size: 0.88rem;
+  color: #94A3B8;
+  text-decoration: line-through;
+}
+.price-demo-tag {
+  font-size: 0.68rem;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Category Cards */
+.category-card {
+  background: #FFFFFF;
+  border: 1px solid var(--aquavera-border);
+  border-radius: var(--aquavera-radius-md);
+  padding: 1.75rem 1.4rem;
+  text-align: center;
+  transition: var(--aquavera-transition);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.category-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--aquavera-aqua);
+  box-shadow: var(--aquavera-shadow-md);
+}
+.category-icon-orb {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: var(--aquavera-cyan-soft);
+  color: var(--aquavera-aqua);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 1.2rem;
+  transition: var(--aquavera-transition);
+}
+.category-card:hover .category-icon-orb {
+  background: var(--aquavera-accent-gradient);
+  color: #0A2540;
+  box-shadow: 0 6px 16px rgba(25, 182, 201, 0.3);
+}
+
+/* Purification Steps Flow */
+.process-step-card {
+  background: #FFFFFF;
+  border: 1px solid var(--aquavera-border);
+  border-radius: var(--aquavera-radius-md);
+  padding: 1.75rem 1.25rem;
+  position: relative;
+  height: 100%;
+}
+.process-step-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--aquavera-navy);
+  color: #65D6D0;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* Comparison Floating Bar */
+.compare-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  box-shadow: 0 -8px 24px rgba(16, 42, 67, 0.12);
+  border-top: 1px solid var(--aquavera-border);
+  padding: 12px 0;
+  z-index: 1040;
+  transform: translateY(110%);
+  transition: transform 0.3s ease-in-out;
+}
+.compare-sticky-bar.visible {
+  transform: translateY(0);
+}
+.compare-thumb-pill {
+  background: var(--aquavera-cyan-soft);
+  border: 1px solid var(--aquavera-cyan-light);
+  border-radius: var(--aquavera-radius-pill);
+  padding: 4px 12px;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Filter Sidebar */
+.filter-card {
+  background: #FFFFFF;
+  border: 1px solid var(--aquavera-border);
+  border-radius: var(--aquavera-radius-md);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.filter-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--aquavera-navy);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 0.5rem;
+}
+
+/* Dashboard & Admin Components */
+.dashboard-card {
+  background: #FFFFFF;
+  border: 1px solid var(--aquavera-border);
+  border-radius: var(--aquavera-radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--aquavera-shadow-sm);
+  transition: var(--aquavera-transition);
+}
+.dashboard-stat-val {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--aquavera-navy);
+  line-height: 1.1;
+}
+
+/* Footer */
+.aquavera-footer {
+  background: var(--aquavera-navy-dark);
+  color: #94A3B8;
+  padding: 4rem 0 2rem;
+  border-top: 3px solid var(--aquavera-aqua);
+}
+.aquavera-footer h5 {
+  color: #FFFFFF;
+  font-size: 1.05rem;
+  margin-bottom: 1.25rem;
+}
+.aquavera-footer a {
+  color: #CBD5E1;
+  transition: var(--aquavera-transition);
+}
+.aquavera-footer a:hover {
+  color: #65D6D0;
+  padding-left: 4px;
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  font-size: 0.84rem;
+}
+
+/* Accessibility & Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

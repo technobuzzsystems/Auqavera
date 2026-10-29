@@ -1,0 +1,347 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AQUAVERA — Pure Water. Thoughtfully Designed.{% endblock %}
+
+{% block content %}
+<!-- A. Hero Section with CSS Abstract Water Art -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <!-- Left Side: Copy and CTAs -->
+            <div class="col-lg-6">
+                <div class="hero-tagline-badge">
+                    <i class="bi bi-droplet-fill text-info"></i> A NEW STANDARD OF PURITY
+                </div>
+                <h1 class="hero-headline">
+                    Better Water.<br>
+                    <span class="accent-text">Better Everyday.</span>
+                </h1>
+                <p class="hero-subtext">
+                    Experience modern, multi-barrier water purification designed for Indian tap and groundwater sources. Thoughtful engineering with balanced essential minerals.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    <a href="{% url 'catalog:product_list' %}" class="btn btn-aquavera px-4 py-2">
+                        <i class="bi bi-grid-fill"></i> Explore Purifiers
+                    </a>
+                    <a href="{% url 'catalog:product_finder' %}" class="btn btn-aquavera-outline px-4 py-2">
+                        <i class="bi bi-funnel"></i> Find Your Perfect Match
+                    </a>
+                </div>
+
+                <!-- 3 Trust Points -->
+                <div class="d-flex flex-wrap gap-4 pt-3 border-top border-secondary border-opacity-10">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-check-circle-fill text-info fs-5"></i>
+                        <span class="small fw-semibold text-secondary">Easy Maintenance</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-check-circle-fill text-info fs-5"></i>
+                        <span class="small fw-semibold text-secondary">Multi-Stage Options</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-check-circle-fill text-info fs-5"></i>
+                        <span class="small fw-semibold text-secondary">Dedicated Support</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Rich Abstract Water Illustration (Strictly No Purifier Photos) -->
+            <div class="col-lg-6">
+                <div class="hero-water-art-container">
+                    <div class="water-art-blob-bg"></div>
+                    <div class="water-art-ripple-ring ring-1"></div>
+                    <div class="water-art-ripple-ring ring-2"></div>
+                    <div class="water-art-ripple-ring ring-3"></div>
+
+                    <!-- Center Orb -->
+                    <div class="water-art-center-orb">
+                        <div class="brand-icon-box mb-2" style="width: 54px; height: 54px; border-radius: 16px;">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2.5C12 2.5 5.5 10.5 5.5 15.5C5.5 19.0899 8.41015 22 12 22C15.5899 22 18.5 19.0899 18.5 15.5C18.5 10.5 12 2.5 12 2.5Z" fill="#0A2540" />
+                                <path d="M12 7C12 7 8 12.5 8 15.5C8 17.7 9.8 19.5 12 19.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <span class="fw-bold fs-5 text-dark">AQUAVERA</span>
+                        <span class="small text-muted font-monospace" style="font-size: 0.75rem;">Pure Water Tech</span>
+                    </div>
+
+                    <!-- Floating Card Left -->
+                    <div class="water-art-floating-card card-left">
+                        <div class="rounded-circle bg-info bg-opacity-20 p-2 text-info">
+                            <i class="bi bi-shield-check fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark small">Multi-Stage Barrier</div>
+                            <div class="text-muted" style="font-size: 0.72rem;">Sediment • Carbon • RO • UV</div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Card Right -->
+                    <div class="water-art-floating-card card-right">
+                        <div class="rounded-circle bg-success bg-opacity-20 p-2 text-success">
+                            <i class="bi bi-droplet-half fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark small">Mineral Balancer</div>
+                            <div class="text-muted" style="font-size: 0.72rem;">Restores Ca & Mg Minerals</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- D. Trust Statistics Strip -->
+<section class="trust-stats-strip">
+    <div class="container">
+        <div class="row text-center g-3">
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">5+</div>
+                <p class="stat-label">Purification Technologies</p>
+                <small class="text-white-50" style="font-size: 0.68rem;">(Demo portfolio)</small>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">24/48h</div>
+                <p class="stat-label">Convenient Service SLA</p>
+                <small class="text-white-50" style="font-size: 0.68rem;">(Target response window)</small>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">10+</div>
+                <p class="stat-label">Purifier Configurations</p>
+                <small class="text-white-50" style="font-size: 0.68rem;">(Fictional models)</small>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">100%</div>
+                <p class="stat-label">Customer-First Support</p>
+                <small class="text-white-50" style="font-size: 0.68rem;">(Quality commitment)</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- E. Product Categories -->
+<section class="py-5 bg-white border-bottom">
+    <div class="container py-3">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-uppercase text-info fw-bold small tracking-wider">Catalogue By Technology</span>
+            <h2 class="fw-bold mt-1">Water Purifier Categories</h2>
+            <p class="text-secondary">Select the right filtration architecture based on your home or office water source.</p>
+        </div>
+
+        <div class="row g-4">
+            {% for cat in categories %}
+            <div class="col-lg col-md-4 col-sm-6">
+                <div class="category-card">
+                    <div class="category-icon-orb">
+                        <i class="bi {{ cat.icon|default:'bi-droplet' }}"></i>
+                    </div>
+                    <h4 class="fs-6 fw-bold mb-2">{{ cat.name }}</h4>
+                    <p class="text-secondary small flex-grow-1 mb-3">{{ cat.description|truncatewords:10 }}</p>
+                    <a href="{{ cat.get_absolute_url }}" class="btn btn-sm btn-outline-info text-dark rounded-pill mt-auto">
+                        Explore <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- F. Featured Products -->
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container py-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+            <div>
+                <span class="text-uppercase text-info fw-bold small">Engineered For Living</span>
+                <h2 class="fw-bold mt-1 mb-0">Featured Water Purifiers</h2>
+            </div>
+            <a href="{% url 'catalog:product_list' %}" class="btn btn-sm btn-aquavera-outline mt-2 mt-sm-0">
+                View All Purifiers <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            {% for product in featured_products %}
+            <div class="col-lg-4 col-md-6">
+                {% include 'includes/product_card.html' with product=product %}
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No featured purifiers currently available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- G. Why Choose Us -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container py-3">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-uppercase text-info fw-bold small">The AQUAVERA Advantage</span>
+            <h2 class="fw-bold mt-1">Why Choose AQUAVERA</h2>
+            <p class="text-secondary">Thoughtful engineering, transparent filtration stages, and dependable doorstep service.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="p-4 rounded-4 bg-light border h-100">
+                    <div class="text-info fs-1 mb-3"><i class="bi bi-sliders"></i></div>
+                    <h5 class="fw-bold mb-2">Source-Specific Tech</h5>
+                    <p class="text-secondary small mb-0">Engineered purification profiles adapted for borewell, municipal, or mixed tanker supply.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="p-4 rounded-4 bg-light border h-100">
+                    <div class="text-info fs-1 mb-3"><i class="bi bi-palette"></i></div>
+                    <h5 class="fw-bold mb-2">Thoughtful Product Design</h5>
+                    <p class="text-secondary small mb-0">Clean silhouettes, food-grade antibacterial reservoirs, and space-conscious dimensions.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="p-4 rounded-4 bg-light border h-100">
+                    <div class="text-info fs-1 mb-3"><i class="bi bi-calendar2-check"></i></div>
+                    <h5 class="fw-bold mb-2">Convenient Maintenance</h5>
+                    <p class="text-secondary small mb-0">Simple online service scheduling, transparent filter intervals, and prompt technician bookings.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="p-4 rounded-4 bg-light border h-100">
+                    <div class="text-info fs-1 mb-3"><i class="bi bi-headset"></i></div>
+                    <h5 class="fw-bold mb-2">Responsive Support</h5>
+                    <p class="text-secondary small mb-0">Direct customer service assistance for installation, diagnostics, and routine water quality queries.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- H. How Purification Works (CSS Flow Diagram) -->
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container py-3">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-uppercase text-info fw-bold small">Filtration Principles</span>
+            <h2 class="fw-bold mt-1">How Purification Works</h2>
+            <p class="text-secondary">A multi-stage journey engineered to remove dissolved and suspended contaminants while preserving taste.</p>
+        </div>
+
+        <div class="row g-4 position-relative">
+            <div class="col-md-3">
+                <div class="process-step-card">
+                    <div class="process-step-number">1</div>
+                    <h5 class="fw-bold fs-6">Pre-Filtration</h5>
+                    <p class="text-secondary small mb-0">Raw tap or groundwater passes through a high-density spun polypropylene cartridge to trap mud, rust, and silt.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="process-step-card">
+                    <div class="process-step-number">2</div>
+                    <h5 class="fw-bold fs-6">Carbon Adsorption</h5>
+                    <p class="text-secondary small mb-0">Activated carbon block absorbs volatile organic compounds, foul chlorine odor, and harmful pesticide traces.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="process-step-card">
+                    <div class="process-step-number">3</div>
+                    <h5 class="fw-bold fs-6">Membrane & UV Barrier</h5>
+                    <p class="text-secondary small mb-0">0.0001 micron RO membrane strips heavy metals, followed by UV disinfection neutralizing bacteria and viruses.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="process-step-card">
+                    <div class="process-step-number">4</div>
+                    <h5 class="fw-bold fs-6">Mineral Restoration</h5>
+                    <p class="text-secondary small mb-0">TDS balancer replenishes essential natural minerals before dispensing into an airtight antibacterial reservoir.</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <small class="text-muted"><i class="bi bi-info-circle me-1"></i> Exact filtration stages vary by product model and input water source.</small>
+        </div>
+    </div>
+</section>
+
+<!-- I. Interactive Product Finder Wizard Banner -->
+<section class="py-5" style="background: var(--aquavera-navy-gradient); color: #FFFFFF;">
+    <div class="container py-3">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="badge bg-info text-dark rounded-pill px-3 py-1 fw-bold text-uppercase mb-2">Interactive Wizard</span>
+                <h2 class="text-white fw-bold">Unsure Which Purifier Fits Your Water Source?</h2>
+                <p class="text-light text-opacity-75 mb-0">
+                    Answer 4 simple questions regarding your water source, household size, and budget to view personalized demo product recommendations.
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'catalog:product_finder' %}" class="btn btn-lg btn-aquavera px-4">
+                    <i class="bi bi-compass me-2"></i> Start Product Finder
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- J. Customer Testimonials (Clearly Marked Demo) -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container py-3">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-uppercase text-info fw-bold small">Experiences & Feedback</span>
+            <h2 class="fw-bold mt-1">What Customers Say</h2>
+            <div class="badge bg-light text-muted border px-3 py-1 mt-1">
+                <i class="bi bi-cone-striped me-1"></i> Demo content for demonstration purposes
+            </div>
+        </div>
+
+        <div class="row g-4">
+            {% for t in testimonials %}
+            <div class="col-lg-4 col-md-6">
+                <div class="p-4 rounded-4 bg-light border h-100 d-flex flex-column">
+                    <div class="text-warning mb-2">
+                        {% for i in "12345" %}
+                            <i class="bi bi-star-fill"></i>
+                        {% endfor %}
+                    </div>
+                    <p class="text-secondary fst-italic flex-grow-1">"{{ t.content }}"</p>
+                    <div class="d-flex align-items-center gap-3 pt-3 border-top mt-auto">
+                        <div class="rounded-circle bg-info bg-opacity-20 text-info fw-bold d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                            {{ t.display_name|slice:":1" }}
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark small">{{ t.display_name }}</div>
+                            <div class="text-muted" style="font-size: 0.76rem;">{{ t.designation }} • {{ t.city }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- K. Service and Support Call To Action -->
+<section class="py-5" style="background: linear-gradient(135deg, #F0FBFB 0%, #E2F8F8 100%);">
+    <div class="container py-4 text-center">
+        <div class="max-w-700 mx-auto">
+            <span class="text-uppercase text-info fw-bold small">Prompt Technician Care</span>
+            <h2 class="fw-bold mt-1 mb-3">Need Service, Installation, or Filter Care?</h2>
+            <p class="text-secondary mb-4">
+                Our customer support network is ready to assist with routine maintenance checks, water TDS testing, and replacement filters.
+            </p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="{% url 'services:service_request_form' %}" class="btn btn-aquavera-navy px-4 py-2">
+                    <i class="bi bi-wrench-adjustable me-1"></i> Book a Service
+                </a>
+                <a href="{% url 'enquiries:enquiry_form' %}" class="btn btn-aquavera px-4 py-2">
+                    <i class="bi bi-clipboard-check me-1"></i> Request a Product Demo
+                </a>
+                <a href="{% url 'pages:contact' %}" class="btn btn-aquavera-outline px-4 py-2">
+                    <i class="bi bi-telephone me-1"></i> Contact Support
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

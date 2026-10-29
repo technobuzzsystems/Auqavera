@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Customer Enquiries — AQUAVERA Staff{% endblock %}
+
+{% block content %}
+<section class="bg-white border-bottom py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1 small">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard:home' %}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Enquiries</li>
+            </ol>
+        </nav>
+        <h1 class="h2 fw-bold mb-0">Customer Consultation & Enquiries</h1>
+    </div>
+</section>
+
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container">
+        <!-- Filter Bar -->
+        <div class="bg-white p-3 rounded-4 border mb-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="small fw-bold text-muted">Filter by Status:</span>
+                <a href="{% url 'dashboard:enquiries' %}" class="btn btn-sm {% if not current_status %}btn-aquavera-navy{% else %}btn-outline-secondary{% endif %} rounded-pill">All</a>
+                {% for code, label in status_choices %}
+                    <a href="?status={{ code }}" class="btn btn-sm {% if current_status == code %}btn-aquavera-navy{% else %}btn-outline-secondary{% endif %} rounded-pill">
+                        {{ label }}
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="small text-muted">
+                Total: <strong>{{ enquiries|length }}</strong> enquiries
+            </div>
+        </div>
+
+        <div class="bg-white rounded-4 border shadow-sm p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Ref #</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in enquiries %}
+                        <tr>
+                            <td class="font-monospace fw-bold text-navy small">{{ e.reference_number }}</td>
+                            <td>
+                                <strong>{{ e.customer_name }}</strong>
+                                <div class="text-muted" style="font-size: 0.75rem;">
+                                    {{ e.city }} • <a href="tel:{{ e.mobile }}">{{ e.mobile }}</a> • {{ e.email }}
+                                </div>
+                            </td>
+                            <td>
+                                {% if e.product %}
+                                    <a href="{{ e.product.get_absolute_url }}" target="_blank" class="text-dark fw-semibold">
+                                        {{ e.product.name }}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted small">General Enquiry</span>
+                                {% endif %}
+                            </td>
+                            <td class="small">{{ e.get_enquiry_type_display }}</td>
+                            <td class="small text-muted">{{ e.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if e.status == 'new' %}bg-primary
+                                    {% elif e.status == 'contacted' %}bg-info text-dark
+                                    {% elif e.status == 'in_progress' %}bg-warning text-dark
+                                    {% elif e.status == 'converted' %}bg-success
+                                    {% else %}bg-secondary{% endif %} rounded-pill px-3 py-1">
+                                    {{ e.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <form action="{% url 'dashboard:enquiry_status' e.pk %}" method="POST" class="d-flex gap-2">
+                                    {% csrf_token %}
+                                    <select name="status" class="form-select form-select-sm" style="width: 130px;" onchange="this.form.submit()">
+                                        {% for code, label in status_choices %}
+                                            <option value="{{ code }}" {% if e.status == code %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="bg-light bg-opacity-50 py-2 px-4 small text-secondary border-bottom">
+                                <i class="bi bi-chat-quote text-info me-1"></i> <strong>Message:</strong> {{ e.message }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">
+                                No enquiries match this filter.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

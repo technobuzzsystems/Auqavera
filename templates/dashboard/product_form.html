@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} — AQUAVERA Staff{% endblock %}
+
+{% block content %}
+<section class="bg-white border-bottom py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1 small">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard:home' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'dashboard:products' %}">Products</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+            </ol>
+        </nav>
+        <h1 class="h2 fw-bold mb-0">{{ title }}</h1>
+    </div>
+</section>
+
+<section class="py-5" style="background-color: var(--aquavera-white-soft);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                            <div class="alert alert-danger border-0 rounded-3 small mb-4">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i> Please correct the form errors below.
+                            </div>
+                        {% endif %}
+
+                        <h5 class="fw-bold text-navy mb-3">Basic Information</h5>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label small fw-bold">Product Name *</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Category *</label>
+                                {{ form.category }}
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Slug (URL identifier)</label>
+                                {{ form.slug }}
+                                <small class="text-muted" style="font-size: 0.72rem;">Leave empty to generate automatically from name.</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Technology *</label>
+                                {{ form.technology }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Short Summary / Tagline *</label>
+                            {{ form.short_description }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Detailed Overview & Description *</label>
+                            {{ form.description }}
+                        </div>
+
+                        <hr class="my-4">
+                        <h5 class="fw-bold text-navy mb-3">Filtration & Capacities</h5>
+                        
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Storage Tank Capacity (Liters) *</label>
+                                {{ form.storage_capacity_liters }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Selling Price (INR) *</label>
+                                {{ form.price }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Original MRP (INR - Optional)</label>
+                                {{ form.original_price }}
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Purification Stages Summary</label>
+                                {{ form.purification_stages }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Intended Application / Water Source</label>
+                                {{ form.intended_use }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Maintenance & Filter Exchange Details</label>
+                            {{ form.maintenance_information }}
+                        </div>
+
+                        <hr class="my-4">
+                        <h5 class="fw-bold text-navy mb-3">Media & Visibility</h5>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Product Image (Optional)</label>
+                                {{ form.image }}
+                                <small class="text-muted d-block mt-1">If blank, the attractive CSS water placeholder is automatically rendered.</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Image Alt Text</label>
+                                {{ form.image_alt_text }}
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-4 mb-4 pt-2">
+                            <div class="form-check">
+                                {{ form.is_featured }}
+                                <label class="form-check-label small fw-bold" for="{{ form.is_featured.id_for_label }}">
+                                    Mark as Featured on Homepage
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                {{ form.is_active }}
+                                <label class="form-check-label small fw-bold" for="{{ form.is_active.id_for_label }}">
+                                    Active (Visible in Public Catalogue)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-aquavera px-4">
+                                Save Product
+                            </button>
+                            <a href="{% url 'dashboard:products' %}" class="btn btn-outline-secondary px-4">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

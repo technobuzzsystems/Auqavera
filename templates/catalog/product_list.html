@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}All Water Purifiers — AQUAVERA Catalogue{% endblock %}
+{% block meta_description %}Explore AQUAVERA's range of RO, UV, UF, Gravity, and Commercial water purifiers. Filter by technology, price, and capacity.{% endblock %}
+
+{% block content %}
+<!-- Page Header / Breadcrumb -->
+<section class="bg-white border-bottom py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2 small">
+                <li class="breadcrumb-item"><a href="{% url 'pages:home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Water Purifiers</li>
+                {% if selected_category %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ selected_category.name }}</li>
+                {% endif %}
+            </ol>
+        </nav>
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <div>
+                <h1 class="h2 fw-bold mb-1">
+                    {% if selected_category %}{{ selected_category.name }}{% else %}All Water Purifiers{% endif %}
+                </h1>
+                <p class="text-secondary small mb-0">
+                    Showing {{ total_count }} demo purifier{% if total_count != 1 %}s{% endif %} engineered for pure living.
+                </p>
+            </div>
+            <div class="mt-2 mt-sm-0">
+                <a href="{% url 'catalog:product_finder' %}" class="btn btn-sm btn-aquavera">
+                    <i class="bi bi-funnel"></i> Purifier Finder Wizard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Catalogue Grid & Filters -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-3">
+                <form method="GET" action="{% url 'catalog:product_list' %}" id="filterForm">
+                    <!-- Preserve search query if present -->
+                    {% if current_q %}
+                        <input type="hidden" name="q" value="{{ current_q }}">
+                    {% endif %}
+
+                    <div class="filter-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="filter-title mb-0 border-0 p-0">Filters</h3>
+                            <a href="{% url 'catalog:product_list' %}" class="small text-danger text-decoration-none">Clear All</a>
+                        </div>
+
+                        <!-- Search within catalog -->
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Search</label>
+                            <div class="input-group input-group-sm">
+                                <input type="text" name="q" value="{{ current_q }}" class="form-control" placeholder="Search name, tech...">
+                                <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Categories</label>
+                            <div class="d-flex flex-column gap-2 small">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="category" id="cat_all" value="" {% if not current_category %}checked{% endif %} onchange="this.form.submit()">
+                                    <label class="form-check-label" for="cat_all">All Categories</label>
+                                </div>
+                                {% for cat in categories %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="category" id="cat_{{ cat.slug }}" value="{{ cat.slug }}" {% if current_category == cat.slug %}checked{% endif %} onchange="this.form.submit()">
+                                    <label class="form-check-label" for="cat_{{ cat.slug }}">{{ cat.name }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Technology Filter -->
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Purification Technology</label>
+                            <select name="tech" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">-- All Technologies --</option>
+                                {% for tech in available_technologies %}
+                                    <option value="{{ tech }}" {% if current_tech == tech %}selected{% endif %}>{{ tech }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Storage Capacity -->
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Storage Capacity</label>
+                            <div class="d-flex flex-column gap-2 small">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="capacity" id="cap_all" value="" {% if not current_capacity %}checked{% endif %} onchange="this.form.submit()">
+                                    <label class="form-check-label" for="cap_all">Any Capacity</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="capacity" id="cap_under_7" value="under_7" {% if current_capacity == 'under_7' %}checked{% endif %} onchange="this.form.submit()">
+                                    <label class="form-check-label" for="cap_under_7">Under 7 Liters</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="capacity" id="cap_7_10" value="7_to_10" {% if current_capacity == '7_to_10' %}checked{% endif %} onchange="this.form.submit()">
+                                    <label class="form-check-label" for="cap_7_10">7 to 10 Liters</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="capacity" id="cap_over_10" value="over_10" {% if current_capacity == 'over_10' %}checked{% endif %} onchange="this.form.submit()">
+                                    <label class="form-check-label" for="cap_over_10">Above 10 Liters</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Range Filter -->
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Price Range (INR)</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="number" name="min_price" value="{{ current_min_price }}" class="form-control form-control-sm" placeholder="Min" min="0" step="500">
+                                <span class="text-muted">-</span>
+                                <input type="number" name="max_price" value="{{ current_max_price }}" class="form-control form-control-sm" placeholder="Max" min="0" step="500">
+                            </div>
+                            <button type="submit" class="btn btn-sm btn-aquavera-navy w-100 mt-2">Apply Price</button>
+                        </div>
+
+                        <!-- Reset Button -->
+                        <a href="{% url 'catalog:product_list' %}" class="btn btn-sm btn-outline-secondary w-100">
+                            Reset Filters
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Products Content Area -->
+            <div class="col-lg-9">
+                <!-- Sorting & View Bar -->
+                <div class="bg-white p-3 rounded-4 border mb-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div class="small text-muted">
+                        Showing <strong class="text-dark">{{ products|length }}</strong> of <strong class="text-dark">{{ total_count }}</strong> products
+                        {% if current_q %}(Filtered by: "{{ current_q }}"){% endif %}
+                    </div>
+
+                    <!-- Sort Controls -->
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="small text-muted mb-0" for="sortSelect">Sort By:</label>
+                        <select id="sortSelect" class="form-select form-select-sm" style="width: auto;" onchange="location = this.value;">
+                            <option value="?{% if current_category %}category={{ current_category }}&{% endif %}{% if current_q %}q={{ current_q }}&{% endif %}sort=featured" {% if current_sort == 'featured' %}selected{% endif %}>Featured</option>
+                            <option value="?{% if current_category %}category={{ current_category }}&{% endif %}{% if current_q %}q={{ current_q }}&{% endif %}sort=price_low" {% if current_sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="?{% if current_category %}category={{ current_category }}&{% endif %}{% if current_q %}q={{ current_q }}&{% endif %}sort=price_high" {% if current_sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                            <option value="?{% if current_category %}category={{ current_category }}&{% endif %}{% if current_q %}q={{ current_q }}&{% endif %}sort=alpha" {% if current_sort == 'alpha' %}selected{% endif %}>Alphabetical (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="row g-4">
+                    {% for product in products %}
+                    <div class="col-md-6 col-xl-4">
+                        {% include 'includes/product_card.html' with product=product %}
+                    </div>
+                    {% empty %}
+                    <!-- Empty State -->
+                    <div class="col-12 text-center py-5 bg-white rounded-4 border">
+                        <div class="text-info fs-1 mb-3"><i class="bi bi-water"></i></div>
+                        <h4 class="fw-bold">No Water Purifiers Found</h4>
+                        <p class="text-secondary small max-w-500 mx-auto mb-4">
+                            We couldn't find any purifiers matching your active filter criteria. Try clearing some filters or searching with a different term.
+                        </p>
+                        <a href="{% url 'catalog:product_list' %}" class="btn btn-aquavera">
+                            Clear All Filters
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <div class="d-flex justify-content-center mt-5">
+                    <nav aria-label="Catalogue pagination">
+                        <ul class="pagination pagination-sm mb-0">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_q %}&q={{ current_q }}{% endif %}">&laquo; Previous</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>
+                            {% endif %}
+
+                            {% for i in page_obj.paginator.page_range %}
+                                {% if page_obj.number == i %}
+                                    <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ i }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_q %}&q={{ current_q }}{% endif %}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_q %}&q={{ current_q }}{% endif %}">Next &raquo;</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
