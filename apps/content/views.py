@@ -50,7 +50,7 @@ def contact_view(request):
             # In a demo app, we log/show success feedback
             messages.success(
                 request,
-                "Thank you for contacting AQUAVERA. Your demo enquiry has been logged successfully. "
+                "Thank you for contacting AQUAVERA. Your message has been received successfully. "
                 "Our team will get in touch shortly."
             )
             return redirect('pages:contact')

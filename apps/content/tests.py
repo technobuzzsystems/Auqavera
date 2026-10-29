@@ -29,7 +29,12 @@ class ContentPagesTests(TestCase):
         # Verify 3-stage purification infographic section and image
         self.assertContains(response, 'Our 3-Stage Water Purification Technology')
         self.assertContains(response, 'aquavera-3-stage-purification.jpg')
-        self.assertContains(response, 'sediment filtration, activated carbon filtration and RO membrane')
+        self.assertContains(response, 'sediment filtration, activated carbon filtration and RO membrane')
+        # Verify no demo branding in homepage
+        self.assertNotContains(response, 'Demo Experience Platform')
+        self.assertNotContains(response, 'DEMO NOTICE')
+        self.assertNotContains(response, 'Demo content for demonstration purposes')
+        self.assertNotContains(response, 'Demo Portfolio Website')
 
 
     def test_about_page_loads(self):

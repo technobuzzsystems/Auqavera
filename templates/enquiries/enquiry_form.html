@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}Product Consultation & Enquiry — AQUAVERA{% endblock %}
-{% block meta_description %}Submit an enquiry for AQUAVERA water purifiers. Request a free demo, water test assessment, or price quote.{% endblock %}
+{% block meta_description %}Submit an enquiry for AQUAVERA water purifiers. Request a product consultation, water test assessment, or price quote.{% endblock %}
 
 {% block content %}
 <section class="bg-white border-bottom py-4">
@@ -13,7 +13,7 @@
                 <li class="breadcrumb-item active" aria-current="page">Request Enquiry</li>
             </ol>
         </nav>
-        <h1 class="h2 fw-bold mb-1">Product Consultation & Demo Enquiry</h1>
+        <h1 class="h2 fw-bold mb-1">Product Consultation & Enquiry</h1>
         <p class="text-secondary small mb-0">Speak with our water quality consultants to choose the right purifier architecture.</p>
     </div>
 </section>
@@ -78,7 +78,7 @@
                         <div class="form-check mb-4">
                             {{ form.consent }}
                             <label class="form-check-label small text-muted" for="{{ form.consent.id_for_label }}">
-                                I consent to receive demo product information and follow-up communication from AQUAVERA.
+                                I consent to receive product information and follow-up communication from AQUAVERA.
                             </label>
                             {% if form.consent.errors %}<div class="text-danger small mt-1">{{ form.consent.errors }}</div>{% endif %}
                         </div>

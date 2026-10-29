@@ -8,7 +8,7 @@
                 <span class="badge-featured"><i class="bi bi-star-fill text-warning me-1"></i> Featured</span>
             {% endif %}
             {% if product.discount_percentage > 0 %}
-                <span class="badge-discount">{{ product.discount_percentage }}% OFF (Demo)</span>
+                <span class="badge-discount">{{ product.discount_percentage }}% OFF</span>
             {% endif %}
         </div>
 
@@ -60,7 +60,7 @@
             {% if product.original_price %}
                 <span class="price-original">{{ product.formatted_original_price }}</span>
             {% endif %}
-            <span class="price-demo-tag ms-auto">Demo Price</span>
+            <span class="price-mrp-tag ms-auto">M.R.P.</span>
         </div>
 
         <!-- Action Buttons -->

@@ -17,12 +17,9 @@
                     {{ site_settings.tagline|default:"Pure Water. Thoughtfully Designed." }}
                 </p>
                 <p class="text-secondary small">
-                    A demonstration water purification platform combining advanced filtration concepts, digital TDS balancing, and responsive customer care.
+                    Water purification solutions designed for everyday homes and workplaces, combining advanced multi-stage filtration, essential mineral balancing, and responsive customer care.
                 </p>
-                <!-- Demo Badge -->
-                <div class="p-2 px-3 rounded-3 bg-dark border border-secondary border-opacity-25 d-inline-block small text-light">
-                    <i class="bi bi-shield-lock-fill text-info me-1"></i> Demo Portfolio Website — No Real Transactions
-                </div>
+                
             </div>
 
             <!-- Quick Links -->
@@ -49,7 +46,7 @@
                 </ul>
             </div>
 
-            <!-- Newsletter & Demo Contact -->
+            <!-- Newsletter & Inquiries -->
             <div class="col-lg-4 col-md-6">
                 <h5>Stay Hydrated with Knowledge</h5>
                 <p class="small text-secondary">Subscribe for seasonal water testing advice and purifier maintenance tips.</p>
@@ -64,8 +61,8 @@
                 </form>
 
                 <div class="mt-3 small text-secondary">
-                    <div><i class="bi bi-telephone-fill text-info me-2"></i> {{ site_settings.support_phone|default:"+91 1800 200 4567" }} (Demo Toll-Free)</div>
-                    <div><i class="bi bi-envelope-fill text-info me-2"></i> {{ site_settings.support_email|default:"care@aquavera.demo" }}</div>
+                    <div><i class="bi bi-telephone-fill text-info me-2"></i> {{ site_settings.support_phone|default:"+91 1800 200 4567" }}</div>
+                    <div><i class="bi bi-envelope-fill text-info me-2"></i> {{ site_settings.support_email|default:"support@aquavera.com" }}</div>
                 </div>
             </div>
         </div>
@@ -73,14 +70,14 @@
         <!-- Footer Bottom -->
         <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center text-secondary">
             <div>
-                &copy; 2026 {{ site_settings.website_name|default:"AQUAVERA" }}. Pure Water. Thoughtfully Designed.
+                &copy; 2026 {{ site_settings.website_name|default:"AQUAVERA" }}. All rights reserved.
             </div>
             <div class="d-flex gap-3 mt-2 mt-md-0">
-                <span class="text-muted-50">Demo Version 1.0</span>
+                <a href="{% url 'pages:about' %}">About Us</a>
                 <span>•</span>
-                <a href="{% url 'pages:about' %}">Privacy & Demo Disclaimers</a>
+                <a href="{% url 'pages:contact' %}">Support & Inquiries</a>
                 <span>•</span>
-                <a href="{% url 'pages:contact' %}">Terms</a>
+                <a href="{% url 'pages:contact' %}">Terms & Privacy</a>
             </div>
         </div>
     </div>

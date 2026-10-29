@@ -54,22 +54,6 @@ a:hover {
   color: var(--aquavera-aqua-hover);
 }
 
-/* Announcement Bar */
-.announcement-bar {
-  background-color: var(--aquavera-navy-dark);
-  color: #D1E5EE;
-  font-size: 0.82rem;
-  letter-spacing: 0.02em;
-  padding: 6px 0;
-}
-.announcement-bar .badge-demo {
-  background: rgba(25, 182, 201, 0.25);
-  color: #65D6D0;
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: var(--aquavera-radius-pill);
-}
 
 /* Navigation & Header */
 .aquavera-navbar {
@@ -777,7 +761,7 @@ a:hover {
   color: #94A3B8;
   text-decoration: line-through;
 }
-.price-demo-tag {
+.price-mrp-tag {
   font-size: 0.68rem;
   color: #64748B;
   background: #F1F5F9;

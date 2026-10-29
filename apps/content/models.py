@@ -63,9 +63,9 @@ class SiteSetting(models.Model):
     """Singleton site configuration for brand identity, support, and social links."""
     website_name = models.CharField(max_length=100, default="AQUAVERA")
     tagline = models.CharField(max_length=200, default="Pure Water. Thoughtfully Designed.")
-    support_email = models.EmailField(default="support@aquavera.demo")
+    support_email = models.EmailField(default="support@aquavera.com")
     support_phone = models.CharField(max_length=50, default="+91 1800 200 4567")
-    address = models.TextField(default="AQUAVERA Innovation Center, Demo Tech Park, Sector 62, Noida, NCR 201309 (Demo Office)")
+    address = models.TextField(default="AQUAVERA Water Innovation Center, Sector 62, Noida, NCR 201309")
     announcement_text = models.CharField(max_length=255, default="Discover smarter, multi-stage water purification tailored for every home source.")
     social_links = models.JSONField(default=dict, blank=True)
 
@@ -83,9 +83,9 @@ class SiteSetting(models.Model):
             defaults={
                 'website_name': 'AQUAVERA',
                 'tagline': 'Pure Water. Thoughtfully Designed.',
-                'support_email': 'support@aquavera.demo',
+                'support_email': 'support@aquavera.com',
                 'support_phone': '+91 1800 200 4567',
-                'address': 'AQUAVERA Innovation Center, Demo Tech Park, Sector 62, Noida, NCR 201309 (Demo Office)',
+                'address': 'AQUAVERA Water Innovation Center, Sector 62, Noida, NCR 201309',
                 'announcement_text': 'Discover smarter, multi-stage water purification tailored for every home source.',
                 'social_links': {
                     'facebook': 'https://facebook.com',

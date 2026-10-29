@@ -62,7 +62,7 @@ class ProductEnquiryForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['product'].queryset = Product.objects.filter(is_active=True).order_by('name')
         self.fields['product'].empty_label = "-- Select Product (Optional) --"
-        self.fields['consent'].label = "I agree to receive a demo callback or communication regarding this enquiry."
+        self.fields['consent'].label = "I agree to receive a callback or communication regarding this enquiry."
 
     def clean_honeypot(self):
         val = self.cleaned_data.get('honeypot')

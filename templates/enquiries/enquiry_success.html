@@ -15,20 +15,20 @@
 
                     <h2 class="fw-bold mb-2">Enquiry Received!</h2>
                     <p class="text-secondary small mb-4">
-                        Thank you, <strong>{{ customer_name }}</strong>. Your product consultation ticket has been recorded in our demo system.
+                        Thank you, <strong>{{ customer_name }}</strong>. Your product consultation request has been received and logged successfully.
                     </p>
 
                     <!-- Reference Pill -->
                     <div class="p-3 rounded-3 bg-light border mb-4">
                         <span class="text-muted small d-block">Reference Tracking Number</span>
-                        <span class="fs-4 fw-bold font-monospace text-navy">{{ reference_number|default:"ENQ-DEMO-RECORD" }}</span>
+                        <span class="fs-4 fw-bold font-monospace text-navy">{{ reference_number|default:"ENQ-PENDING-REF" }}</span>
                     </div>
 
                     <div class="text-start p-3 rounded-3 border bg-light mb-4 small text-secondary">
-                        <div class="fw-bold text-dark mb-1"><i class="bi bi-clock-history text-info me-1"></i> Next Demo Steps:</div>
+                        <div class="fw-bold text-dark mb-1"><i class="bi bi-clock-history text-info me-1"></i> Next Steps:</div>
                         <ul class="mb-0 ps-3">
                             <li>Our regional water specialist reviews your water source details.</li>
-                            <li>A demo callback is logged within 24 working hours.</li>
+                            <li>A representative will follow up within 24 working hours.</li>
                             <li>You can track this enquiry anytime in your customer dashboard.</li>
                         </ul>
                     </div>

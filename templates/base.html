@@ -22,17 +22,7 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <!-- Announcement Bar -->
-    <div class="announcement-bar text-center">
-        <div class="container d-flex justify-content-between align-items-center">
-            <span class="d-none d-md-inline text-muted-50">Demo Experience Platform</span>
-            <div class="mx-auto text-truncate px-2">
-                <span class="badge-demo me-2">DEMO NOTICE</span>
-                {{ site_settings.announcement_text|default:"Discover smarter, multi-stage water purification for modern homes." }}
-            </div>
-            <a href="{% url 'services:service_request_form' %}" class="d-none d-md-inline text-white text-decoration-underline font-monospace" style="font-size: 0.78rem;">Book Service</a>
-        </div>
-    </div>
+    
 
     <!-- Navigation Header -->
     {% include 'includes/navbar.html' %}

@@ -20,12 +20,7 @@
                         <p class="text-secondary small">Sign in to your AQUAVERA customer account or staff dashboard.</p>
                     </div>
 
-                    <!-- Helpful demo accounts hint box -->
-                    <div class="alert alert-info border-0 rounded-3 p-3 small mb-4">
-                        <div class="fw-bold mb-1"><i class="bi bi-key-fill me-1"></i> Quick Demo Logins:</div>
-                        <div><strong>Staff Admin:</strong> <code>admin</code> / <code>Admin@12345</code></div>
-                        <div><strong>Customer:</strong> <code>customer</code> / <code>Customer@12345</code></div>
-                    </div>
+                    
 
                     <form action="{% url 'accounts:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="POST" novalidate>
                         {% csrf_token %}

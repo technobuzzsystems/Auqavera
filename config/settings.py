@@ -131,7 +131,7 @@ LOGOUT_REDIRECT_URL = 'pages:home'
 
 # Email backend (Console for development)
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'AQUAVERA Support <support@aquavera.demo>')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'AQUAVERA Support <support@aquavera.com>')
 
 # Security Settings
 SESSION_COOKIE_HTTPONLY = True

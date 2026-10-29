@@ -18,9 +18,9 @@ class Command(BaseCommand):
         setting, _ = SiteSetting.objects.get_or_create(id=1)
         setting.website_name = "AQUAVERA"
         setting.tagline = "Pure Water. Thoughtfully Designed."
-        setting.support_email = "care@aquavera.demo"
+        setting.support_email = "support@aquavera.com"
         setting.support_phone = "+91 1800 200 4567"
-        setting.address = "AQUAVERA Water Innovation Center, Sector 62, Noida, NCR 201309 (Demo Office)"
+        setting.address = "AQUAVERA Water Innovation Center, Sector 62, Noida, NCR 201309"
         setting.announcement_text = "Discover smarter multi-stage water purification for modern homes."
         setting.social_links = {
             'facebook': 'https://facebook.com',
@@ -336,8 +336,8 @@ class Command(BaseCommand):
             {
                 'display_name': 'Rohan Deshmukh',
                 'city': 'Pune, Maharashtra',
-                'designation': 'Software Architect (Demo Profile)',
-                'content': 'We recently tested the Crystal Optima RO demo unit for our municipal mixed supply. The water taste is consistently crisp, and the maintenance alerts make filter upkeep completely effortless.',
+                'designation': 'Software Architect',
+                'content': 'We recently tested the Crystal Optima RO unit for our municipal mixed supply. The water taste is consistently crisp, and the maintenance alerts make filter upkeep completely effortless.',
                 'rating': 5,
                 'is_demo_content': True,
                 'is_active': True,
@@ -345,7 +345,7 @@ class Command(BaseCommand):
             {
                 'display_name': 'Pooja Venkatesh',
                 'city': 'Bengaluru, Karnataka',
-                'designation': 'Interior Consultant (Demo Profile)',
+                'designation': 'Interior Consultant',
                 'content': 'The compact aesthetic of the PureFlow Smart fits seamlessly into our modular kitchen. Unlike bulky purifiers, the thoughtful design and responsive technician support stand out.',
                 'rating': 5,
                 'is_demo_content': True,
@@ -354,7 +354,7 @@ class Command(BaseCommand):
             {
                 'display_name': 'Arun Verma',
                 'city': 'Gurugram, NCR',
-                'designation': 'Operations Manager, Co-Work Studio (Demo Profile)',
+                'designation': 'Operations Manager, Co-Work Studio',
                 'content': 'Our coworking office uses the Titan Commercial 50 LPH model. Even during peak working hours, drinking water flow never slows down and the team has had zero complaints.',
                 'rating': 5,
                 'is_demo_content': True,
