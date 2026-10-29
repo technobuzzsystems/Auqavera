@@ -1,4 +1,7 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from django.urls import reverse
+from django.utils.html import escape
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Product, Category
@@ -17,7 +20,7 @@ def product_list(request):
     - Pagination
     - Active product count
     """
-    queryset = Product.objects.filter(is_active=True).select_related('category')
+    queryset = Product.objects.filter(is_active=True).select_related('category').prefetch_related('images')
     
     # Search query
     q = request.GET.get('q', '').strip()
@@ -236,3 +239,78 @@ def product_finder(request):
         'capacity': capacity,
     }
     return render(request, 'catalog/product_finder.html', context)
+
+
+def product_preview_json(request, pk):
+    """
+    Safe read-only JSON endpoint for product quick-view modal.
+    Only exposes public catalogue fields. Validates product active status.
+    """
+    try:
+        product = Product.objects.filter(is_active=True).select_related('category').prefetch_related('images').get(pk=pk)
+    except (Product.DoesNotExist, ValueError):
+        return JsonResponse({'error': 'Product not found or unavailable'}, status=404)
+
+    gallery = []
+    # Collect all uploaded gallery images in order
+    for g_img in product.images.all().order_by('display_order', 'id'):
+        if g_img.image:
+            try:
+                gallery.append({
+                    'id': g_img.id,
+                    'url': g_img.image.url,
+                    'alt': g_img.alt_text or product.name,
+                    'is_primary': g_img.is_primary,
+                })
+            except ValueError:
+                pass
+
+    # If no gallery images, but legacy single product.image exists
+    if not gallery and product.image:
+        try:
+            gallery.append({
+                'id': 0,
+                'url': product.image.url,
+                'alt': product.image_alt_text or product.name,
+                'is_primary': True,
+            })
+        except ValueError:
+            pass
+
+    # Safe feature list
+    feature_list = []
+    if isinstance(product.features, list):
+        for f in product.features:
+            if f and isinstance(f, str):
+                feature_list.append(escape(f.strip()))
+
+    data = {
+        'id': product.id,
+        'name': product.name,
+        'slug': product.slug,
+        'sku': product.sku or '',
+        'brand': product.brand or 'AQUAVERA',
+        'category': product.category.name if product.category else '',
+        'category_url': product.category.get_absolute_url() if product.category else '',
+        'formatted_price': product.formatted_price,
+        'price': float(product.price),
+        'original_price': float(product.original_price) if product.original_price else None,
+        'formatted_original_price': product.formatted_original_price,
+        'discount_percentage': product.discount_percentage,
+        'short_description': product.short_description or '',
+        'technology': product.technology or '',
+        'storage_capacity_liters': str(product.storage_capacity_liters) if product.storage_capacity_liters else '',
+        'purification_stages': product.purification_stages or '',
+        'intended_use': product.intended_use or '',
+        'warranty_info': product.warranty_info or '',
+        'features': feature_list[:5],
+        'is_out_of_stock': product.is_out_of_stock,
+        'is_low_stock': product.is_low_stock,
+        'stock_status_display': product.stock_status_display,
+        'stock_badge_class': product.stock_badge_class,
+        'detail_url': product.get_absolute_url(),
+        'enquiry_url': f"{reverse('enquiries:enquiry_form')}?product={product.id}",
+        'images': gallery,
+    }
+    return JsonResponse(data)
+

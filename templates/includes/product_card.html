@@ -1,20 +1,32 @@
 {% load static %}
 <div class="product-card">
-    <!-- Image Area: Strictly No Real Water Purifier Photos -->
-    <div class="product-image-container">
-        <!-- Floating Badges -->
+    <!-- Image Area: Pale Aqua Container Matching Reference Design -->
+    <div class="product-image-container product-preview-trigger" 
+         role="button" 
+         tabindex="0"
+         data-product-id="{{ product.id }}"
+         data-preview-url="{% url 'catalog:product_preview_json' pk=product.id %}"
+         aria-label="Quick view {{ product.name }} image and specifications"
+         title="Click image to view gallery and specifications">
+        <!-- Floating Badges in Upper-Left Corner -->
         <div class="product-badge-overlay">
-            {% if product.is_featured %}
-                <span class="badge-featured"><i class="bi bi-star-fill text-warning me-1"></i> Featured</span>
-            {% endif %}
             {% if product.discount_percentage > 0 %}
                 <span class="badge-discount">{{ product.discount_percentage }}% OFF</span>
             {% endif %}
+            {% if product.is_out_of_stock %}
+                <span class="badge-stock badge-stock-out">Out of Stock</span>
+            {% elif product.is_low_stock %}
+                <span class="badge-stock badge-stock-low">Low Stock ({{ product.stock_quantity }} left)</span>
+            {% else %}
+                <span class="badge-stock badge-stock-in">In Stock ({{ product.stock_quantity }} units)</span>
+            {% endif %}
+            {% if product.is_featured %}
+                <span class="badge-featured"><i class="bi bi-star-fill text-warning me-1"></i> Featured</span>
+            {% endif %}
         </div>
 
-        {% if product.image %}
-            <!-- Real uploaded product image (if uploaded via admin in future) -->
-            <img src="{{ product.image.url }}" alt="{{ product.image_alt_text|default:product.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
+        {% if product.display_image_url %}
+            <img src="{{ product.display_image_url }}" alt="{{ product.display_image_alt }}" class="product-card-img">
         {% else %}
             <!-- Stylized CSS Abstract Water Gradient Placeholder -->
             <div class="product-css-placeholder">
@@ -32,6 +44,11 @@
                 </div>
             </div>
         {% endif %}
+
+        <!-- Quick View Overlay Hint -->
+        <div class="product-image-hover-hint">
+            <i class="bi bi-arrows-angle-expand me-1"></i> Quick View
+        </div>
     </div>
 
     <!-- Card Content -->
@@ -57,10 +74,10 @@
         <!-- Pricing Block -->
         <div class="product-pricing-box">
             <span class="price-current">{{ product.formatted_price }}</span>
-            {% if product.original_price %}
+            {% if product.original_price and product.original_price > product.price %}
                 <span class="price-original">{{ product.formatted_original_price }}</span>
+                <span class="price-mrp-tag ms-auto">M.R.P.</span>
             {% endif %}
-            <span class="price-mrp-tag ms-auto">M.R.P.</span>
         </div>
 
         <!-- Action Buttons -->

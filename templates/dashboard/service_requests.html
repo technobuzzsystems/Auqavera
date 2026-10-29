@@ -1,103 +1,145 @@
-{% extends 'base.html' %}
+{% extends 'dashboard/admin_base.html' %}
 {% load static %}
 
-{% block title %}Manage Service Tickets — AQUAVERA Staff{% endblock %}
+{% block title %}Service Requests{% endblock %}
+{% block page_title %}Technician Service Requests{% endblock %}
 
-{% block content %}
-<section class="bg-white border-bottom py-4">
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-1 small">
-                <li class="breadcrumb-item"><a href="{% url 'dashboard:home' %}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Service Requests</li>
-            </ol>
-        </nav>
-        <h1 class="h2 fw-bold mb-0">Technician Service & Support Queue</h1>
-    </div>
-</section>
+{% block breadcrumb %}
+<li><a href="{% url 'dashboard:service_requests' %}" class="text-decoration-none text-muted">Customer Queries</a></li>
+<li class="active text-dark fw-medium">Service Requests</li>
+{% endblock %}
 
-<section class="py-5" style="background-color: var(--aquavera-white-soft);">
-    <div class="container">
-        <!-- Filter Bar -->
-        <div class="bg-white p-3 rounded-4 border mb-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-                <span class="small fw-bold text-muted">Filter by Status:</span>
-                <a href="{% url 'dashboard:service_requests' %}" class="btn btn-sm {% if not current_status %}btn-aquavera-navy{% else %}btn-outline-secondary{% endif %} rounded-pill">All</a>
-                {% for code, label in status_choices %}
-                    <a href="?status={{ code }}" class="btn btn-sm {% if current_status == code %}btn-aquavera-navy{% else %}btn-outline-secondary{% endif %} rounded-pill">
-                        {{ label }}
-                    </a>
-                {% endfor %}
-            </div>
-            <div class="small text-muted">
-                Total: <strong>{{ services|length }}</strong> tickets
-            </div>
+{% block admin_content %}
+<div class="container-fluid px-0">
+
+    <!-- Header Toolbar -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="h5 fw-bold text-dark mb-1">Field Service & Maintenance Tickets</h2>
+            <p class="text-muted small mb-0">Track purifier installations, filter replacements, routine sanitization, and repair tickets.</p>
         </div>
-
-        <div class="bg-white rounded-4 border shadow-sm p-4">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th>Ticket #</th>
-                            <th>Customer</th>
-                            <th>Model</th>
-                            <th>Service Type</th>
-                            <th>Preferred Visit</th>
-                            <th>Status</th>
-                            <th>Update Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for s in services %}
-                        <tr>
-                            <td class="font-monospace fw-bold text-navy small">{{ s.reference_number }}</td>
-                            <td>
-                                <strong>{{ s.customer_name }}</strong>
-                                <div class="text-muted" style="font-size: 0.75rem;">
-                                    {{ s.city }} • <a href="tel:{{ s.mobile }}">{{ s.mobile }}</a>
-                                </div>
-                            </td>
-                            <td class="fw-semibold text-dark">{{ s.product_model }}</td>
-                            <td class="small">{{ s.get_service_type_display }}</td>
-                            <td class="small text-muted">{{ s.preferred_date|date:"M d, Y" }}</td>
-                            <td>
-                                <span class="badge 
-                                    {% if s.status == 'pending' %}bg-warning text-dark
-                                    {% elif s.status == 'scheduled' %}bg-info text-dark
-                                    {% elif s.status == 'in_progress' %}bg-primary
-                                    {% elif s.status == 'completed' %}bg-success
-                                    {% else %}bg-secondary{% endif %} rounded-pill px-3 py-1">
-                                    {{ s.get_status_display }}
-                                </span>
-                            </td>
-                            <td>
-                                <form action="{% url 'dashboard:service_status' s.pk %}" method="POST" class="d-flex gap-2">
-                                    {% csrf_token %}
-                                    <select name="status" class="form-select form-select-sm" style="width: 150px;" onchange="this.form.submit()">
-                                        {% for code, label in status_choices %}
-                                            <option value="{{ code }}" {% if s.status == code %}selected{% endif %}>{{ label }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="7" class="bg-light bg-opacity-50 py-2 px-4 small text-secondary border-bottom">
-                                <i class="bi bi-tools text-info me-1"></i> <strong>Issue / Scope:</strong> {{ s.issue_description }}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="7" class="text-center py-5 text-muted">
-                                No service requests match this filter.
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div>
+            <span class="badge bg-warning text-dark px-3 py-2 fs-6">
+                <i class="bi bi-wrench-adjustable me-1"></i> {{ pending_count }} Pending Review
+            </span>
         </div>
     </div>
-</section>
+
+    <!-- Filter Bar -->
+    <div class="admin-filter-bar mb-4">
+        <form method="GET" class="row g-2 align-items-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="q" value="{{ current_q }}" class="form-control" placeholder="Search customer, phone, model, ref...">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6">
+                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">All Ticket Statuses</option>
+                    {% for val, label in status_choices %}
+                        <option value="{{ val }}" {% if current_status == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6">
+                <select name="type" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">All Service Types</option>
+                    {% for val, label in service_type_choices %}
+                        <option value="{{ val }}" {% if current_type == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-lg-2 d-grid">
+                <button type="submit" class="btn btn-sm btn-outline-primary">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Service Requests Table -->
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Reference #</th>
+                        <th>Customer</th>
+                        <th>Purifier Model</th>
+                        <th>Service Type</th>
+                        <th>Preferred Date</th>
+                        <th>Ticket Status</th>
+                        <th class="text-end">Manage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for srv in services %}
+                    <tr>
+                        <td class="font-monospace text-secondary small fw-bold">
+                            <a href="{% url 'dashboard:service_detail' srv.pk %}" class="text-decoration-none text-dark">
+                                {{ srv.reference_number }}
+                            </a>
+                        </td>
+                        <td>
+                            <div class="fw-bold text-dark">{{ srv.customer_name }}</div>
+                            <div class="small text-muted">
+                                <i class="bi bi-telephone me-1"></i> {{ srv.mobile }}
+                                <span class="mx-1">•</span>
+                                <i class="bi bi-geo-alt me-1"></i> {{ srv.city }}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="small fw-semibold text-secondary">{{ srv.product_model }}</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border small">{{ srv.get_service_type_display }}</span>
+                        </td>
+                        <td class="small text-muted">{{ srv.preferred_date|date:"d M Y" }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'dashboard:service_status' srv.pk %}" class="d-inline">
+                                {% csrf_token %}
+                                <select name="status" class="form-select form-select-sm" style="font-size: 0.78rem; width: auto; display: inline-block;" onchange="this.form.submit()">
+                                    {% for val, label in status_choices %}
+                                        <option value="{{ val }}" {% if srv.status == val %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                        <td class="text-end">
+                            <a href="{% url 'dashboard:service_detail' srv.pk %}" class="btn btn-sm btn-outline-secondary py-1 px-2" title="Manage ticket">
+                                <i class="bi bi-wrench"></i> Details
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox" style="font-size: 2.5rem; color: #CBD5E1;"></i>
+                            <p class="mt-2 mb-0">No service requests match the filter criteria.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if page_obj.has_other_pages %}
+        <div class="admin-card-footer">
+            <span class="small text-muted">Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            <ul class="pagination pagination-sm mb-0">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&status={{ current_status }}&type={{ current_type }}&q={{ current_q }}">&laquo; Prev</a></li>
+                {% endif %}
+                <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&status={{ current_status }}&type={{ current_type }}&q={{ current_q }}">Next &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
 {% endblock %}

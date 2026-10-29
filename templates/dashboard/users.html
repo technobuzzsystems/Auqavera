@@ -1,0 +1,109 @@
+{% extends 'dashboard/admin_base.html' %}
+{% load static %}
+
+{% block title %}Staff Users & Permissions{% endblock %}
+{% block page_title %}Authorized Staff & Administrator Accounts{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="{% url 'dashboard:users' %}" class="text-decoration-none text-muted">Administration</a></li>
+<li class="active text-dark fw-medium">Staff Accounts</li>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid px-0">
+
+    <!-- Header bar -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="h5 fw-bold text-dark mb-1">Staff Access & Permissions</h2>
+            <p class="text-muted small mb-0">Manage authorized personnel with access to the AQUAVERA administration console.</p>
+        </div>
+        {% if request.user.is_superuser %}
+        <div>
+            <a href="{% url 'dashboard:user_create' %}" class="btn btn-admin-primary">
+                <i class="bi bi-person-plus-fill me-1"></i> Add Staff Account
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Staff Users Table -->
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th>Contact Phone</th>
+                        <th>Role / Privilege</th>
+                        <th>Account Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in staff_users %}
+                    <tr>
+                        <td class="fw-bold text-dark">
+                            <i class="bi bi-person-circle me-1 text-primary"></i> {{ u.username }}
+                            {% if u == request.user %}
+                                <span class="badge bg-primary-subtle text-primary small ms-1">You</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ u.get_full_name|default:"-" }}</td>
+                        <td><a href="mailto:{{ u.email }}" class="text-decoration-none small">{{ u.email }}</a></td>
+                        <td class="small">{{ u.phone_number|default:"-" }}</td>
+                        <td>
+                            {% if u.is_superuser %}
+                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle small fw-bold">
+                                    <i class="bi bi-shield-fill-check"></i> Superuser
+                                </span>
+                            {% else %}
+                                <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle small fw-bold">
+                                    <i class="bi bi-shield"></i> Staff Admin
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if u.is_active %}
+                                <span class="badge-status badge-published"><i class="bi bi-check-circle-fill"></i> Active</span>
+                            {% else %}
+                                <span class="badge-status badge-draft"><i class="bi bi-slash-circle"></i> Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <div class="d-flex gap-1 justify-content-end">
+                                {% if request.user.is_superuser or request.user == u %}
+                                    <a href="{% url 'dashboard:user_edit' u.pk %}" class="btn btn-sm btn-outline-secondary py-1 px-2" title="Edit user">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if request.user.is_superuser and u != request.user %}
+                                    <form method="POST" action="{% url 'dashboard:user_toggle_active' u.pk %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm {% if u.is_active %}btn-outline-warning{% else %}btn-outline-success{% endif %} py-1 px-2" title="{% if u.is_active %}Deactivate{% else %}Activate{% endif %}">
+                                            {% if u.is_active %}
+                                                <i class="bi bi-pause-circle"></i>
+                                            {% else %}
+                                                <i class="bi bi-play-circle"></i>
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">No staff members found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

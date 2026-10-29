@@ -1,0 +1,91 @@
+{% extends 'dashboard/admin_base.html' %}
+{% load static %}
+
+{% block title %}Category Management{% endblock %}
+{% block page_title %}Product Categories{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="{% url 'dashboard:products' %}" class="text-decoration-none text-muted">Catalogue</a></li>
+<li class="active text-dark fw-medium">Categories</li>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid px-0">
+
+    <!-- Top Action Bar -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="h5 fw-bold text-dark mb-1">Purifier Categories & Classification</h2>
+            <p class="text-muted small mb-0">Organize purifiers by technology (RO, UV, UF, Gravity, Commercial).</p>
+        </div>
+        <div>
+            <a href="{% url 'dashboard:category_create' %}" class="btn btn-admin-primary">
+                <i class="bi bi-plus-lg me-1"></i> Add New Category
+            </a>
+        </div>
+    </div>
+
+    <!-- Categories Table -->
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">Icon</th>
+                        <th>Category Name</th>
+                        <th>Slug</th>
+                        <th>Sort Order</th>
+                        <th>Purifiers Count</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in categories %}
+                    <tr>
+                        <td>
+                            <div style="width: 38px; height: 38px; border-radius: 8px; background: #E0F7FA; color: #0D9488; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                <i class="bi {{ cat.icon|default:'bi-droplet' }}"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="fw-bold text-dark">{{ cat.name }}</div>
+                            <div class="small text-muted">{{ cat.description|truncatechars:50 }}</div>
+                        </td>
+                        <td><span class="font-monospace text-secondary small">{{ cat.slug }}</span></td>
+                        <td>{{ cat.sort_order }}</td>
+                        <td>
+                            <span class="badge bg-light text-dark border fw-bold">{{ cat.product_count }} purifiers</span>
+                        </td>
+                        <td>
+                            {% if cat.is_active %}
+                                <span class="badge-status badge-published"><i class="bi bi-check-circle-fill"></i> Active</span>
+                            {% else %}
+                                <span class="badge-status badge-draft"><i class="bi bi-pause-circle"></i> Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <div class="d-flex gap-1 justify-content-end">
+                                <a href="{% url 'dashboard:category_edit' cat.pk %}" class="btn btn-sm btn-outline-secondary py-1 px-2" title="Edit category">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'dashboard:category_delete' cat.pk %}" class="btn btn-sm btn-outline-danger py-1 px-2" title="Delete category">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <p class="mb-0">No categories defined yet.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

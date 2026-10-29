@@ -19,9 +19,11 @@ def home_view(request):
     - Service CTA
     - Newsletter signup
     """
-    featured_products = Product.objects.filter(is_active=True, is_featured=True).select_related('category')[:6]
-    if not featured_products.exists():
-        featured_products = Product.objects.filter(is_active=True).select_related('category')[:6]
+    featured_products = Product.objects.filter(
+        status='published',
+        is_active=True,
+        is_featured=True
+    ).select_related('category').prefetch_related('images').order_by('-updated_at')[:6]
     
     categories = Category.objects.filter(is_active=True).order_by('sort_order')
     testimonials = Testimonial.objects.filter(is_active=True)[:3]

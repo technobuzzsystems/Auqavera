@@ -6,10 +6,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
+    path('admin-panel/', include('apps.dashboard.urls', namespace='dashboard')),
+    path('dashboard/', RedirectView.as_view(url='/admin-panel/', permanent=False)),
     path('accounts/', include('apps.accounts.urls', namespace='accounts')),
     path('', include('apps.catalog.urls', namespace='catalog')),
     path('', include('apps.enquiries.urls', namespace='enquiries')),
@@ -23,4 +25,3 @@ if settings.DEBUG:
 
 handler404 = 'apps.content.views.custom_404_view'
 handler500 = 'apps.content.views.custom_500_view'
-

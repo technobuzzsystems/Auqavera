@@ -37,6 +37,16 @@ class ServiceRequest(models.Model):
     preferred_date = models.DateField(help_text="Preferred technician visit date")
     issue_description = models.TextField(help_text="Description of issue, filtration behavior, or specific service needed")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', db_index=True)
+    internal_notes = models.TextField(blank=True, help_text="Staff or technician field notes")
+    technician_name = models.CharField(max_length=150, blank=True, help_text="Assigned field technician name")
+    follow_up_date = models.DateField(null=True, blank=True)
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='assigned_service_requests'
+    )
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -54,3 +64,14 @@ class ServiceRequest(models.Model):
             rand_str = uuid.uuid4().hex[:6].upper()
             self.reference_number = f"SRV-{date_str}-{rand_str}"
         super().save(*args, **kwargs)
+
+    @property
+    def status_badge_class(self):
+        badges = {
+            'pending': 'badge bg-warning text-dark',
+            'scheduled': 'badge bg-info text-dark',
+            'in_progress': 'badge bg-primary',
+            'completed': 'badge bg-success',
+            'cancelled': 'badge bg-secondary',
+        }
+        return badges.get(self.status, 'badge bg-secondary')

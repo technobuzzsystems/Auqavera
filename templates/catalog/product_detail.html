@@ -27,16 +27,25 @@
             <div class="col-lg-6">
                 <div class="product-image-container large-detail shadow-sm border">
                     <div class="product-badge-overlay">
-                        {% if product.is_featured %}
-                            <span class="badge-featured"><i class="bi bi-star-fill text-warning me-1"></i> Featured Concept</span>
-                        {% endif %}
                         {% if product.discount_percentage > 0 %}
                             <span class="badge-discount">{{ product.discount_percentage }}% OFF</span>
                         {% endif %}
+                        {% if product.is_out_of_stock %}
+                            <span class="badge-stock badge-stock-out">Out of Stock</span>
+                        {% elif product.is_low_stock %}
+                            <span class="badge-stock badge-stock-low">Low Stock ({{ product.stock_quantity }} left)</span>
+                        {% else %}
+                            <span class="badge-stock badge-stock-in">In Stock ({{ product.stock_quantity }} units)</span>
+                        {% endif %}
+                        {% if product.is_featured %}
+                            <span class="badge-featured"><i class="bi bi-star-fill text-warning me-1"></i> Featured</span>
+                        {% endif %}
                     </div>
 
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.image_alt_text|default:product.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
+                    {% if product.primary_image %}
+                        <img id="mainProductImg" src="{{ product.primary_image.image.url }}" alt="{{ product.primary_image.alt_text|default:product.name }}" class="product-card-img" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    {% elif product.image %}
+                        <img id="mainProductImg" src="{{ product.image.url }}" alt="{{ product.image_alt_text|default:product.name }}" class="product-card-img" style="max-height: 100%; max-width: 100%; object-fit: contain;">
                     {% else %}
                         <!-- CSS Abstract Water Architecture Concept -->
                         <div class="product-css-placeholder">
@@ -49,18 +58,31 @@
                                 <path d="M0.00,80.00 C180.00,140.00 310.00,20.00 500.00,80.00 L500.00,150.00 L0.00,150.00 Z" fill="rgba(101, 214, 208, 0.3)"></path>
                             </svg>
                             <div class="placeholder-label-pill" style="bottom: 20px; font-size: 0.82rem; padding: 5px 14px;">
-                                <i class="bi bi-camera me-1"></i> Stylized Concept Placeholder
+                                <i class="bi bi-camera me-1"></i> Preview Concept
                             </div>
                         </div>
                     {% endif %}
                 </div>
 
+                {% if product.images.count > 1 %}
+                <!-- Multiple Images Gallery Thumbnails -->
+                <div class="d-flex gap-2 mt-3 overflow-auto pb-1" id="productThumbnailGallery">
+                    {% for g_img in product.images.all %}
+                        <div class="border rounded p-1 gallery-thumb-item {% if g_img.is_primary %}border-primary{% endif %}" style="width: 68px; height: 68px; flex-shrink: 0; cursor: pointer; transition: all 0.2s;" onclick="const m = document.getElementById('mainProductImg'); if (m) { m.src='{{ g_img.image.url }}'; } document.querySelectorAll('.gallery-thumb-item').forEach(el => el.classList.remove('border-primary')); this.classList.add('border-primary');">
+                            <img src="{{ g_img.image.url }}" alt="{{ g_img.alt_text|default:product.name }}" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 4px;">
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if not product.primary_image and not product.image %}
                 <!-- Subtle notice explaining placeholder -->
                 <div class="text-center mt-2">
                     <small class="text-muted" style="font-size: 0.78rem;">
                         <i class="bi bi-info-circle me-1"></i> Visual concept placeholder. Actual device styling may vary.
                     </small>
                 </div>
+                {% endif %}
             </div>
 
             <!-- Right: Product Information & Action Controls -->
@@ -69,6 +91,9 @@
                     <span class="badge bg-info bg-opacity-10 text-info fw-bold text-uppercase px-3 py-1 rounded-pill" style="font-size: 0.75rem;">
                         {{ product.category.name }}
                     </span>
+                    {% if product.sku %}
+                        <span class="font-monospace text-secondary small">SKU: {{ product.sku }}</span>
+                    {% endif %}
                     <span class="badge bg-light text-secondary border px-3 py-1 rounded-pill" style="font-size: 0.75rem;">
                         {{ product.technology }}
                     </span>
@@ -88,6 +113,15 @@
                     </div>
                     <div class="small text-muted mt-1">
                         <i class="bi bi-shield-check text-success me-1"></i> Delivery & basic installation guidance included.
+                    </div>
+                    <div class="small mt-2 pt-2 border-top">
+                        {% if product.is_out_of_stock %}
+                            <span class="text-danger fw-bold"><i class="bi bi-x-circle me-1"></i> Currently Out of Stock</span>
+                        {% elif product.is_low_stock %}
+                            <span class="text-warning-emphasis fw-bold"><i class="bi bi-exclamation-triangle me-1"></i> Limited Stock Available</span>
+                        {% else %}
+                            <span class="text-success fw-medium"><i class="bi bi-check-circle me-1"></i> In Stock & Ready for Consultation</span>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -114,7 +148,7 @@
                     <div class="col-sm-6">
                         <div class="p-3 rounded-3 border bg-white">
                             <span class="text-muted small d-block">Warranty & Service Support</span>
-                            <strong class="text-dark"><i class="bi bi-award text-warning me-1"></i> 1 Year Standard Support</strong>
+                            <strong class="text-dark"><i class="bi bi-award text-warning me-1"></i> {{ product.warranty_info|default:"1 Year Standard Support" }}</strong>
                         </div>
                     </div>
                 </div>

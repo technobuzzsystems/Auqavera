@@ -1,146 +1,476 @@
-{% extends 'base.html' %}
+{% extends 'dashboard/admin_base.html' %}
 {% load static %}
 
-{% block title %}{{ title }} — AQUAVERA Staff{% endblock %}
+{% block title %}{{ title }} — AQUAVERA Admin{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
 
-{% block content %}
-<section class="bg-white border-bottom py-4">
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-1 small">
-                <li class="breadcrumb-item"><a href="{% url 'dashboard:home' %}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'dashboard:products' %}">Products</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
-            </ol>
-        </nav>
-        <h1 class="h2 fw-bold mb-0">{{ title }}</h1>
-    </div>
-</section>
+{% block breadcrumb %}
+<li><a href="{% url 'dashboard:products' %}" class="text-decoration-none text-muted">Catalogue</a></li>
+<li class="active text-dark fw-medium">{{ title }}</li>
+{% endblock %}
 
-<section class="py-5" style="background-color: var(--aquavera-white-soft);">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-9">
-                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
-                    <form method="POST" enctype="multipart/form-data" novalidate>
-                        {% csrf_token %}
+{% block admin_content %}
+<div class="container-fluid px-0">
 
-                        {% if form.errors %}
-                            <div class="alert alert-danger border-0 rounded-3 small mb-4">
-                                <i class="bi bi-exclamation-triangle-fill me-2"></i> Please correct the form errors below.
-                            </div>
-                        {% endif %}
+    <form method="POST" enctype="multipart/form-data" novalidate id="productForm">
+        {% csrf_token %}
 
-                        <h5 class="fw-bold text-navy mb-3">Basic Information</h5>
-                        <div class="row g-3 mb-3">
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger shadow-sm mb-4">
+                {% for err in form.non_field_errors %}
+                    <div><i class="bi bi-exclamation-triangle-fill me-2"></i> {{ err }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="row g-4">
+            <!-- Left Column: Core Data, Specs, & Multiple Product Images -->
+            <div class="col-lg-8">
+                <!-- 1. Basic Information -->
+                <div class="admin-card mb-4">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title"><i class="bi bi-info-circle-fill me-2 text-primary"></i> Basic Product Identity</h2>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="row g-3">
                             <div class="col-md-8">
-                                <label class="form-label small fw-bold">Product Name *</label>
+                                <label for="{{ form.name.id_for_label }}" class="form-label small fw-bold">Product Name <span class="text-danger">*</span></label>
                                 {{ form.name }}
+                                {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>{% endif %}
                             </div>
+
                             <div class="col-md-4">
-                                <label class="form-label small fw-bold">Category *</label>
+                                <label for="{{ form.category.id_for_label }}" class="form-label small fw-bold">Category <span class="text-danger">*</span></label>
                                 {{ form.category }}
+                                {% if form.category.errors %}<div class="text-danger small mt-1">{{ form.category.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="{{ form.sku.id_for_label }}" class="form-label small fw-bold">SKU / Model Number</label>
+                                {{ form.sku }}
+                                <div class="form-text small">Leave blank to auto-generate unique SKU.</div>
+                                {% if form.sku.errors %}<div class="text-danger small mt-1">{{ form.sku.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="{{ form.brand.id_for_label }}" class="form-label small fw-bold">Brand</label>
+                                {{ form.brand }}
+                                {% if form.brand.errors %}<div class="text-danger small mt-1">{{ form.brand.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="{{ form.slug.id_for_label }}" class="form-label small fw-bold">URL Slug</label>
+                                {{ form.slug }}
+                                <div class="form-text small">Leave blank to auto-generate from product name.</div>
+                                {% if form.slug.errors %}<div class="text-danger small mt-1">{{ form.slug.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="{{ form.intended_use.id_for_label }}" class="form-label small fw-bold">Intended Application</label>
+                                {{ form.intended_use }}
+                                {% if form.intended_use.errors %}<div class="text-danger small mt-1">{{ form.intended_use.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Technical Purification Specs -->
+                <div class="admin-card mb-4">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title"><i class="bi bi-cpu-fill me-2 text-info"></i> Purification Specifications</h2>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label for="{{ form.technology.id_for_label }}" class="form-label small fw-bold">Purification Technology <span class="text-danger">*</span></label>
+                                {{ form.technology }}
+                                {% if form.technology.errors %}<div class="text-danger small mt-1">{{ form.technology.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="{{ form.storage_capacity_liters.id_for_label }}" class="form-label small fw-bold">Storage Tank (Liters) <span class="text-danger">*</span></label>
+                                {{ form.storage_capacity_liters }}
+                                {% if form.storage_capacity_liters.errors %}<div class="text-danger small mt-1">{{ form.storage_capacity_liters.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="{{ form.purification_stages.id_for_label }}" class="form-label small fw-bold">Filtration Stages <span class="text-danger">*</span></label>
+                                {{ form.purification_stages }}
+                                {% if form.purification_stages.errors %}<div class="text-danger small mt-1">{{ form.purification_stages.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="{{ form.warranty_info.id_for_label }}" class="form-label small fw-bold">Warranty Period</label>
+                                {{ form.warranty_info }}
+                                {% if form.warranty_info.errors %}<div class="text-danger small mt-1">{{ form.warranty_info.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-12">
+                                <label for="{{ form.maintenance_information.id_for_label }}" class="form-label small fw-bold">Maintenance & Filter Sizing Advisory</label>
+                                {{ form.maintenance_information }}
+                                {% if form.maintenance_information.errors %}<div class="text-danger small mt-1">{{ form.maintenance_information.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Copywriting & Descriptions -->
+                <div class="admin-card mb-4">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title"><i class="bi bi-text-paragraph me-2 text-teal"></i> Copywriting & Descriptions</h2>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="mb-3">
+                            <label for="{{ form.short_description.id_for_label }}" class="form-label small fw-bold">Short Tagline Description <span class="text-danger">*</span></label>
+                            {{ form.short_description }}
+                            <div class="form-text small">Rendered on product catalogue cards and comparison tables.</div>
+                            {% if form.short_description.errors %}<div class="text-danger small mt-1">{{ form.short_description.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="mb-0">
+                            <label for="{{ form.description.id_for_label }}" class="form-label small fw-bold">Comprehensive Product Description <span class="text-danger">*</span></label>
+                            {{ form.description }}
+                            {% if form.description.errors %}<div class="text-danger small mt-1">{{ form.description.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Dedicated Product Images & Multi-Angle Gallery Section -->
+                <div class="admin-card mb-4" id="productImagesSection">
+                    <div class="admin-card-header d-flex justify-content-between align-items-center">
+                        <h2 class="admin-card-title"><i class="bi bi-images me-2 text-teal"></i> Product Images & Gallery</h2>
+                        <span class="badge bg-light text-dark border small"><i class="bi bi-camera me-1"></i> Multi-Angle Photos</span>
+                    </div>
+                    <div class="admin-card-body">
+                        <!-- Upload Input Box -->
+                        <div class="p-3 bg-light rounded-3 border mb-4">
+                            <label for="new_images_input" class="form-label small fw-bold text-dark d-flex align-items-center justify-content-between">
+                                <span><i class="bi bi-cloud-arrow-up-fill text-primary me-2"></i> Upload Product Images</span>
+                                <span class="badge bg-primary-subtle text-primary fw-semibold">Multiple Files Supported</span>
+                            </label>
+                            <input type="file" name="new_images" id="new_images_input" multiple accept=".jpg,.jpeg,.png,.webp" class="form-control">
+                            <div class="form-text small mt-2 text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Supported formats: <strong>JPG, JPEG, PNG, WEBP</strong>. Max size: <strong>5 MB</strong> per file. Hold <kbd>Ctrl</kbd> or <kbd>Cmd</kbd> to select multiple images simultaneously.
                             </div>
                         </div>
 
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold">Slug (URL identifier)</label>
-                                {{ form.slug }}
-                                <small class="text-muted" style="font-size: 0.72rem;">Leave empty to generate automatically from name.</small>
+                        <!-- Live Client-side New Uploads Preview Container -->
+                        <div id="new_images_preview_wrapper" style="display: none;" class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                                <span class="small fw-bold text-uppercase text-primary">
+                                    <i class="bi bi-eye-fill me-1"></i> Selected New Images (<span id="new_images_count">0</span>)
+                                </span>
+                                <small class="text-muted"><i class="bi bi-check2-circle text-success me-1"></i> Mark radio button on the primary photo</small>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold">Technology *</label>
-                                {{ form.technology }}
+                            <div class="row g-3" id="new_images_preview_grid">
+                                <!-- Populated dynamically by client-side JS -->
                             </div>
+                        </div>
+
+                        <!-- Existing Saved Images (in Edit Mode) -->
+                        {% if existing_images %}
+                        <div class="border-top pt-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="small fw-bold text-uppercase text-secondary">
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i> Saved Gallery Images ({{ existing_images.count }})
+                                </span>
+                                <small class="text-muted">Choose radio button to set Primary; check box to remove on save</small>
+                            </div>
+
+                            <div class="row g-3">
+                                {% for img in existing_images %}
+                                <div class="col-sm-6 col-md-4" id="existing_card_{{ img.id }}">
+                                    <div class="card h-100 border {% if img.is_primary %}border-primary shadow-sm{% endif %} position-relative overflow-hidden" id="card_box_{{ img.id }}">
+                                        {% if img.is_primary %}
+                                            <span class="badge bg-primary position-absolute top-0 start-0 m-2 shadow-sm" style="z-index: 2;" id="primary_badge_{{ img.id }}">
+                                                <i class="bi bi-star-fill me-1"></i> Primary
+                                            </span>
+                                        {% endif %}
+                                        <div style="height: 140px; background: #F8FAFC; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
+                                            <img src="{{ img.image.url }}" alt="{{ img.alt_text|default:product.name }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                        </div>
+                                        <div class="p-2 bg-white small border-top">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input primary-radio" type="radio" name="primary_image_choice" value="existing_{{ img.id }}" id="prim_exist_{{ img.id }}" {% if img.is_primary %}checked{% endif %} onchange="handlePrimaryChange(this)">
+                                                <label class="form-check-label fw-bold text-dark" for="prim_exist_{{ img.id }}">
+                                                    Primary Image
+                                                </label>
+                                            </div>
+                                            <label class="text-muted small" style="font-size: 0.72rem;">Alt text / Angle:</label>
+                                            <input type="text" name="existing_alt_{{ img.id }}" value="{{ img.alt_text }}" class="form-control form-control-sm" placeholder="e.g. Front View">
+
+                                            <div class="form-check mt-2 pt-2 border-top">
+                                                <input class="form-check-input text-danger delete-checkbox" type="checkbox" name="delete_image_ids" value="{{ img.id }}" id="del_{{ img.id }}" onchange="toggleDeleteCard('existing_card_{{ img.id }}', this.checked)">
+                                                <label class="form-check-label text-danger fw-semibold" for="del_{{ img.id }}" style="font-size: 0.75rem;">
+                                                    <i class="bi bi-trash me-1"></i> Remove this image
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if product %}
+                    <div class="admin-card-footer bg-light py-2 px-3">
+                        <a href="{% url 'dashboard:product_images' product.pk %}" class="small text-decoration-none fw-semibold text-teal">
+                            <i class="bi bi-box-arrow-up-right me-1"></i> Open Advanced Gallery Workspace ({{ product.images.count }} Photos) &rarr;
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Right Column: Commercials, Status & Active Featured Thumbnail -->
+            <div class="col-lg-4">
+                <!-- Status & Publishing -->
+                <div class="admin-card mb-4">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title"><i class="bi bi-broadcast me-2 text-success"></i> Publishing Status</h2>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label small fw-bold">Publication State</label>
+                            {{ form.status }}
+                            <div class="form-text small">Published products appear on the live website automatically.</div>
+                            {% if form.status.errors %}<div class="text-danger small mt-1">{{ form.status.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="form-check form-switch mb-0">
+                            {{ form.is_featured }}
+                            <label class="form-check-label small fw-semibold" for="{{ form.is_featured.id_for_label }}">
+                                Highlight as Featured Purifier on Homepage
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing & Inventory -->
+                <div class="admin-card mb-4">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title"><i class="bi bi-currency-rupee me-2 text-warning"></i> Pricing & Stock</h2>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="mb-3">
+                            <label for="{{ form.price.id_for_label }}" class="form-label small fw-bold">Selling Price (₹) <span class="text-danger">*</span></label>
+                            {{ form.price }}
+                            {% if form.price.errors %}<div class="text-danger small mt-1">{{ form.price.errors.0 }}</div>{% endif %}
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Short Summary / Tagline *</label>
-                            {{ form.short_description }}
+                            <label for="{{ form.original_price.id_for_label }}" class="form-label small fw-bold">Original M.R.P. (₹)</label>
+                            {{ form.original_price }}
+                            <div class="form-text small">Strike-through price for calculating discount.</div>
+                            {% if form.original_price.errors %}<div class="text-danger small mt-1">{{ form.original_price.errors.0 }}</div>{% endif %}
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold">Detailed Overview & Description *</label>
-                            {{ form.description }}
+                        <div class="mb-3">
+                            <label for="{{ form.stock_quantity.id_for_label }}" class="form-label small fw-bold">Current Stock Quantity</label>
+                            {{ form.stock_quantity }}
+                            {% if form.stock_quantity.errors %}<div class="text-danger small mt-1">{{ form.stock_quantity.errors.0 }}</div>{% endif %}
                         </div>
 
-                        <hr class="my-4">
-                        <h5 class="fw-bold text-navy mb-3">Filtration & Capacities</h5>
-                        
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold">Storage Tank Capacity (Liters) *</label>
-                                {{ form.storage_capacity_liters }}
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold">Selling Price (INR) *</label>
-                                {{ form.price }}
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold">Original MRP (INR - Optional)</label>
-                                {{ form.original_price }}
-                            </div>
+                        <div class="mb-0">
+                            <label for="{{ form.low_stock_threshold.id_for_label }}" class="form-label small fw-bold">Low-Stock Alert Threshold</label>
+                            {{ form.low_stock_threshold }}
+                            {% if form.low_stock_threshold.errors %}<div class="text-danger small mt-1">{{ form.low_stock_threshold.errors.0 }}</div>{% endif %}
                         </div>
+                    </div>
+                </div>
 
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold">Purification Stages Summary</label>
-                                {{ form.purification_stages }}
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold">Intended Application / Water Source</label>
-                                {{ form.intended_use }}
-                            </div>
+                <!-- Active Primary Image Preview Card -->
+                <div class="admin-card mb-4">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title"><i class="bi bi-card-image me-2 text-teal"></i> Featured Thumbnail</h2>
+                    </div>
+                    <div class="admin-card-body text-center">
+                        <div id="sidebar_primary_preview">
+                            {% if product and product.display_image_url %}
+                                <div class="position-relative d-inline-block w-100">
+                                    <img src="{{ product.display_image_url }}" alt="{{ product.display_image_alt }}" class="img-fluid rounded border mb-2 shadow-sm" style="max-height: 180px; width: 100%; object-fit: contain; background: #F8FAFC;">
+                                </div>
+                                <div class="small fw-semibold text-dark">Active Primary Photo</div>
+                                <div class="text-muted" style="font-size: 0.72rem;">Shown on product cards and comparison tables</div>
+                            {% else %}
+                                <div class="py-4 bg-light rounded border text-muted">
+                                    <i class="bi bi-water text-primary" style="font-size: 2.2rem;"></i>
+                                    <div class="small fw-semibold mt-2">Stylized CSS Placeholder Active</div>
+                                    <div class="text-muted" style="font-size: 0.72rem;">Upload an image in the left section to set real photo</div>
+                                </div>
+                            {% endif %}
                         </div>
+                    </div>
+                </div>
 
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold">Maintenance & Filter Exchange Details</label>
-                            {{ form.maintenance_information }}
-                        </div>
-
-                        <hr class="my-4">
-                        <h5 class="fw-bold text-navy mb-3">Media & Visibility</h5>
-
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold">Product Image (Optional)</label>
-                                {{ form.image }}
-                                <small class="text-muted d-block mt-1">If blank, the attractive CSS water placeholder is automatically rendered.</small>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold">Image Alt Text</label>
-                                {{ form.image_alt_text }}
-                            </div>
-                        </div>
-
-                        <div class="d-flex gap-4 mb-4 pt-2">
-                            <div class="form-check">
-                                {{ form.is_featured }}
-                                <label class="form-check-label small fw-bold" for="{{ form.is_featured.id_for_label }}">
-                                    Mark as Featured on Homepage
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                {{ form.is_active }}
-                                <label class="form-check-label small fw-bold" for="{{ form.is_active.id_for_label }}">
-                                    Active (Visible in Public Catalogue)
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="d-flex gap-3">
-                            <button type="submit" class="btn btn-aquavera px-4">
-                                Save Product
-                            </button>
-                            <a href="{% url 'dashboard:products' %}" class="btn btn-outline-secondary px-4">
-                                Cancel
-                            </a>
-                        </div>
-                    </form>
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-admin-primary btn-lg">
+                        <i class="bi bi-check2-circle me-1"></i> {{ button_label|default:"Save Product" }}
+                    </button>
+                    <a href="{% url 'dashboard:products' %}" class="btn btn-outline-secondary">
+                        Cancel & Return
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </form>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Selected new files store for DataTransfer
+    let selectedNewFiles = [];
+
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+    const ALLOWED_EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
+
+    function formatBytes(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / 1048576).toFixed(2) + ' MB';
+    }
+
+    function updateFileInput() {
+        const input = document.getElementById('new_images_input');
+        if (!input) return;
+        try {
+            const dt = new DataTransfer();
+            selectedNewFiles.forEach(f => dt.items.add(f));
+            input.files = dt.files;
+        } catch (e) {
+            // DataTransfer fallback
+        }
+    }
+
+    function removeNewFile(index) {
+        selectedNewFiles.splice(index, 1);
+        updateFileInput();
+        renderNewImagePreviews();
+    }
+
+    function toggleDeleteCard(cardId, isDeleting) {
+        const card = document.getElementById(cardId);
+        if (card) {
+            if (isDeleting) {
+                card.style.opacity = '0.45';
+                card.style.filter = 'grayscale(100%)';
+            } else {
+                card.style.opacity = '1';
+                card.style.filter = 'none';
+            }
+        }
+    }
+
+    function handlePrimaryChange(radio) {
+        document.querySelectorAll('.primary-radio').forEach(r => {
+            if (r !== radio) r.checked = false;
+        });
+    }
+
+    function renderNewImagePreviews() {
+        const wrapper = document.getElementById('new_images_preview_wrapper');
+        const grid = document.getElementById('new_images_preview_grid');
+        const countSpan = document.getElementById('new_images_count');
+
+        if (!wrapper || !grid) return;
+
+        grid.innerHTML = '';
+        countSpan.textContent = selectedNewFiles.length;
+
+        if (selectedNewFiles.length === 0) {
+            wrapper.style.display = 'none';
+            return;
+        }
+
+        wrapper.style.display = 'block';
+
+        // Check if an existing image is already designated as primary
+        const existingChecked = document.querySelector('input.primary-radio[value^="existing_"]:checked');
+        const hasExistingPrimary = !!existingChecked;
+
+        selectedNewFiles.forEach((file, idx) => {
+            const ext = '.' + file.name.split('.').pop().toLowerCase();
+            const isExtValid = ALLOWED_EXTS.includes(ext);
+            const isSizeValid = file.size <= MAX_FILE_SIZE;
+            const isValid = isExtValid && isSizeValid;
+
+            const col = document.createElement('div');
+            col.className = 'col-sm-6 col-md-4';
+            col.id = `new_preview_card_${idx}`;
+
+            const isDefaultPrimary = (!hasExistingPrimary && idx === 0);
+
+            const card = document.createElement('div');
+            card.className = `card h-100 border ${isValid ? 'border-info-subtle' : 'border-danger'} position-relative overflow-hidden shadow-sm`;
+
+            // Thumbnail container
+            const thumbBox = document.createElement('div');
+            thumbBox.style.cssText = 'height: 140px; background: #F8FAFC; overflow: hidden; display: flex; align-items: center; justify-content: center;';
+
+            const img = document.createElement('img');
+            img.className = 'img-fluid w-100 h-100';
+            img.style.objectFit = 'cover';
+            img.alt = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            thumbBox.appendChild(img);
+
+            // Controls Body
+            const body = document.createElement('div');
+            body.className = 'p-2 bg-white small border-top';
+
+            let errorNotice = '';
+            if (!isSizeValid) {
+                errorNotice = '<div class="badge bg-danger mb-1 w-100">Exceeds 5MB Limit</div>';
+            } else if (!isExtValid) {
+                errorNotice = '<div class="badge bg-danger mb-1 w-100">Unsupported Format</div>';
+            }
+
+            body.innerHTML = `
+                ${errorNotice}
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="text-truncate fw-semibold" style="max-width: 120px;" title="${file.name}">${file.name}</span>
+                    <span class="text-muted" style="font-size: 0.72rem;">${formatBytes(file.size)}</span>
+                </div>
+                <div class="form-check mb-1">
+                    <input class="form-check-input primary-radio" type="radio" name="primary_image_choice" value="new_${idx}" id="prim_new_${idx}" ${isDefaultPrimary ? 'checked' : ''} onchange="handlePrimaryChange(this)">
+                    <label class="form-check-label fw-bold text-dark" for="prim_new_${idx}">
+                        Set as Primary
+                    </label>
+                </div>
+                <label class="text-muted" style="font-size: 0.72rem;">Alt text / Angle:</label>
+                <input type="text" name="new_image_alt_${idx}" class="form-control form-control-sm mb-2" placeholder="e.g. Front View / Angle">
+                <button type="button" class="btn btn-sm btn-outline-danger w-100 py-0" style="font-size: 0.75rem;" onclick="removeNewFile(${idx})">
+                    <i class="bi bi-x-circle me-1"></i> Remove
+                </button>
+            `;
+
+            card.appendChild(thumbBox);
+            card.appendChild(body);
+            col.appendChild(card);
+            grid.appendChild(col);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('new_images_input');
+        if (input) {
+            input.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files.length > 0) {
+                    selectedNewFiles = Array.from(e.target.files);
+                    renderNewImagePreviews();
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

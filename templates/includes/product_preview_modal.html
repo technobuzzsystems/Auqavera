@@ -1,0 +1,162 @@
+{% load static %}
+<!-- AQUAVERA Product Quick View / Preview Modal -->
+<div class="modal fade" id="productPreviewModal" tabindex="-1" aria-labelledby="quickViewTitle" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable quickview-modal-dialog">
+        <div class="modal-content border-0 shadow-lg quickview-modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header border-0 pb-0 justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-info bg-opacity-10 text-info fw-bold text-uppercase px-3 py-1 rounded-pill" id="quickViewCategory" style="font-size: 0.75rem;">
+                        Water Purifier
+                    </span>
+                    <span class="font-monospace text-secondary small" id="quickViewSku" style="display: none;"></span>
+                </div>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body p-3 p-md-4 pt-2">
+                <!-- Loading State Skeleton -->
+                <div id="quickViewLoading" class="text-center py-5">
+                    <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading product details...</span>
+                    </div>
+                    <p class="text-secondary small mt-3 mb-0">Loading purifier specifications...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="quickViewError" class="text-center py-5" style="display: none;">
+                    <i class="bi bi-exclamation-circle text-danger fs-1"></i>
+                    <h5 class="fw-bold mt-2 mb-1">Product Details Unavailable</h5>
+                    <p class="text-secondary small mb-3">Unable to retrieve product preview at this moment.</p>
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                </div>
+
+                <!-- Main Content (Two Columns) -->
+                <div id="quickViewContent" class="row g-4 align-items-start" style="display: none;">
+                    <!-- Left Column: Gallery & Large Image Showcase -->
+                    <div class="col-lg-6">
+                        <div class="quickview-image-frame position-relative rounded-4 overflow-hidden border">
+                            <!-- Overlay Badges -->
+                            <div class="position-absolute top-0 start-0 p-3 d-flex flex-column gap-2" style="z-index: 5;">
+                                <span id="quickViewDiscountBadge" class="badge-discount" style="display: none;"></span>
+                                <span id="quickViewStockBadge" class="badge"></span>
+                            </div>
+
+                            <!-- Image Viewport -->
+                            <div class="quickview-main-image-viewport d-flex align-items-center justify-content-center" id="quickViewImageViewport">
+                                <img id="quickViewMainImg" src="" alt="" class="img-fluid quickview-main-img" style="display: none;">
+                                
+                                <!-- CSS Abstract Water Placeholder (Fallback if no photographs exist) -->
+                                <div id="quickViewPlaceholder" class="product-css-placeholder w-100 h-100 position-absolute top-0 start-0" style="display: none;">
+                                    <div class="placeholder-water-rings" style="width: 220px; height: 220px;"></div>
+                                    <div class="placeholder-core-badge" style="width: 96px; height: 96px; border-radius: 24px;">
+                                        <i class="bi bi-water" style="font-size: 2.5rem;"></i>
+                                    </div>
+                                    <svg class="placeholder-water-waves" viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 70px;">
+                                        <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" fill="rgba(25, 182, 201, 0.18)"></path>
+                                        <path d="M0.00,80.00 C180.00,140.00 310.00,20.00 500.00,80.00 L500.00,150.00 L0.00,150.00 Z" fill="rgba(101, 214, 208, 0.3)"></path>
+                                    </svg>
+                                    <div class="placeholder-label-pill" style="bottom: 16px; font-size: 0.78rem; padding: 4px 12px;">
+                                        <i class="bi bi-camera me-1"></i> Preview Concept
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Next/Prev Controls (Visible when multiple images exist) -->
+                            <button type="button" class="quickview-nav-btn quickview-nav-prev" id="quickViewPrevBtn" aria-label="Previous image" style="display: none;">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button type="button" class="quickview-nav-btn quickview-nav-next" id="quickViewNextBtn" aria-label="Next image" style="display: none;">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Thumbnails Row -->
+                        <div class="quickview-thumbnails-row d-flex gap-2 mt-3 overflow-auto pb-1" id="quickViewThumbnails" style="display: none;">
+                            <!-- Injected dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Product Information & Actions -->
+                    <div class="col-lg-6">
+                        <div class="d-flex flex-column h-100">
+                            <!-- Product Title -->
+                            <h2 class="h3 fw-bold text-navy mb-2" id="quickViewTitle"></h2>
+                            
+                            <!-- Short Description -->
+                            <p class="text-secondary small mb-3" id="quickViewDescription"></p>
+
+                            <!-- Pricing Box -->
+                            <div class="p-3 rounded-4 bg-light border mb-3 quickview-pricing-box">
+                                <div class="d-flex align-items-baseline gap-2 flex-wrap">
+                                    <span class="fs-3 fw-bold text-dark" id="quickViewPrice"></span>
+                                    <span class="text-muted text-decoration-line-through small" id="quickViewOriginalPrice" style="display: none;"></span>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill small ms-auto" id="quickViewSavingsBadge" style="display: none;"></span>
+                                </div>
+                                <div class="small text-muted mt-1 d-flex align-items-center">
+                                    <i class="bi bi-shield-check text-info me-1"></i>
+                                    <span>Genuine AQUAVERA Technology & Quality Guarantee</span>
+                                </div>
+                            </div>
+
+                            <!-- Key Specifications Grid -->
+                            <div class="row g-2 mb-3" id="quickViewSpecsGrid">
+                                <div class="col-sm-6" id="quickViewTechCol" style="display: none;">
+                                    <div class="p-2 px-3 rounded-3 border bg-white h-100">
+                                        <span class="text-muted small d-block" style="font-size: 0.72rem;">Technology</span>
+                                        <strong class="text-dark small"><i class="bi bi-cpu text-info me-1"></i> <span id="quickViewTech"></span></strong>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="quickViewCapacityCol" style="display: none;">
+                                    <div class="p-2 px-3 rounded-3 border bg-white h-100">
+                                        <span class="text-muted small d-block" style="font-size: 0.72rem;">Storage Capacity</span>
+                                        <strong class="text-dark small"><i class="bi bi-droplet-half text-primary me-1"></i> <span id="quickViewCapacity"></span></strong>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="quickViewStagesCol" style="display: none;">
+                                    <div class="p-2 px-3 rounded-3 border bg-white h-100">
+                                        <span class="text-muted small d-block" style="font-size: 0.72rem;">Purification Stages</span>
+                                        <strong class="text-dark small"><i class="bi bi-layers text-info me-1"></i> <span id="quickViewStages"></span></strong>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" id="quickViewUseCol" style="display: none;">
+                                    <div class="p-2 px-3 rounded-3 border bg-white h-100">
+                                        <span class="text-muted small d-block" style="font-size: 0.72rem;">Intended Use</span>
+                                        <strong class="text-dark small"><i class="bi bi-house-door text-secondary me-1"></i> <span id="quickViewUse"></span></strong>
+                                    </div>
+                                </div>
+                                <div class="col-12" id="quickViewWarrantyCol" style="display: none;">
+                                    <div class="p-2 px-3 rounded-3 border bg-white">
+                                        <span class="text-muted small d-block" style="font-size: 0.72rem;">Warranty & Support</span>
+                                        <strong class="text-dark small"><i class="bi bi-award text-warning me-1"></i> <span id="quickViewWarranty"></span></strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Key Features Bullets (if any) -->
+                            <div id="quickViewFeaturesBox" class="mb-3" style="display: none;">
+                                <span class="text-muted small fw-bold d-block mb-1" style="font-size: 0.75rem;">KEY HIGHLIGHTS</span>
+                                <ul class="list-unstyled small mb-0 ps-1 d-flex flex-column gap-1" id="quickViewFeaturesList">
+                                </ul>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex flex-wrap gap-2 mt-auto pt-2 border-top">
+                                <a id="quickViewDetailBtn" href="#" class="btn btn-aquavera flex-grow-1 justify-content-center">
+                                    View Full Details <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                                <a id="quickViewEnquiryBtn" href="#" class="btn btn-outline-info text-dark justify-content-center border-opacity-50" style="border-radius: var(--aquavera-radius-pill);">
+                                    <i class="bi bi-chat-dots me-1 text-info"></i> Request Enquiry
+                                </a>
+                                <button type="button" id="quickViewCompareBtn" class="btn btn-aquavera-outline" title="Add to comparison tray">
+                                    <i class="bi bi-arrow-left-right me-1"></i> Compare
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

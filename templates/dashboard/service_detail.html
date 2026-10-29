@@ -1,0 +1,126 @@
+{% extends 'dashboard/admin_base.html' %}
+{% load static %}
+
+{% block title %}Service Ticket #{{ service_req.reference_number }} — Details{% endblock %}
+{% block page_title %}Service Ticket #{{ service_req.reference_number }}{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="{% url 'dashboard:service_requests' %}" class="text-decoration-none text-muted">Customer Queries</a></li>
+<li><a href="{% url 'dashboard:service_requests' %}" class="text-decoration-none text-muted">Service Requests</a></li>
+<li class="active text-dark fw-medium">{{ service_req.reference_number }}</li>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid px-0">
+
+    <div class="row g-4">
+        <!-- Left Column: Customer & Service Request Details -->
+        <div class="col-lg-7">
+            <!-- Ticket Info Card -->
+            <div class="admin-card mb-4">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title"><i class="bi bi-wrench-adjustable-circle-fill me-2 text-warning"></i> Service Ticket Overview</h3>
+                    <span class="{{ service_req.status_badge_class }}">{{ service_req.get_status_display }}</span>
+                </div>
+                <div class="admin-card-body">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <span class="text-muted small d-block">Customer Name</span>
+                            <span class="fw-bold fs-6">{{ service_req.customer_name }}</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted small d-block">Contact Number</span>
+                            <span class="fw-semibold"><a href="tel:{{ service_req.mobile }}" class="text-decoration-none">{{ service_req.mobile }}</a></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted small d-block">Email Address</span>
+                            <span class="fw-semibold">{{ service_req.email|default:"Not provided" }}</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted small d-block">Service City</span>
+                            <span class="fw-semibold">{{ service_req.city }}</span>
+                        </div>
+                        <div class="col-sm-6 border-top pt-3">
+                            <span class="text-muted small d-block">Purifier Model / Serial #</span>
+                            <span class="fw-semibold text-dark">{{ service_req.product_model }}</span>
+                        </div>
+                        <div class="col-sm-6 border-top pt-3">
+                            <span class="text-muted small d-block">Service Type</span>
+                            <span class="badge bg-light text-dark border">{{ service_req.get_service_type_display }}</span>
+                        </div>
+                        <div class="col-sm-6 border-top pt-3">
+                            <span class="text-muted small d-block">Preferred Technician Date</span>
+                            <span class="fw-bold text-primary">{{ service_req.preferred_date|date:"l, d F Y" }}</span>
+                        </div>
+                        <div class="col-sm-6 border-top pt-3">
+                            <span class="text-muted small d-block">Date Booked</span>
+                            <span class="small text-muted">{{ service_req.created_at|date:"d M Y, H:i" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issue Description Card -->
+            <div class="admin-card mb-4">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title"><i class="bi bi-chat-left-text me-2 text-primary"></i> Customer Issue Description</h3>
+                </div>
+                <div class="admin-card-body">
+                    <p class="mb-0 text-secondary" style="white-space: pre-line;">{{ service_req.issue_description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Technician Assignment & Status Update -->
+        <div class="col-lg-5">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title"><i class="bi bi-person-gear me-2 text-teal"></i> Field Operations Management</h3>
+                </div>
+                <div class="admin-card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label small fw-bold">Ticket Progress Status</label>
+                            {{ form.status }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.technician_name.id_for_label }}" class="form-label small fw-bold">Assigned Field Technician</label>
+                            {{ form.technician_name }}
+                            <div class="form-text small">Name of the field technician allocated to visit customer site.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.assigned_to.id_for_label }}" class="form-label small fw-bold">Supervising Staff</label>
+                            {{ form.assigned_to }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.follow_up_date.id_for_label }}" class="form-label small fw-bold">Follow-Up / Visit Date</label>
+                            {{ form.follow_up_date }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="{{ form.internal_notes.id_for_label }}" class="form-label small fw-bold">Internal Operations Notes</label>
+                            {{ form.internal_notes }}
+                            <div class="form-text small">Record technician visit logs, parts replaced, membrane pressure, TDS readings, etc.</div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-admin-primary">
+                                <i class="bi bi-check2-circle me-1"></i> Update Service Ticket
+                            </button>
+                            <a href="{% url 'dashboard:service_requests' %}" class="btn btn-outline-secondary">
+                                &larr; Return to Service Requests
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

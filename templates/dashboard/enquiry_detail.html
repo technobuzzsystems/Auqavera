@@ -1,0 +1,144 @@
+{% extends 'dashboard/admin_base.html' %}
+{% load static %}
+
+{% block title %}Enquiry #{{ enquiry.reference_number }} — Details{% endblock %}
+{% block page_title %}Customer Enquiry #{{ enquiry.reference_number }}{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="{% url 'dashboard:enquiries' %}" class="text-decoration-none text-muted">Customer Queries</a></li>
+<li><a href="{% url 'dashboard:enquiries' %}" class="text-decoration-none text-muted">Enquiries</a></li>
+<li class="active text-dark fw-medium">{{ enquiry.reference_number }}</li>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid px-0">
+
+    <div class="row g-4">
+        <!-- Left: Customer Information & Message -->
+        <div class="col-lg-7">
+            <!-- Customer Details Card -->
+            <div class="admin-card mb-4">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title"><i class="bi bi-person-lines-fill me-2 text-primary"></i> Customer Contact Information</h3>
+                    <span class="{{ enquiry.status_badge_class }}">{{ enquiry.get_status_display }}</span>
+                </div>
+                <div class="admin-card-body">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <span class="text-muted small d-block">Full Name</span>
+                            <span class="fw-bold fs-6">{{ enquiry.customer_name }}</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted small d-block">Mobile Phone</span>
+                            <span class="fw-semibold"><a href="tel:{{ enquiry.mobile }}" class="text-decoration-none">{{ enquiry.mobile }}</a></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted small d-block">Email Address</span>
+                            <span class="fw-semibold"><a href="mailto:{{ enquiry.email }}" class="text-decoration-none">{{ enquiry.email }}</a></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted small d-block">City / Location</span>
+                            <span class="fw-semibold">{{ enquiry.city }}</span>
+                        </div>
+                        <div class="col-sm-6 border-top pt-3">
+                            <span class="text-muted small d-block">Enquiry Type</span>
+                            <span class="badge bg-light text-dark border">{{ enquiry.get_enquiry_type_display }}</span>
+                        </div>
+                        <div class="col-sm-6 border-top pt-3">
+                            <span class="text-muted small d-block">Submission Timestamp</span>
+                            <span class="small text-muted">{{ enquiry.created_at|date:"d M Y, H:i:s" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Associated Product Card -->
+            {% if enquiry.product %}
+            <div class="admin-card mb-4">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title"><i class="bi bi-box-seam me-2 text-info"></i> Inquired Water Purifier</h3>
+                    <a href="{% url 'dashboard:product_detail' enquiry.product.pk %}" class="small text-decoration-none">View Product</a>
+                </div>
+                <div class="admin-card-body">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width: 60px; height: 60px; border-radius: 8px; overflow: hidden; background: #F1F5F9; display: flex; align-items: center; justify-content: center; border: 1px solid #E2E8F0;">
+                            {% if enquiry.product.primary_image %}
+                                <img src="{{ enquiry.product.primary_image.image.url }}" alt="{{ enquiry.product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif enquiry.product.image %}
+                                <img src="{{ enquiry.product.image.url }}" alt="{{ enquiry.product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% else %}
+                                <i class="bi bi-water text-primary" style="font-size: 1.5rem;"></i>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h4 class="h6 fw-bold mb-1">{{ enquiry.product.name }}</h4>
+                            <div class="small text-muted">
+                                <span>{{ enquiry.product.category.name }}</span> • 
+                                <span class="fw-semibold text-dark">{{ enquiry.product.formatted_price }}</span> • 
+                                <span class="{{ enquiry.product.stock_badge_class }}">{{ enquiry.product.stock_status_display }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Customer Message Card -->
+            <div class="admin-card mb-4">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title"><i class="bi bi-chat-quote me-2 text-teal"></i> Inbound Customer Message</h3>
+                </div>
+                <div class="admin-card-body">
+                    <p class="mb-0 text-secondary" style="white-space: pre-line;">{{ enquiry.message }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Staff Notes & Status Workflow -->
+        <div class="col-lg-5">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title"><i class="bi bi-clipboard-check-fill me-2 text-success"></i> Staff Workflow & Follow-Up</h3>
+                </div>
+                <div class="admin-card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label small fw-bold">Update Pipeline Status</label>
+                            {{ form.status }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.assigned_to.id_for_label }}" class="form-label small fw-bold">Assigned Staff Representative</label>
+                            {{ form.assigned_to }}
+                            <div class="form-text small">Assign this enquiry to an active staff member.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.follow_up_date.id_for_label }}" class="form-label small fw-bold">Scheduled Follow-Up Date</label>
+                            {{ form.follow_up_date }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="{{ form.internal_notes.id_for_label }}" class="form-label small fw-bold">Internal Staff Notes</label>
+                            {{ form.internal_notes }}
+                            <div class="form-text small">Record phone conversation notes, raw water TDS readings, or follow-up milestones.</div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-admin-primary">
+                                <i class="bi bi-check2-circle me-1"></i> Save Updates
+                            </button>
+                            <a href="{% url 'dashboard:enquiries' %}" class="btn btn-outline-secondary">
+                                &larr; Return to Enquiries List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

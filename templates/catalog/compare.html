@@ -48,7 +48,9 @@
                                     
                                     <!-- CSS Placeholder for comparison header -->
                                     <div class="product-image-container mx-auto mb-2" style="height: 140px; max-width: 180px; border-radius: 12px;">
-                                        {% if p.image %}
+                                        {% if p.display_image_url %}
+                                            <img src="{{ p.display_image_url }}" alt="{{ p.display_image_alt|default:p.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
+                                        {% elif p.image %}
                                             <img src="{{ p.image.url }}" alt="{{ p.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
                                         {% else %}
                                             <div class="product-css-placeholder">

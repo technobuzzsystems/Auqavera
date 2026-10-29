@@ -1,30 +1,70 @@
-{% extends 'base.html' %}
+{% extends 'dashboard/admin_base.html' %}
 {% load static %}
 
-{% block title %}Delete Product — AQUAVERA Staff{% endblock %}
+{% block title %}Archive or Delete Product — {{ product.name }}{% endblock %}
+{% block page_title %}Remove Product: {{ product.name }}{% endblock %}
 
-{% block content %}
-<section class="py-5" style="background-color: var(--aquavera-white-soft);">
-    <div class="container py-4 text-center">
-        <div class="row justify-content-center">
-            <div class="col-lg-5 col-md-7">
-                <div class="bg-white p-5 rounded-4 border shadow-sm">
-                    <div class="rounded-circle bg-danger bg-opacity-10 text-danger p-3 d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="bi bi-trash fs-2"></i>
+{% block breadcrumb %}
+<li><a href="{% url 'dashboard:products' %}" class="text-decoration-none text-muted">Catalogue</a></li>
+<li class="active text-dark fw-medium">Archive / Delete</li>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid px-0">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="admin-card border-danger shadow-sm">
+                <div class="admin-card-header bg-danger bg-opacity-10 text-danger">
+                    <h2 class="admin-card-title text-danger">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Product Action
+                    </h2>
+                </div>
+                <div class="admin-card-body p-4">
+                    <div class="mb-3">
+                        <h3 class="h5 fw-bold text-dark">{{ product.name }}</h3>
+                        <div class="small text-muted mb-2">
+                            <span class="font-monospace">SKU: {{ product.sku|default:"-" }}</span> | 
+                            Category: {{ product.category.name }} | 
+                            Price: {{ product.formatted_price }}
+                        </div>
                     </div>
-                    <h3 class="fw-bold text-navy mb-2">Delete Product?</h3>
-                    <p class="text-secondary small mb-4">
-                        Are you sure you want to permanently delete <strong>"{{ product.name }}"</strong>? This action cannot be reversed.
-                    </p>
+
+                    <div class="alert alert-warning small mb-4">
+                        <i class="bi bi-info-circle-fill me-1"></i>
+                        <strong>Recommendation:</strong> Prefer <strong>Archiving</strong> instead of permanent deletion. Archiving immediately hides the product from the public catalogue while safeguarding existing customer enquiries, service tickets, and warranty records.
+                    </div>
 
                     <form method="POST">
                         {% csrf_token %}
-                        <div class="d-flex justify-content-center gap-3">
-                            <a href="{% url 'dashboard:products' %}" class="btn btn-outline-secondary px-4">
-                                Cancel
+
+                        <div class="mb-4">
+                            <div class="form-check p-3 rounded border mb-2 bg-light">
+                                <input class="form-check-input" type="radio" name="action" id="actionArchive" value="archive" checked>
+                                <label class="form-check-label fw-bold" for="actionArchive">
+                                    Archive Product (Recommended)
+                                </label>
+                                <div class="small text-muted ms-4">
+                                    Safely unpublishes the product and hides it from customers without breaking linked records.
+                                </div>
+                            </div>
+
+                            <div class="form-check p-3 rounded border border-danger-subtle bg-danger bg-opacity-10">
+                                <input class="form-check-input" type="radio" name="action" id="actionDelete" value="delete">
+                                <label class="form-check-label fw-bold text-danger" for="actionDelete">
+                                    Permanently Delete Product
+                                </label>
+                                <div class="small text-danger-emphasis ms-4">
+                                    Irreversibly deletes the product and its uploaded gallery images from database storage.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'dashboard:products' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> Cancel
                             </a>
-                            <button type="submit" class="btn btn-danger px-4">
-                                Yes, Delete Product
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-check2-circle me-1"></i> Confirm & Proceed
                             </button>
                         </div>
                     </form>
@@ -32,5 +72,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
 {% endblock %}
