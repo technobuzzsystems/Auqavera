@@ -239,6 +239,52 @@ a:hover {
   }
 }
 
+/* Navbar Dropdowns & Mobile Actions */
+.navbar-search-dropdown {
+  width: 280px;
+  max-width: calc(100vw - 32px);
+  border-radius: 14px;
+}
+.navbar-categories-dropdown {
+  border-radius: 14px;
+  min-width: 250px;
+  max-width: calc(100vw - 32px);
+}
+.navbar-account-dropdown {
+  border-radius: 14px;
+  min-width: 220px;
+  max-width: calc(100vw - 32px);
+}
+
+@media (max-width: 575.98px) {
+  .aquavera-navbar .navbar-brand .brand-name {
+    font-size: 1.15rem;
+  }
+  .navbar-actions {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 8px;
+  }
+  .navbar-actions > .d-flex {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .navbar-action-btn-cta {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-cta-group .btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 /* Buttons */
 .btn-aquavera {
   background: var(--aquavera-accent-gradient);
@@ -367,11 +413,13 @@ a:hover {
   margin-bottom: 1.25rem;
 }
 .hero-headline {
-  font-size: clamp(2.3rem, 4.5vw, 3.6rem);
+  font-size: clamp(1.75rem, 5vw, 3.6rem);
   font-weight: 800;
   line-height: 1.15;
   color: var(--aquavera-navy);
   margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+  word-break: break-word;
 }
 .hero-headline .accent-text {
   background: var(--aquavera-accent-gradient);
@@ -536,7 +584,7 @@ a:hover {
   border-right: none;
 }
 .stat-number {
-  font-size: 1.85rem;
+  font-size: clamp(1.4rem, 4vw, 1.85rem);
   font-weight: 800;
   color: #65D6D0;
   line-height: 1.2;
@@ -545,6 +593,23 @@ a:hover {
   font-size: 0.86rem;
   color: #CBD5E1;
   margin-bottom: 0;
+}
+
+@media (max-width: 767.98px) {
+  .trust-stats-strip {
+    padding: 1.5rem 0;
+  }
+  .stat-item {
+    padding: 0 0.5rem;
+  }
+  .stat-item:nth-child(2n) {
+    border-right: none;
+  }
+  .stat-item:nth-child(1),
+  .stat-item:nth-child(2) {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
 }
 
 /* 3-Stage Water Purification Infographic Section */
@@ -866,6 +931,21 @@ a:hover {
   box-shadow: 0 6px 16px rgba(25, 182, 201, 0.3);
 }
 
+@media (max-width: 575.98px) {
+  .category-card {
+    padding: 1.25rem 0.85rem;
+  }
+  .category-icon-orb {
+    width: 48px;
+    height: 48px;
+    font-size: 1.4rem;
+    margin-bottom: 0.85rem;
+  }
+  .category-card h4 {
+    font-size: 0.92rem !important;
+  }
+}
+
 /* Purification Steps Flow */
 .process-step-card {
   background: #FFFFFF;
@@ -1142,6 +1222,92 @@ a:hover {
   }
   .quickview-image-frame {
     height: 250px;
+  }
+}
+
+/* Responsive Image Containers on Small Mobile */
+@media (max-width: 379.98px) {
+  .product-image-container {
+    height: 200px;
+    margin: 8px 8px 0 8px;
+    width: calc(100% - 16px);
+    padding: 10px;
+  }
+  .product-card-body {
+    padding: 1rem 0.85rem;
+  }
+  .product-card-title {
+    font-size: 1rem;
+  }
+  .price-current {
+    font-size: 1.2rem;
+  }
+}
+
+/* Detail Page Responsive Adjustments */
+@media (max-width: 991.98px) {
+  .product-image-container.large-detail {
+    height: 360px;
+    padding: 18px;
+  }
+}
+@media (max-width: 575.98px) {
+  .product-image-container.large-detail {
+    height: 270px;
+    padding: 14px;
+    border-radius: var(--aquavera-radius-md);
+  }
+  .product-detail-ctas .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .product-nav-pills .nav-link {
+    font-size: 0.82rem;
+    padding: 0.5rem 1rem !important;
+    white-space: nowrap;
+  }
+}
+
+/* Comparison Table Responsive Touch Scroll */
+.comparison-table-wrapper {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* Mobile Quick View Modal */
+@media (max-width: 575.98px) {
+  .quickview-modal-dialog {
+    margin: 0.5rem;
+  }
+  .quickview-modal-content {
+    border-radius: var(--aquavera-radius-md);
+  }
+  .quickview-image-frame {
+    height: 220px;
+  }
+  .quickview-thumb-item {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+/* Mobile Inputs & Tap Targets (Prevents iOS Safari auto-zoom) */
+@media (max-width: 767.98px) {
+  input.form-control,
+  select.form-select,
+  textarea.form-control {
+    font-size: 16px !important;
+  }
+}
+
+/* Compare Sticky Bar Mobile Optimization */
+@media (max-width: 575.98px) {
+  .compare-sticky-bar {
+    padding: 8px 0;
+  }
+  .compare-thumb-pill {
+    font-size: 0.74rem;
+    padding: 2px 8px;
   }
 }
 

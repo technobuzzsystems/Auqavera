@@ -33,7 +33,7 @@
                     <a class="nav-link dropdown-toggle" href="#" id="purifiersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Water Purifiers
                     </a>
-                    <ul class="dropdown-menu border-0 shadow-lg p-2" style="border-radius: 14px; min-width: 250px;" aria-labelledby="purifiersDropdown">
+                    <ul class="dropdown-menu border-0 shadow-lg p-2 navbar-categories-dropdown" aria-labelledby="purifiersDropdown">
                         <li><a class="dropdown-item py-2 rounded-2 fw-semibold" href="{% url 'catalog:product_list' %}"><i class="bi bi-grid-fill text-info me-2"></i> All Purifiers</a></li>
                         <li><hr class="dropdown-divider my-1"></li>
                         {% for cat in nav_categories %}
@@ -73,7 +73,7 @@
                     <button class="btn btn-outline-light text-dark rounded-circle border-0 navbar-action-btn-icon" type="button" id="searchDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Search Purifiers">
                         <i class="bi bi-search fs-5"></i>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end p-3 border-0 shadow-lg" style="width: 280px; border-radius: 14px;" aria-labelledby="searchDropdown">
+                    <div class="dropdown-menu dropdown-menu-end p-3 border-0 shadow-lg navbar-search-dropdown" aria-labelledby="searchDropdown">
                         <form action="{% url 'catalog:product_list' %}" method="GET">
                             <div class="input-group">
                                 <input type="text" name="q" class="form-control form-control-sm" placeholder="Search model or tech..." aria-label="Search">
@@ -95,7 +95,7 @@
                             {% endif %}
                         </span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2" style="border-radius: 14px; min-width: 220px;" aria-labelledby="userMenuDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 navbar-account-dropdown" aria-labelledby="userMenuDropdown">
                         {% if user.is_authenticated %}
                             <li class="px-3 py-2 border-bottom mb-1">
                                 <div class="fw-bold text-dark">{{ user.get_full_name|default:user.username }}</div>

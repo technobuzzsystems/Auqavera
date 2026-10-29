@@ -21,7 +21,7 @@
                     Experience modern, multi-barrier water purification designed for Indian tap and groundwater sources. Thoughtful engineering with balanced essential minerals.
                 </p>
 
-                <div class="d-flex flex-wrap gap-3 mb-4">
+                <div class="d-flex flex-wrap gap-3 mb-4 hero-cta-group">
                     <a href="{% url 'catalog:product_list' %}" class="btn btn-aquavera px-4 py-2">
                         <i class="bi bi-grid-fill"></i> Explore Purifiers
                     </a>
@@ -159,7 +159,7 @@
 
         <div class="row g-4">
             {% for cat in categories %}
-            <div class="col-lg col-md-4 col-sm-6">
+            <div class="col-6 col-md-4 col-lg">
                 <div class="category-card">
                     <div class="category-icon-orb">
                         <i class="bi {{ cat.icon|default:'bi-droplet' }}"></i>
