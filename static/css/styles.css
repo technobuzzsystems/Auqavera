@@ -563,6 +563,42 @@ a:hover {
   margin-bottom: 0;
 }
 
+/* 3-Stage Water Purification Infographic Section */
+.purification-infographic-section {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--aquavera-border);
+}
+
+.infographic-image-card {
+  max-width: 1040px;
+  width: 100%;
+  border-radius: var(--aquavera-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--aquavera-shadow-md);
+  border: 1px solid var(--aquavera-border);
+  background-color: #FFFFFF;
+  transition: var(--aquavera-transition);
+}
+
+.infographic-image-card:hover {
+  box-shadow: var(--aquavera-shadow-lg);
+  border-color: rgba(25, 182, 201, 0.35);
+}
+
+.infographic-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+@media (max-width: 575.98px) {
+  .infographic-image-card {
+    border-radius: var(--aquavera-radius-md);
+  }
+}
+
 /* Product Card & CSS Image Placeholder System */
 .product-card {
   background: var(--aquavera-card-bg);

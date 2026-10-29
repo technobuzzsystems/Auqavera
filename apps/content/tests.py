@@ -25,7 +25,11 @@ class ContentPagesTests(TestCase):
         self.assertContains(response, '/media/video/hero%20video.mp4')
         # Verify old illustration is removed
         self.assertNotContains(response, 'hero-water-art-container')
-        self.assertNotContains(response, 'water-art-blob-bg')
+        self.assertNotContains(response, 'water-art-blob-bg')
+        # Verify 3-stage purification infographic section and image
+        self.assertContains(response, 'Our 3-Stage Water Purification Technology')
+        self.assertContains(response, 'aquavera-3-stage-purification.jpg')
+        self.assertContains(response, 'sediment filtration, activated carbon filtration and RO membrane')
 
 
     def test_about_page_loads(self):
