@@ -4,6 +4,15 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.text import slugify
 
+
+def product_main_image_upload_path(instance, filename):
+    return f"products/{filename}"
+
+
+def product_gallery_upload_path(instance, filename):
+    return f"products/gallery/{filename}"
+
+
 class Category(models.Model):
     """Product category: RO, UV, UF, Gravity, Commercial, etc."""
     name = models.CharField(max_length=120, unique=True)
@@ -49,7 +58,7 @@ class Product(models.Model):
     storage_capacity_liters = models.DecimalField(max_digits=5, decimal_places=1, help_text="Capacity in liters")
     price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Selling price in INR")
     original_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Strike-through MRP in INR")
-    image = models.ImageField(upload_to='products/', null=True, blank=True, help_text="Optional future product image. If blank, CSS placeholder is rendered.")
+    image = models.ImageField(upload_to=product_main_image_upload_path, max_length=255, null=True, blank=True, help_text="Optional future product image. If blank, CSS placeholder is rendered.")
     image_alt_text = models.CharField(max_length=255, blank=True)
     specifications = models.JSONField(default=dict, blank=True, help_text="Key-value specifications dictionary")
     features = models.JSONField(default=list, blank=True, help_text="List of feature highlights")
@@ -62,6 +71,25 @@ class Product(models.Model):
     stock_quantity = models.PositiveIntegerField(default=15, help_text="Available stock units")
     low_stock_threshold = models.PositiveIntegerField(default=5, help_text="Alert threshold for low inventory")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='published', db_index=True)
+
+    # Source / Import metadata
+    source_name = models.CharField(max_length=150, blank=True, default='Official KENT India', help_text="Data source origin reference")
+    source_url = models.URLField(max_length=500, blank=True, null=True, help_text="Original manufacturer / source product URL")
+    raw_specifications = models.TextField(blank=True, help_text="Unprocessed official technical specification string")
+    manufacturer_availability = models.CharField(max_length=50, blank=True, default='In Stock', help_text="Manufacturer website stock status (e.g. In Stock, Sold Out)")
+    import_status = models.CharField(
+        max_length=30,
+        choices=[
+            ('imported', 'Imported'),
+            ('pending_review', 'Pending Review'),
+            ('verified', 'Verified'),
+            ('published', 'Published'),
+            ('import_failed', 'Import Failed'),
+        ],
+        default='verified',
+        db_index=True
+    )
+    last_imported_at = models.DateTimeField(null=True, blank=True, help_text="Timestamp when product data was last imported")
 
     is_featured = models.BooleanField(default=False, db_index=True)
     is_active = models.BooleanField(default=True, db_index=True)
@@ -185,11 +213,17 @@ class Product(models.Model):
             return self.image_alt_text
         return self.name
 
+    @property
+    def is_kent_product(self):
+        """Returns True if the purifier is branded KENT or has KENT in the name."""
+        return bool((self.brand and self.brand.upper() == 'KENT') or ('KENT' in self.name.upper()))
+
+
 
 class ProductImage(models.Model):
     """Multiple images for a water purifier product."""
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='products/gallery/')
+    image = models.ImageField(upload_to=product_gallery_upload_path, max_length=255)
     alt_text = models.CharField(max_length=255, blank=True)
     is_primary = models.BooleanField(default=False)
     display_order = models.PositiveIntegerField(default=0)

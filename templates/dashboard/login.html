@@ -12,6 +12,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon.png' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+
     <style>
         :root {
             --admin-navy: #0C2340;
@@ -91,10 +95,10 @@
 
     <div class="login-card">
         <div class="login-header">
-            <div class="brand-badge">
-                <i class="bi bi-droplet-fill"></i>
+            <div class="mb-3">
+                {% include 'includes/kent_logo.html' with height="64px" extra_class="img-fluid" %}
             </div>
-            <h2 class="h4 fw-bold text-dark mb-1">AQUAVERA Control Center</h2>
+            <h2 class="h4 fw-bold text-dark mb-1">Admin Control Center</h2>
             <p class="text-muted small mb-0">Authorized Staff & Administrator Login</p>
         </div>
 

@@ -23,6 +23,19 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 col-xl-7">
                 <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+                    <!-- Service Brands Badge -->
+                    <div class="p-3 bg-light rounded-3 border mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div>
+                                {% include 'includes/kent_logo.html' with height="42px" %}
+                            </div>
+                            <small class="text-secondary">
+                                Doorstep service, filter exchange, and technician maintenance supported for genuine <strong>KENT</strong> purifiers.
+                            </small>
+                        </div>
+                    </div>
+
+
                     <form action="{% url 'services:service_request_form' %}" method="POST" novalidate>
                         {% csrf_token %}
                         <input type="text" name="honeypot" style="display:none;" tabindex="-1" autocomplete="off">

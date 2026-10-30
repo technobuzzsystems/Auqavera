@@ -64,25 +64,19 @@
                             <source src="{{ MEDIA_URL }}video/hero%20video.mp4" type="video/mp4">
                             <!-- Graceful Fallback for browsers without HTML5 video support -->
                             <div class="hero-video-fallback">
-                                <div class="brand-icon-box mb-3" style="width: 58px; height: 58px; border-radius: 16px;">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                                        <path d="M12 2.5C12 2.5 5.5 10.5 5.5 15.5C5.5 19.0899 8.41015 22 12 22C15.5899 22 18.5 19.0899 18.5 15.5C18.5 10.5 12 2.5 12 2.5Z" fill="#0A2540" />
-                                        <path d="M12 7C12 7 8 12.5 8 15.5C8 17.7 9.8 19.5 12 19.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
-                                    </svg>
+                                <div class="mb-3">
+                                    {% include 'includes/kent_logo.html' with height="72px" %}
                                 </div>
-                                <h5 class="fw-bold text-navy mb-1">AQUAVERA</h5>
+                                <h5 class="fw-bold text-navy mb-1">KENT</h5>
                                 <p class="small text-muted mb-0">Pure Water. Thoughtfully Designed.</p>
                             </div>
                         </video>
                         <!-- Fallback layer if video stream fails to load -->
                         <div class="hero-video-fallback" id="heroVideoFallback" aria-hidden="true">
-                            <div class="brand-icon-box mb-3" style="width: 58px; height: 58px; border-radius: 16px;">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 2.5C12 2.5 5.5 10.5 5.5 15.5C5.5 19.0899 8.41015 22 12 22C15.5899 22 18.5 19.0899 18.5 15.5C18.5 10.5 12 2.5 12 2.5Z" fill="#0A2540" />
-                                    <path d="M12 7C12 7 8 12.5 8 15.5C8 17.7 9.8 19.5 12 19.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
-                                </svg>
+                            <div class="mb-3">
+                                {% include 'includes/kent_logo.html' with height="72px" %}
                             </div>
-                            <h5 class="fw-bold text-navy mb-1">AQUAVERA</h5>
+                            <h5 class="fw-bold text-navy mb-1">KENT</h5>
                             <p class="small text-muted mb-0">Pure Water. Thoughtfully Designed.</p>
                         </div>
                         <!-- Accessible Play/Pause Toggle -->
@@ -144,6 +138,36 @@
                 loading="lazy"
                 decoding="async"
             >
+        </div>
+    </div>
+</section>
+
+<!-- D3. KENT House of Purity Showcase Banner -->
+<section class="py-4 bg-white border-bottom">
+    <div class="container">
+        <div class="kent-showcase-card p-4 p-md-5">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-3 text-center text-lg-start">
+                    {% include 'includes/kent_logo.html' with height="85px" extra_class="img-fluid" %}
+                </div>
+                <div class="col-lg-6 text-center text-lg-start">
+                    <div class="d-inline-flex align-items-center gap-2 mb-2">
+                        <span class="badge bg-primary bg-opacity-10 text-primary fw-bold text-uppercase px-3 py-1 rounded-pill" style="font-size: 0.72rem;">
+                            Trusted Brand Technology
+                        </span>
+                        <span class="text-muted small"><i class="bi bi-shield-check text-success me-1"></i> Mineral RO™ Standards</span>
+                    </div>
+                    <h3 class="fw-bold text-navy mb-2">KENT House of Purity Collection</h3>
+                    <p class="text-secondary small mb-0">
+                        Explore genuine KENT water purifiers featuring patented Mineral RO™ technology, multi-stage RO+UV+UF filtration, and in-tank UV disinfection designed to retain essential natural minerals.
+                    </p>
+                </div>
+                <div class="col-lg-3 text-center text-lg-end">
+                    <a href="{% url 'catalog:product_list' %}?brand=KENT" class="btn btn-aquavera px-4 py-2 text-nowrap">
+                        View KENT Purifiers <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </section>

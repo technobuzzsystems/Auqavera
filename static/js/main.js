@@ -410,6 +410,11 @@ function initProductQuickView() {
       if (discountBadgeEl) discountBadgeEl.style.display = 'none';
       if (savingsBadgeEl) savingsBadgeEl.style.display = 'none';
     }
+    // KENT Brand Badge
+    const kentBadgeEl = document.getElementById('quickViewKentBadge');
+    if (kentBadgeEl) {
+      kentBadgeEl.style.display = product.is_kent_product ? 'inline-flex' : 'none';
+    }
 
     // Stock badge
     if (stockBadgeEl) {

@@ -1,390 +1,429 @@
-{% extends 'dashboard/admin_base.html' %}
-{% load static %}
-
-{% block title %}Operations Dashboard{% endblock %}
-{% block page_title %}Executive Command Center{% endblock %}
-
-{% block breadcrumb %}
-<li class="active text-dark fw-medium">Operations Dashboard</li>
-{% endblock %}
-
-{% block admin_content %}
-<div class="container-fluid px-0">
-
-    <!-- KPI Metrics Grid (8 Real Database Counters) -->
-    <div class="row g-3 mb-4">
-        <!-- 1. Total Products -->
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <div>
-                        <p class="kpi-title">Total Products</p>
-                        <div class="kpi-value">{{ total_products }}</div>
-                    </div>
-                    <div class="kpi-icon-wrap kpi-icon-primary">
-                        <i class="bi bi-grid-fill"></i>
-                    </div>
-                </div>
-                <p class="kpi-subtext text-success">
-                    <i class="bi bi-check-circle-fill me-1"></i> {{ published_products }} active in catalogue
-                </p>
-            </div>
-        </div>
-
-        <!-- 2. Published Products -->
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <div>
-                        <p class="kpi-title">Published Live</p>
-                        <div class="kpi-value">{{ published_products }}</div>
-                    </div>
-                    <div class="kpi-icon-wrap kpi-icon-teal">
-                        <i class="bi bi-eye-fill"></i>
-                    </div>
-                </div>
-                <p class="kpi-subtext">
-                    <span class="text-muted">Publicly browsable</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- 3. Draft / Inactive Products -->
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <div>
-                        <p class="kpi-title">Draft / Archived</p>
-                        <div class="kpi-value">{{ draft_products|add:archived_products }}</div>
-                    </div>
-                    <div class="kpi-icon-wrap kpi-icon-info">
-                        <i class="bi bi-file-earmark-lock2-fill"></i>
-                    </div>
-                </div>
-                <p class="kpi-subtext text-muted">
-                    <span>{{ draft_products }} drafts, {{ archived_products }} archived</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- 4. Low-Stock Products -->
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <div>
-                        <p class="kpi-title">Low-Stock Alert</p>
-                        <div class="kpi-value {% if low_stock_products > 0 %}text-warning{% endif %}">{{ low_stock_products }}</div>
-                    </div>
-                    <div class="kpi-icon-wrap kpi-icon-warning">
-                        <i class="bi bi-exclamation-triangle-fill"></i>
-                    </div>
-                </div>
-                <p class="kpi-subtext text-muted">
-                    <span>At or below reorder threshold</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- 5. Out-of-Stock Products -->
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <div>
-                        <p class="kpi-title">Out of Stock</p>
-                        <div class="kpi-value {% if out_of_stock_products > 0 %}text-danger{% endif %}">{{ out_of_stock_products }}</div>
-                    </div>
-                    <div class="kpi-icon-wrap kpi-icon-danger">
-                        <i class="bi bi-slash-circle-fill"></i>
-                    </div>
-                </div>
-                <p class="kpi-subtext text-muted">
-                    <span>Requires immediate restocking</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- 6. Total Customer Queries -->
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <div>
-                        <p class="kpi-title">Total Queries</p>
-                        <div class="kpi-value">{{ total_enquiries }}</div>
-                    </div>
-                    <div class="kpi-icon-wrap kpi-icon-teal">
-                        <i class="bi bi-chat-left-dots-fill"></i>
-                    </div>
-                </div>
-                <p class="kpi-subtext text-muted">
-                    <span>From all website forms</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- 7. New or Unread Queries -->
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <div>
-                        <p class="kpi-title">New Enquiries</p>
-                        <div class="kpi-value {% if new_enquiries > 0 %}text-primary{% endif %}">{{ new_enquiries }}</div>
-                    </div>
-                    <div class="kpi-icon-wrap kpi-icon-primary">
-                        <i class="bi bi-bell-fill"></i>
-                    </div>
-                </div>
-                <p class="kpi-subtext text-primary fw-medium">
-                    <i class="bi bi-arrow-right-circle me-1"></i> Awaiting staff review
-                </p>
-            </div>
-        </div>
-
-        <!-- 8. Total Inventory Units -->
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <div>
-                        <p class="kpi-title">Total Stock Units</p>
-                        <div class="kpi-value">{{ total_inventory_units }}</div>
-                    </div>
-                    <div class="kpi-icon-wrap kpi-icon-success">
-                        <i class="bi bi-boxes"></i>
-                    </div>
-                </div>
-                <p class="kpi-subtext text-muted">
-                    <span>Across all purifier models</span>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Operations Toolbar -->
-    <div class="admin-card mb-4">
-        <div class="admin-card-body py-3">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-                <div class="d-flex flex-wrap align-items-center gap-2">
-                    <span class="text-secondary small fw-bold text-uppercase"><i class="bi bi-lightning-charge-fill text-warning me-1"></i> Quick Actions:</span>
-                    <a href="{% url 'dashboard:product_create' %}" class="btn btn-sm btn-admin-primary">
-                        <i class="bi bi-plus-lg me-1"></i> Add Water Purifier
-                    </a>
-                    <a href="{% url 'dashboard:inventory' %}" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-sliders me-1"></i> Adjust Stock
-                    </a>
-                    <a href="{% url 'dashboard:categories' %}" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-tags me-1"></i> Categories
-                    </a>
-                </div>
-                <div>
-                    <a href="{% url 'dashboard:enquiries' %}?status=new" class="btn btn-sm btn-outline-primary position-relative">
-                        <i class="bi bi-envelope-open me-1"></i> Review New Enquiries
-                        {% if new_enquiries > 0 %}
-                            <span class="badge bg-danger ms-1">{{ new_enquiries }}</span>
-                        {% endif %}
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Charts & Breakdown Row -->
-    <div class="row g-4 mb-4">
-        <!-- Chart 1: Product Categories -->
-        <div class="col-lg-6">
-            <div class="admin-card h-100 mb-0">
-                <div class="admin-card-header">
-                    <h2 class="admin-card-title"><i class="bi bi-pie-chart-fill me-2 text-info"></i> Purifier Category Breakdown</h2>
-                    <span class="badge bg-light text-dark border">Live Data</span>
-                </div>
-                <div class="admin-card-body">
-                    <div style="height: 260px; position: relative;">
-                        <canvas id="categoryChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Chart 2: Inventory Stock Health -->
-        <div class="col-lg-6">
-            <div class="admin-card h-100 mb-0">
-                <div class="admin-card-header">
-                    <h2 class="admin-card-title"><i class="bi bi-shield-check me-2 text-success"></i> Stock Health Distribution</h2>
-                    <span class="badge bg-light text-dark border">Warehouse Live</span>
-                </div>
-                <div class="admin-card-body">
-                    <div style="height: 260px; position: relative;">
-                        <canvas id="stockChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Tables Row -->
-    <div class="row g-4">
-        <!-- Recent Customer Enquiries -->
-        <div class="col-lg-6">
-            <div class="admin-card h-100 mb-0">
-                <div class="admin-card-header">
-                    <h2 class="admin-card-title"><i class="bi bi-chat-quote-fill me-2 text-primary"></i> Recent Customer Enquiries</h2>
-                    <a href="{% url 'dashboard:enquiries' %}" class="btn btn-sm btn-link text-decoration-none">View All</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Ref #</th>
-                                <th>Customer</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for enq in recent_enquiries %}
-                            <tr>
-                                <td class="fw-semibold text-secondary small">{{ enq.reference_number }}</td>
-                                <td>
-                                    <div class="fw-bold">{{ enq.customer_name }}</div>
-                                    <div class="small text-muted">{{ enq.mobile }}</div>
-                                </td>
-                                <td><span class="badge bg-light text-dark border small">{{ enq.get_enquiry_type_display|truncatechars:18 }}</span></td>
-                                <td><span class="{{ enq.status_badge_class }}">{{ enq.get_status_display }}</span></td>
-                                <td class="text-end">
-                                    <a href="{% url 'dashboard:enquiry_detail' enq.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2" title="View details">
-                                        <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center py-4 text-muted">No customer enquiries recorded yet.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Products Added / Updated -->
-        <div class="col-lg-6">
-            <div class="admin-card h-100 mb-0">
-                <div class="admin-card-header">
-                    <h2 class="admin-card-title"><i class="bi bi-box-seam-fill me-2 text-teal"></i> Active Product Catalogue</h2>
-                    <a href="{% url 'dashboard:products' %}" class="btn btn-sm btn-link text-decoration-none">All Products</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>SKU</th>
-                                <th>Price</th>
-                                <th>Stock</th>
-                                <th>Status</th>
-                                <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for p in recent_products %}
-                            <tr>
-                                <td>
-                                    <div class="fw-bold">{{ p.name }}</div>
-                                    <div class="small text-muted">{{ p.category.name }}</div>
-                                </td>
-                                <td class="small text-secondary font-monospace">{{ p.sku|default:"-" }}</td>
-                                <td class="fw-semibold">{{ p.formatted_price }}</td>
-                                <td>
-                                    <span class="{{ p.stock_badge_class }}">{{ p.stock_quantity }}</span>
-                                </td>
-                                <td>
-                                    {% if p.status == 'published' %}
-                                        <span class="badge-status badge-published"><i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i> Live</span>
-                                    {% elif p.status == 'draft' %}
-                                        <span class="badge-status badge-draft"><i class="bi bi-circle" style="font-size: 0.5rem;"></i> Draft</span>
-                                    {% else %}
-                                        <span class="badge-status badge-archived"><i class="bi bi-archive" style="font-size: 0.5rem;"></i> Archived</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-end">
-                                    <a href="{% url 'dashboard:product_edit' p.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Edit product">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" class="text-center py-4 text-muted">No products available in database.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-{% endblock %}
-
-{% block extra_js %}
-<!-- Chart.js CDN for live database charts -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Category Chart
-        const catCtx = document.getElementById('categoryChart');
-        if (catCtx) {
-            const catLabels = {{ category_labels_json|safe }};
-            const catData = {{ category_data_json|safe }};
-            new Chart(catCtx, {
-                type: 'bar',
-                data: {
-                    labels: catLabels,
-                    datasets: [{
-                        label: 'Purifiers in Catalogue',
-                        data: catData,
-                        backgroundColor: '#19B6C9',
-                        borderRadius: 6,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { precision: 0 } },
-                        x: { grid: { display: false } }
-                    }
-                }
-            });
-        }
-
-        // Stock Health Chart
-        const stockCtx = document.getElementById('stockChart');
-        if (stockCtx) {
-            const stockLabels = {{ stock_labels_json|safe }};
-            const stockData = {{ stock_data_json|safe }};
-            new Chart(stockCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: stockLabels,
-                    datasets: [{
-                        data: stockData,
-                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
-                        borderWidth: 2,
-                        borderColor: '#FFFFFF',
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
-        }
-    });
-</script>
-{% endblock %}
+{% extends 'dashboard/admin_base.html' %}
+{% load static %}
+
+{% block title %}Operations Dashboard{% endblock %}
+{% block page_title %}Executive Command Center{% endblock %}
+
+{% block breadcrumb %}
+<li class="active text-dark fw-medium">Operations Dashboard</li>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid px-0">
+
+    <!-- KPI Metrics Grid (8 Real Database Counters) -->
+    <div class="row g-3 mb-4">
+        <!-- 1. Total Products -->
+        <div class="col-xl-3 col-md-6 col-sm-6">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <div>
+                        <p class="kpi-title">Total Products</p>
+                        <div class="kpi-value">{{ total_products }}</div>
+                    </div>
+                    <div class="kpi-icon-wrap kpi-icon-primary">
+                        <i class="bi bi-grid-fill"></i>
+                    </div>
+                </div>
+                <p class="kpi-subtext text-success">
+                    <i class="bi bi-check-circle-fill me-1"></i> {{ published_products }} active in catalogue
+                </p>
+            </div>
+        </div>
+
+        <!-- 1b. KENT Water Purifiers -->
+        <div class="col-xl-3 col-md-6 col-sm-6">
+            <div class="kpi-card" style="border-left: 3px solid #0056b3;">
+                <div class="kpi-card-header">
+                    <div>
+                        <p class="kpi-title">KENT Purifiers</p>
+                        <div class="kpi-value text-primary">{{ kent_products }}</div>
+                    </div>
+                    <div class="kpi-icon-wrap" style="background: rgba(0, 86, 179, 0.1);">
+                        {% include 'includes/kent_logo.html' with height="18px" %}
+                    </div>
+                </div>
+                <p class="kpi-subtext">
+                    <a href="{% url 'dashboard:products' %}?brand=KENT" class="text-decoration-none fw-semibold">
+                        Manage all KENT models &rarr;
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- 2. Published Products -->
+        <div class="col-xl-3 col-md-6 col-sm-6">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <div>
+                        <p class="kpi-title">Published Live</p>
+                        <div class="kpi-value">{{ published_products }}</div>
+                    </div>
+                    <div class="kpi-icon-wrap kpi-icon-teal">
+                        <i class="bi bi-eye-fill"></i>
+                    </div>
+                </div>
+                <p class="kpi-subtext">
+                    <span class="text-muted">Publicly browsable</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 3. Draft / Inactive Products -->
+        <div class="col-xl-3 col-md-6 col-sm-6">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <div>
+                        <p class="kpi-title">Draft / Archived</p>
+                        <div class="kpi-value">{{ draft_products|add:archived_products }}</div>
+                    </div>
+                    <div class="kpi-icon-wrap kpi-icon-info">
+                        <i class="bi bi-file-earmark-lock2-fill"></i>
+                    </div>
+                </div>
+                <p class="kpi-subtext text-muted">
+                    <span>{{ draft_products }} drafts, {{ archived_products }} archived</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 4. Low-Stock Products -->
+        <div class="col-xl-3 col-md-6 col-sm-6">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <div>
+                        <p class="kpi-title">Low-Stock Alert</p>
+                        <div class="kpi-value {% if low_stock_products > 0 %}text-warning{% endif %}">{{ low_stock_products }}</div>
+                    </div>
+                    <div class="kpi-icon-wrap kpi-icon-warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                </div>
+                <p class="kpi-subtext text-muted">
+                    <span>At or below reorder threshold</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 5. Out-of-Stock Products -->
+        <div class="col-xl-3 col-md-6 col-sm-6">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <div>
+                        <p class="kpi-title">Out of Stock</p>
+                        <div class="kpi-value {% if out_of_stock_products > 0 %}text-danger{% endif %}">{{ out_of_stock_products }}</div>
+                    </div>
+                    <div class="kpi-icon-wrap kpi-icon-danger">
+                        <i class="bi bi-slash-circle-fill"></i>
+                    </div>
+                </div>
+                <p class="kpi-subtext text-muted">
+                    <span>Requires immediate restocking</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 6. Total Customer Queries -->
+        <div class="col-xl-3 col-md-6 col-sm-6">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <div>
+                        <p class="kpi-title">Total Queries</p>
+                        <div class="kpi-value">{{ total_enquiries }}</div>
+                    </div>
+                    <div class="kpi-icon-wrap kpi-icon-teal">
+                        <i class="bi bi-chat-left-dots-fill"></i>
+                    </div>
+                </div>
+                <p class="kpi-subtext text-muted">
+                    <span>From all website forms</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 7. New or Unread Queries -->
+        <div class="col-xl-3 col-md-6 col-sm-6">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <div>
+                        <p class="kpi-title">New Enquiries</p>
+                        <div class="kpi-value {% if new_enquiries > 0 %}text-primary{% endif %}">{{ new_enquiries }}</div>
+                    </div>
+                    <div class="kpi-icon-wrap kpi-icon-primary">
+                        <i class="bi bi-bell-fill"></i>
+                    </div>
+                </div>
+                <p class="kpi-subtext text-primary fw-medium">
+                    <i class="bi bi-arrow-right-circle me-1"></i> Awaiting staff review
+                </p>
+            </div>
+        </div>
+
+        <!-- 8. Total Inventory Units -->
+        <div class="col-xl-3 col-md-6 col-sm-6">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <div>
+                        <p class="kpi-title">Total Stock Units</p>
+                        <div class="kpi-value">{{ total_inventory_units }}</div>
+                    </div>
+                    <div class="kpi-icon-wrap kpi-icon-success">
+                        <i class="bi bi-boxes"></i>
+                    </div>
+                </div>
+                <p class="kpi-subtext text-muted">
+                    <span>Across all purifier models</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Operations Toolbar -->
+    <div class="admin-card mb-4">
+        <div class="admin-card-body py-3">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <span class="d-inline-flex align-items-center me-1">
+                        {% include 'includes/kent_logo.html' with height="24px" %}
+                    </span>
+                    <span class="text-secondary small fw-bold text-uppercase"><i class="bi bi-lightning-charge-fill text-warning me-1"></i> Quick Actions:</span>
+                    <a href="{% url 'dashboard:product_create' %}" class="btn btn-sm btn-admin-primary">
+                        <i class="bi bi-plus-lg me-1"></i> Add Water Purifier
+                    </a>
+                    <a href="{% url 'dashboard:inventory' %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-sliders me-1"></i> Adjust Stock
+                    </a>
+                    <a href="{% url 'dashboard:categories' %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-tags me-1"></i> Categories
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'dashboard:enquiries' %}?status=new" class="btn btn-sm btn-outline-primary position-relative">
+                        <i class="bi bi-envelope-open me-1"></i> Review New Enquiries
+                        {% if new_enquiries > 0 %}
+                            <span class="badge bg-danger ms-1">{{ new_enquiries }}</span>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts & Breakdown Row -->
+    <div class="row g-4 mb-4">
+        <!-- Chart 1: Product Categories -->
+        <div class="col-lg-6">
+            <div class="admin-card h-100 mb-0">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-pie-chart-fill me-2 text-info"></i> Purifier Category Breakdown</h2>
+                    <span class="badge bg-light text-dark border">Live Data</span>
+                </div>
+                <div class="admin-card-body">
+                    <div style="height: 260px; position: relative;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 2: Inventory Stock Health -->
+        <div class="col-lg-6">
+            <div class="admin-card h-100 mb-0">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-shield-check me-2 text-success"></i> Stock Health Distribution</h2>
+                    <span class="badge bg-light text-dark border">Warehouse Live</span>
+                </div>
+                <div class="admin-card-body">
+                    <div style="height: 260px; position: relative;">
+                        <canvas id="stockChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Tables Row -->
+    <div class="row g-4">
+        <!-- Recent Customer Enquiries -->
+        <div class="col-lg-6">
+            <div class="admin-card h-100 mb-0">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-chat-quote-fill me-2 text-primary"></i> Recent Customer Enquiries</h2>
+                    <a href="{% url 'dashboard:enquiries' %}" class="btn btn-sm btn-link text-decoration-none">View All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Ref #</th>
+                                <th>Customer</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for enq in recent_enquiries %}
+                            <tr>
+                                <td class="fw-semibold text-secondary small">{{ enq.reference_number }}</td>
+                                <td>
+                                    <div class="fw-bold">{{ enq.customer_name }}</div>
+                                    <div class="small text-muted">{{ enq.mobile }}</div>
+                                </td>
+                                <td><span class="badge bg-light text-dark border small">{{ enq.get_enquiry_type_display|truncatechars:18 }}</span></td>
+                                <td><span class="{{ enq.status_badge_class }}">{{ enq.get_status_display }}</span></td>
+                                <td class="text-end">
+                                    <a href="{% url 'dashboard:enquiry_detail' enq.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2" title="View details">
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">No customer enquiries recorded yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Products Added / Updated -->
+        <div class="col-lg-6">
+            <div class="admin-card h-100 mb-0">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-box-seam-fill me-2 text-teal"></i> Active Product Catalogue</h2>
+                    <a href="{% url 'dashboard:products' %}" class="btn btn-sm btn-link text-decoration-none">All Products</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>SKU</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in recent_products %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div style="width: 40px; height: 40px; border-radius: 6px; overflow: hidden; background: #F8FAFC; border: 1px solid #E2E8F0; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                                            {% if p.display_image_url %}
+                                                <img src="{{ p.display_image_url }}" alt="{{ p.name }}" style="width: 100%; height: 100%; object-fit: contain;">
+                                            {% else %}
+                                                <i class="bi bi-water text-primary"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold d-flex align-items-center gap-1">
+                                                <a href="{% url 'dashboard:product_detail' p.pk %}" class="text-decoration-none text-dark hover-teal">{{ p.name }}</a>
+                                                {% if p.is_kent_product %}
+                                                    <span title="KENT">{% include 'includes/kent_logo.html' with height="12px" %}</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="small text-muted">{{ p.category.name }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="small text-secondary font-monospace">{{ p.sku|default:"-" }}</td>
+                                <td class="fw-semibold">{{ p.formatted_price }}</td>
+                                <td>
+                                    <span class="{{ p.stock_badge_class }}">{{ p.stock_quantity }}</span>
+                                </td>
+                                <td>
+                                    {% if p.status == 'published' %}
+                                        <span class="badge-status badge-published"><i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i> Live</span>
+                                    {% elif p.status == 'draft' %}
+                                        <span class="badge-status badge-draft"><i class="bi bi-circle" style="font-size: 0.5rem;"></i> Draft</span>
+                                    {% else %}
+                                        <span class="badge-status badge-archived"><i class="bi bi-archive" style="font-size: 0.5rem;"></i> Archived</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <a href="{% url 'dashboard:product_edit' p.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Edit product">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">No products available in database.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js CDN for live database charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Category Chart
+        const catCtx = document.getElementById('categoryChart');
+        if (catCtx) {
+            const catLabels = {{ category_labels_json|safe }};
+            const catData = {{ category_data_json|safe }};
+            new Chart(catCtx, {
+                type: 'bar',
+                data: {
+                    labels: catLabels,
+                    datasets: [{
+                        label: 'Purifiers in Catalogue',
+                        data: catData,
+                        backgroundColor: '#19B6C9',
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // Stock Health Chart
+        const stockCtx = document.getElementById('stockChart');
+        if (stockCtx) {
+            const stockLabels = {{ stock_labels_json|safe }};
+            const stockData = {{ stock_data_json|safe }};
+            new Chart(stockCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: stockLabels,
+                    datasets: [{
+                        data: stockData,
+                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -72,7 +72,7 @@
                             <span class="badge bg-light text-dark border small">{{ adj.get_change_type_display }}</span>
                         </td>
                         <td class="fw-bold fs-6 {% if adj.quantity_change > 0 %}text-success{% else %}text-danger{% endif %}">
-                            {{ adj.quantity_change:+d }} units
+                            {% if adj.quantity_change > 0 %}+{{ adj.quantity_change }}{% else %}{{ adj.quantity_change }}{% endif %} units
                         </td>
                         <td>
                             <span class="text-muted">{{ adj.previous_stock }}</span>

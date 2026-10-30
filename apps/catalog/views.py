@@ -36,8 +36,19 @@ def product_list(request):
     category_slug = request.GET.get('category', '').strip()
     selected_category = None
     if category_slug:
-        queryset = queryset.filter(category__slug=category_slug)
-        selected_category = Category.objects.filter(slug=category_slug, is_active=True).first()
+        slug_aliases = {
+            'ro-water-purifiers': ['ro-water-purifiers', 'kent-ro-water-purifiers'],
+            'uv-water-purifiers': ['uv-water-purifiers', 'kent-uv-water-purifiers'],
+            'uf-water-purifiers': ['uf-water-purifiers', 'gravity-water-purifiers', 'kent-gravity-water-purifiers'],
+            'gravity-water-purifiers': ['gravity-water-purifiers', 'kent-gravity-water-purifiers'],
+            'commercial-water-purifiers': ['commercial-water-purifiers', 'kent-commercial-water-purifiers'],
+            'hydrogen-water-products': ['hydrogen-water-products', 'kent-hydrogen-water-products'],
+            'water-guard': ['water-guard', 'kent-water-guard'],
+            'accessories': ['accessories', 'kent-water-purifier-accessories'],
+        }
+        matching_slugs = slug_aliases.get(category_slug, [category_slug])
+        queryset = queryset.filter(category__slug__in=matching_slugs)
+        selected_category = Category.objects.filter(slug__in=matching_slugs, is_active=True).first()
 
     # Technology filter
     tech_filter = request.GET.get('tech', '').strip()
@@ -304,6 +315,7 @@ def product_preview_json(request, pk):
         'intended_use': product.intended_use or '',
         'warranty_info': product.warranty_info or '',
         'features': feature_list[:5],
+        'is_kent_product': product.is_kent_product,
         'is_out_of_stock': product.is_out_of_stock,
         'is_low_stock': product.is_low_stock,
         'stock_status_display': product.stock_status_display,

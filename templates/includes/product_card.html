@@ -25,6 +25,13 @@
             {% endif %}
         </div>
 
+        {% if product.is_kent_product %}
+            <!-- Brand Stamp for genuine KENT product -->
+            <div class="product-brand-stamp" title="Genuine KENT House of Purity Purifier">
+                {% include 'includes/kent_logo.html' with height="22px" %}
+            </div>
+        {% endif %}
+
         {% if product.display_image_url %}
             <img src="{{ product.display_image_url }}" alt="{{ product.display_image_alt }}" class="product-card-img">
         {% else %}
@@ -53,7 +60,12 @@
 
     <!-- Card Content -->
     <div class="product-card-body">
-        <div class="product-card-cat">{{ product.category.name }}</div>
+        <div class="d-flex align-items-center justify-content-between mb-1">
+            <div class="product-card-cat mb-0">{{ product.category.name }}</div>
+            {% if product.is_kent_product %}
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle small fw-bold" style="font-size: 0.68rem;">KENT</span>
+            {% endif %}
+        </div>
         <h3 class="product-card-title">
             <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
         </h3>

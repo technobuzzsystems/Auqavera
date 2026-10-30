@@ -16,9 +16,14 @@
             </ol>
         </nav>
         <div class="d-flex flex-wrap justify-content-between align-items-center">
-            <div>
-                <h1 class="h2 fw-bold mb-1">Product Comparison</h1>
-                <p class="text-secondary small mb-0">Evaluate up to 3 models side-by-side across key parameters.</p>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-none d-sm-inline-flex">
+                    {% include 'includes/kent_logo.html' with height="50px" %}
+                </div>
+                <div>
+                    <h1 class="h2 fw-bold mb-1">Product Comparison</h1>
+                    <p class="text-secondary small mb-0">Evaluate up to 3 models side-by-side across key parameters.</p>
+                </div>
             </div>
             <div class="d-flex gap-2 mt-2 mt-sm-0">
                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearCompareList(); location.href='{% url 'catalog:product_compare' %}';">
@@ -64,6 +69,12 @@
                                             </div>
                                         {% endif %}
                                     </div>
+                                    {% if p.is_kent_product %}
+                                        <div class="mb-1">
+                                            {% include 'includes/kent_logo.html' with height="20px" %}
+                                        </div>
+                                    {% endif %}
+
                                     <h5 class="fw-bold fs-6 mb-1">{{ p.name }}</h5>
                                     <div class="text-info fw-bold">{{ p.formatted_price }}</div>
                                     <small class="text-muted text-decoration-line-through">{{ p.formatted_original_price }}</small>
@@ -99,6 +110,22 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <th class="text-start bg-light">Brand / Manufacturer</th>
+                            {% for p in products %}
+                                <td>
+                                    {% if p.is_kent_product %}
+                                        <div class="d-inline-flex align-items-center gap-1">
+                                            {% include 'includes/kent_logo.html' with height="18px" %}
+                                            <span class="fw-bold text-dark ms-1">KENT</span>
+                                        </div>
+                                    {% else %}
+                                        <span class="fw-bold text-dark">{{ p.brand|default:"AQUAVERA" }}</span>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                            {% if products|length < 3 %}<td>-</td>{% endif %}
+                        </tr>
                         <tr>
                             <th class="text-start bg-light">Category</th>
                             {% for p in products %}

@@ -117,7 +117,7 @@
                                 <td class="small text-muted">{{ adj.created_at|date:"d M Y, H:i" }}</td>
                                 <td><span class="badge bg-light text-dark border small">{{ adj.get_change_type_display }}</span></td>
                                 <td class="fw-bold {% if adj.quantity_change > 0 %}text-success{% else %}text-danger{% endif %}">
-                                    {{ adj.quantity_change:+d }}
+                                    {% if adj.quantity_change > 0 %}+{{ adj.quantity_change }}{% else %}{{ adj.quantity_change }}{% endif %}
                                 </td>
                                 <td>{{ adj.previous_stock }} &rarr; <strong>{{ adj.new_stock }}</strong></td>
                                 <td class="small">{{ adj.created_by.username|default:"System" }}</td>

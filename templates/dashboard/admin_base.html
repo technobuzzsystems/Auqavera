@@ -15,6 +15,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon.png' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+
     <!-- Admin Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/admin.css' %}">
 
@@ -27,13 +31,11 @@
     <div class="admin-wrapper">
         <!-- Sidebar Navigation -->
         <aside class="admin-sidebar" id="adminSidebar">
-            <a href="{% url 'dashboard:home' %}" class="admin-sidebar-brand">
-                <div class="brand-icon">
-                    <i class="bi bi-droplet-fill"></i>
-                </div>
+            <a href="{% url 'dashboard:home' %}" class="admin-sidebar-brand d-flex align-items-center gap-2 text-decoration-none">
+                {% include 'includes/kent_logo.html' with height="36px" extra_class="admin-brand-kent" %}
                 <div>
-                    <div>AQUAVERA</div>
-                    <span class="brand-sub">Pure Water Admin</span>
+                    <span class="fw-bold text-white small d-block" style="letter-spacing: -0.01em;">Admin Panel</span>
+                    <span class="brand-sub">House of Purity</span>
                 </div>
             </a>
 
@@ -149,7 +151,8 @@
 
                 <div class="admin-topbar-actions">
                     <a href="{% url 'pages:home' %}" target="_blank" class="btn btn-sm btn-outline-secondary d-none d-md-inline-flex align-items-center">
-                        <i class="bi bi-globe2 me-1 text-primary"></i> View Public Site
+                        {% include 'includes/kent_logo.html' with height="18px" extra_class="me-2" %}
+                        View Public Site
                     </a>
 
                     <div class="dropdown">

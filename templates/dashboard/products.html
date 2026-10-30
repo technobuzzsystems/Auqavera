@@ -1,287 +1,347 @@
-{% extends 'dashboard/admin_base.html' %}
-{% load static %}
-
-{% block title %}Products Management{% endblock %}
-{% block page_title %}Water Purifier Catalogue ({{ total_count }}){% endblock %}
-
-{% block breadcrumb %}
-<li><a href="{% url 'dashboard:products' %}" class="text-decoration-none text-muted">Catalogue</a></li>
-<li class="active text-dark fw-medium">Products</li>
-{% endblock %}
-
-{% block admin_content %}
-<div class="container-fluid px-0">
-
-    <!-- Top Action Bar -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-        <div>
-            <h2 class="h5 fw-bold text-dark mb-1">Purifier Inventory & Catalogue</h2>
-            <p class="text-muted small mb-0">Manage water purifier specifications, images, pricing, and publication status.</p>
-        </div>
-        <div class="d-flex gap-2">
-            <a href="{% url 'dashboard:product_create' %}" class="btn btn-admin-primary">
-                <i class="bi bi-plus-lg me-1"></i> Add New Purifier
-            </a>
-            <a href="{% url 'catalog:product_list' %}" target="_blank" class="btn btn-outline-secondary">
-                <i class="bi bi-eye me-1"></i> Public Catalogue
-            </a>
-        </div>
-    </div>
-
-    <!-- Filter & Search Bar -->
-    <div class="admin-filter-bar mb-4">
-        <form method="GET" action="{% url 'dashboard:products' %}" class="row g-2 align-items-center">
-            <!-- Search -->
-            <div class="col-lg-3 col-md-6">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" name="q" value="{{ current_q }}" class="form-control" placeholder="Search name, SKU, tech..." aria-label="Search">
-                </div>
-            </div>
-
-            <!-- Category Filter -->
-            <div class="col-lg-2 col-md-3 col-sm-6">
-                <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
-                    <option value="">All Categories</option>
-                    {% for cat in categories %}
-                        <option value="{{ cat.id }}" {% if current_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Status Filter -->
-            <div class="col-lg-2 col-md-3 col-sm-6">
-                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-                    <option value="">All Statuses</option>
-                    <option value="published" {% if current_status == 'published' %}selected{% endif %}>Published Only</option>
-                    <option value="draft" {% if current_status == 'draft' %}selected{% endif %}>Draft Only</option>
-                    <option value="archived" {% if current_status == 'archived' %}selected{% endif %}>Archived Only</option>
-                </select>
-            </div>
-
-            <!-- Stock Filter -->
-            <div class="col-lg-2 col-md-4 col-sm-6">
-                <select name="stock" class="form-select form-select-sm" onchange="this.form.submit()">
-                    <option value="">All Stock Levels</option>
-                    <option value="in" {% if current_stock == 'in' %}selected{% endif %}>In Stock</option>
-                    <option value="low" {% if current_stock == 'low' %}selected{% endif %}>Low Stock</option>
-                    <option value="out" {% if current_stock == 'out' %}selected{% endif %}>Out of Stock</option>
-                </select>
-            </div>
-
-            <!-- Sort -->
-            <div class="col-lg-2 col-md-4 col-sm-6">
-                <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()">
-                    <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest First</option>
-                    <option value="oldest" {% if current_sort == 'oldest' %}selected{% endif %}>Oldest First</option>
-                    <option value="name_asc" {% if current_sort == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
-                    <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                    <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-                    <option value="stock_asc" {% if current_sort == 'stock_asc' %}selected{% endif %}>Stock: Lowest First</option>
-                </select>
-            </div>
-
-            <div class="col-lg-1 col-md-4 d-grid">
-                <button type="submit" class="btn btn-sm btn-outline-primary">Filter</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- Products Table Card -->
-    <div class="admin-card">
-        <div class="table-responsive">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th style="width: 70px;">Image</th>
-                        <th>Product Details</th>
-                        <th>Category</th>
-                        <th>Selling Price</th>
-                        <th>Stock Status</th>
-                        <th>Catalogue Status</th>
-                        <th class="text-end" style="width: 140px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in products %}
-                    <tr>
-                        <!-- Thumbnail -->
-                        <td>
-                            <div style="width: 56px; height: 56px; border-radius: 8px; overflow: hidden; background: #F8FAFC; display: flex; align-items: center; justify-content: center; border: 1px solid #E2E8F0; flex-shrink: 0;">
-                                {% if product.display_image_url %}
-                                    <img src="{{ product.display_image_url }}" alt="{{ product.display_image_alt }}" style="width: 100%; height: 100%; object-fit: cover;">
-                                {% else %}
-                                    <i class="bi bi-water text-primary" style="font-size: 1.4rem;"></i>
-                                {% endif %}
-                            </div>
-                        </td>
-
-                        <!-- Name & SKU -->
-                        <td>
-                            <div class="fw-bold text-dark">
-                                <a href="{% url 'dashboard:product_detail' product.pk %}" class="text-decoration-none text-dark hover-teal">
-                                    {{ product.name }}
-                                </a>
-                                {% if product.is_featured %}
-                                    <span class="badge bg-warning text-dark small ms-1"><i class="bi bi-star-fill"></i> Featured</span>
-                                {% endif %}
-                            </div>
-                            <div class="small text-muted">
-                                <span class="font-monospace text-secondary">SKU: {{ product.sku|default:"-" }}</span>
-                                <span class="mx-1">•</span>
-                                <span>{{ product.technology|truncatechars:28 }}</span>
-                            </div>
-                        </td>
-
-                        <!-- Category -->
-                        <td>
-                            <span class="badge bg-light text-dark border">{{ product.category.name }}</span>
-                        </td>
-
-                        <!-- Price -->
-                        <td>
-                            <div class="fw-bold">{{ product.formatted_price }}</div>
-                            {% if product.original_price %}
-                                <div class="text-muted small text-decoration-line-through">{{ product.formatted_original_price }}</div>
-                            {% endif %}
-                        </td>
-
-                        <!-- Stock -->
-                        <td>
-                            <span class="{{ product.stock_badge_class }}">
-                                {% if product.stock_quantity == 0 %}
-                                    <i class="bi bi-x-circle me-1"></i> Out of Stock
-                                {% elif product.stock_quantity <= product.low_stock_threshold %}
-                                    <i class="bi bi-exclamation-triangle me-1"></i> Low ({{ product.stock_quantity }})
-                                {% else %}
-                                    <i class="bi bi-check-circle me-1"></i> In Stock ({{ product.stock_quantity }})
-                                {% endif %}
-                            </span>
-                        </td>
-
-                        <!-- Status -->
-                        <td>
-                            {% if product.status == 'published' %}
-                                <span class="badge-status badge-published"><i class="bi bi-check-circle-fill"></i> Live</span>
-                            {% elif product.status == 'draft' %}
-                                <span class="badge-status badge-draft"><i class="bi bi-clock-fill"></i> Draft</span>
-                            {% else %}
-                                <span class="badge-status badge-archived"><i class="bi bi-archive-fill"></i> Archived</span>
-                            {% endif %}
-                        </td>
-
-                        <!-- Actions -->
-                        <td class="text-end">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Options
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                    <li>
-                                        <a class="dropdown-item small" href="{% url 'dashboard:product_detail' product.pk %}">
-                                            <i class="bi bi-card-heading me-2 text-info"></i> View Details
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item small" href="{% url 'dashboard:product_edit' product.pk %}">
-                                            <i class="bi bi-pencil-square me-2 text-primary"></i> Edit Product
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item small" href="{% url 'dashboard:product_images' product.pk %}">
-                                            <i class="bi bi-images me-2 text-teal"></i> Manage Images ({{ product.images.count }})
-                                        </a>
-                                    </li>
-                                    {% if product.is_active %}
-                                    <li>
-                                        <a class="dropdown-item small" href="{{ product.get_absolute_url }}" target="_blank">
-                                            <i class="bi bi-box-arrow-up-right me-2 text-secondary"></i> View on Live Site
-                                        </a>
-                                    </li>
-                                    {% endif %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form method="POST" action="{% url 'dashboard:product_toggle_featured' product.pk %}" class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" class="dropdown-item small">
-                                                {% if product.is_featured %}
-                                                    <i class="bi bi-star me-2 text-warning"></i> Remove from Homepage
-                                                {% else %}
-                                                    <i class="bi bi-star-fill me-2 text-warning"></i> Feature on Homepage
-                                                {% endif %}
-                                            </button>
-                                        </form>
-                                    </li>
-                                    <li>
-                                        <form method="POST" action="{% url 'dashboard:product_toggle_status' product.pk %}" class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" class="dropdown-item small text-warning">
-                                                {% if product.status == 'published' %}
-                                                    <i class="bi bi-pause-circle me-2"></i> Unpublish (Set Draft)
-                                                {% else %}
-                                                    <i class="bi bi-play-circle me-2"></i> Publish to Website
-                                                {% endif %}
-                                            </button>
-                                        </form>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item small text-danger" href="{% url 'dashboard:product_delete' product.pk %}">
-                                            <i class="bi bi-trash3 me-2"></i> Archive / Delete
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">
-                            <i class="bi bi-inbox" style="font-size: 2.5rem; color: #CBD5E1;"></i>
-                            <p class="mt-2 mb-0 fw-medium">No water purifiers matched your search/filter criteria.</p>
-                            <a href="{% url 'dashboard:products' %}" class="btn btn-sm btn-outline-secondary mt-3">Reset Filters</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        {% if page_obj.has_other_pages %}
-        <div class="admin-card-footer">
-            <span class="small text-muted">
-                Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} purifiers
-            </span>
-            <nav aria-label="Product pagination">
-                <ul class="pagination pagination-sm mb-0">
-                    {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ current_q }}&category={{ current_category }}&status={{ current_status }}&stock={{ current_stock }}&sort={{ current_sort }}">&laquo; Prev</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">&laquo; Prev</span></li>
-                    {% endif %}
-
-                    {% for num in page_obj.paginator.page_range %}
-                        {% if page_obj.number == num %}
-                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                            <li class="page-item"><a class="page-link" href="?page={{ num }}&q={{ current_q }}&category={{ current_category }}&status={{ current_status }}&stock={{ current_stock }}&sort={{ current_sort }}">{{ num }}</a></li>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ current_q }}&category={{ current_category }}&status={{ current_status }}&stock={{ current_stock }}&sort={{ current_sort }}">Next &raquo;</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-        {% endif %}
-    </div>
-
-</div>
-{% endblock %}
+{% extends 'dashboard/admin_base.html' %}
+{% load static %}
+
+{% block title %}Products Management{% endblock %}
+{% block page_title %}Water Purifier Catalogue ({{ total_count }}){% endblock %}
+
+{% block breadcrumb %}
+<li><a href="{% url 'dashboard:products' %}" class="text-decoration-none text-muted">Catalogue</a></li>
+<li class="active text-dark fw-medium">Products</li>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid px-0">
+
+    <!-- Top Action Bar -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="h5 fw-bold text-dark mb-1">Purifier Inventory & Catalogue</h2>
+            <p class="text-muted small mb-0">Manage water purifier specifications, images, pricing, and publication status.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'dashboard:product_create' %}" class="btn btn-admin-primary">
+                <i class="bi bi-plus-lg me-1"></i> Add New Purifier
+            </a>
+            <a href="{% url 'catalog:product_list' %}" target="_blank" class="btn btn-outline-secondary">
+                <i class="bi bi-eye me-1"></i> Public Catalogue
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter & Search Bar -->
+    <div class="admin-filter-bar mb-4">
+        <form method="GET" action="{% url 'dashboard:products' %}" class="row g-2 align-items-center">
+            <!-- Search -->
+            <div class="col-lg-3 col-md-6">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="q" value="{{ current_q }}" class="form-control" placeholder="Search name, SKU, tech..." aria-label="Search">
+                </div>
+            </div>
+
+            <!-- Brand Filter -->
+            <div class="col-lg-2 col-md-3 col-sm-6">
+                <select name="brand" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">All Brands</option>
+                    {% for b in brands %}
+                        <option value="{{ b }}" {% if current_brand == b %}selected{% endif %}>{{ b }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="col-lg-2 col-md-3 col-sm-6">
+                <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if current_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="col-lg-2 col-md-3 col-sm-6">
+                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">All Statuses</option>
+                    <option value="published" {% if current_status == 'published' %}selected{% endif %}>Published Only</option>
+                    <option value="draft" {% if current_status == 'draft' %}selected{% endif %}>Draft Only</option>
+                    <option value="archived" {% if current_status == 'archived' %}selected{% endif %}>Archived Only</option>
+                </select>
+            </div>
+
+            <!-- Stock Filter -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <select name="stock" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">All Stock Levels</option>
+                    <option value="in" {% if current_stock == 'in' %}selected{% endif %}>In Stock</option>
+                    <option value="low" {% if current_stock == 'low' %}selected{% endif %}>Low Stock</option>
+                    <option value="out" {% if current_stock == 'out' %}selected{% endif %}>Out of Stock</option>
+                </select>
+            </div>
+
+            <!-- Sort -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest First</option>
+                    <option value="oldest" {% if current_sort == 'oldest' %}selected{% endif %}>Oldest First</option>
+                    <option value="name_asc" {% if current_sort == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+                    <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                    <option value="stock_asc" {% if current_sort == 'stock_asc' %}selected{% endif %}>Stock: Lowest First</option>
+                </select>
+            </div>
+
+            <div class="col-lg-1 col-md-4 d-grid">
+                <button type="submit" class="btn btn-sm btn-outline-primary">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Quick Brand & Status Action Pills -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <a href="{% url 'dashboard:products' %}" class="btn btn-sm {% if not current_brand and not current_status and not current_stock and not current_category %}btn-primary{% else %}btn-outline-secondary{% endif %} rounded-pill">
+                All Products ({{ total_count }})
+            </a>
+            <a href="{% url 'dashboard:products' %}?brand=KENT" class="btn btn-sm {% if current_brand == 'KENT' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill d-inline-flex align-items-center gap-1">
+                {% include 'includes/kent_logo.html' with height="14px" %}
+                <span>KENT Purifiers ({{ kent_count }})</span>
+            </a>
+            <a href="{% url 'dashboard:products' %}?status=published" class="btn btn-sm {% if current_status == 'published' %}btn-success text-white{% else %}btn-outline-success{% endif %} rounded-pill">
+                <i class="bi bi-check-circle me-1"></i> Live in Catalogue
+            </a>
+            <a href="{% url 'dashboard:products' %}?stock=low" class="btn btn-sm {% if current_stock == 'low' %}btn-warning text-dark{% else %}btn-outline-warning text-dark{% endif %} rounded-pill">
+                <i class="bi bi-exclamation-triangle me-1"></i> Low Stock
+            </a>
+            <a href="{% url 'dashboard:products' %}?stock=out" class="btn btn-sm {% if current_stock == 'out' %}btn-danger text-white{% else %}btn-outline-danger{% endif %} rounded-pill">
+                <i class="bi bi-x-circle me-1"></i> Out of Stock
+            </a>
+        </div>
+        {% if current_brand or current_category or current_status or current_stock or current_q %}
+            <a href="{% url 'dashboard:products' %}" class="btn btn-sm btn-link text-muted text-decoration-none">
+                <i class="bi bi-x-circle me-1"></i> Clear Filters
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Products Table Card -->
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">Image</th>
+                        <th>Product Details</th>
+                        <th>Brand</th>
+                        <th>Category</th>
+                        <th>Selling Price</th>
+                        <th>Stock Status</th>
+                        <th>Catalogue Status</th>
+                        <th class="text-end" style="width: 140px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <!-- Thumbnail -->
+                        <td>
+                            <div class="position-relative" style="width: 56px; height: 56px; border-radius: 8px; overflow: hidden; background: #F8FAFC; display: flex; align-items: center; justify-content: center; border: 1px solid #E2E8F0; flex-shrink: 0;">
+                                {% if product.display_image_url %}
+                                    <img src="{{ product.display_image_url }}" alt="{{ product.display_image_alt }}" style="width: 100%; height: 100%; object-fit: contain; padding: 2px;">
+                                {% else %}
+                                    <i class="bi bi-water text-primary" style="font-size: 1.4rem;"></i>
+                                {% endif %}
+                                {% if product.images.count > 1 %}
+                                    <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white rounded-start px-1" style="font-size: 0.65rem;" title="{{ product.images.count }} photos">
+                                        +{{ product.images.count }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </td>
+
+                        <!-- Name & SKU -->
+                        <td>
+                            <div class="fw-bold text-dark">
+                                <a href="{% url 'dashboard:product_detail' product.pk %}" class="text-decoration-none text-dark hover-teal">
+                                    {{ product.name }}
+                                </a>
+                                {% if product.is_featured %}
+                                    <span class="badge bg-warning text-dark small ms-1"><i class="bi bi-star-fill"></i> Featured</span>
+                                {% endif %}
+                                {% if product.is_kent_product %}
+                                    <span class="ms-1 align-middle" title="KENT House of Purity">
+                                        {% include 'includes/kent_logo.html' with height="14px" %}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <div class="small text-muted">
+                                <span class="font-monospace text-secondary">SKU: {{ product.sku|default:"-" }}</span>
+                                <span class="mx-1">•</span>
+                                <span>{{ product.technology|truncatechars:28 }}</span>
+                            </div>
+                        </td>
+
+                        <!-- Brand -->
+                        <td>
+                            {% if product.is_kent_product %}
+                                <span class="d-inline-flex align-items-center gap-1 badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">
+                                    {% include 'includes/kent_logo.html' with height="14px" %}
+                                    <span class="fw-bold" style="font-size: 0.72rem;">KENT</span>
+                                </span>
+                            {% else %}
+                                <span class="badge bg-light text-secondary border">{{ product.brand|default:"AQUAVERA" }}</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Category -->
+                        <td>
+                            <span class="badge bg-light text-dark border">{{ product.category.name }}</span>
+                        </td>
+
+                        <!-- Price -->
+                        <td>
+                            <div class="fw-bold">{{ product.formatted_price }}</div>
+                            {% if product.original_price %}
+                                <div class="text-muted small text-decoration-line-through">{{ product.formatted_original_price }}</div>
+                            {% endif %}
+                        </td>
+
+                        <!-- Stock -->
+                        <td>
+                            <span class="{{ product.stock_badge_class }}">
+                                {% if product.stock_quantity == 0 %}
+                                    <i class="bi bi-x-circle me-1"></i> Out of Stock
+                                {% elif product.stock_quantity <= product.low_stock_threshold %}
+                                    <i class="bi bi-exclamation-triangle me-1"></i> Low ({{ product.stock_quantity }})
+                                {% else %}
+                                    <i class="bi bi-check-circle me-1"></i> In Stock ({{ product.stock_quantity }})
+                                {% endif %}
+                            </span>
+                        </td>
+
+                        <!-- Status -->
+                        <td>
+                            {% if product.status == 'published' %}
+                                <span class="badge-status badge-published"><i class="bi bi-check-circle-fill"></i> Live</span>
+                            {% elif product.status == 'draft' %}
+                                <span class="badge-status badge-draft"><i class="bi bi-clock-fill"></i> Draft</span>
+                            {% else %}
+                                <span class="badge-status badge-archived"><i class="bi bi-archive-fill"></i> Archived</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-end">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Options
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li>
+                                        <a class="dropdown-item small" href="{% url 'dashboard:product_detail' product.pk %}">
+                                            <i class="bi bi-card-heading me-2 text-info"></i> View Details
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item small" href="{% url 'dashboard:product_edit' product.pk %}">
+                                            <i class="bi bi-pencil-square me-2 text-primary"></i> Edit Product
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item small" href="{% url 'dashboard:product_images' product.pk %}">
+                                            <i class="bi bi-images me-2 text-teal"></i> Manage Images ({{ product.images.count }})
+                                        </a>
+                                    </li>
+                                    {% if product.is_active %}
+                                    <li>
+                                        <a class="dropdown-item small" href="{{ product.get_absolute_url }}" target="_blank">
+                                            <i class="bi bi-box-arrow-up-right me-2 text-secondary"></i> View on Live Site
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form method="POST" action="{% url 'dashboard:product_toggle_featured' product.pk %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-item small">
+                                                {% if product.is_featured %}
+                                                    <i class="bi bi-star me-2 text-warning"></i> Remove from Homepage
+                                                {% else %}
+                                                    <i class="bi bi-star-fill me-2 text-warning"></i> Feature on Homepage
+                                                {% endif %}
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form method="POST" action="{% url 'dashboard:product_toggle_status' product.pk %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-item small text-warning">
+                                                {% if product.status == 'published' %}
+                                                    <i class="bi bi-pause-circle me-2"></i> Unpublish (Set Draft)
+                                                {% else %}
+                                                    <i class="bi bi-play-circle me-2"></i> Publish to Website
+                                                {% endif %}
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item small text-danger" href="{% url 'dashboard:product_delete' product.pk %}">
+                                            <i class="bi bi-trash3 me-2"></i> Archive / Delete
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox" style="font-size: 2.5rem; color: #CBD5E1;"></i>
+                            <p class="mt-2 mb-0 fw-medium">No water purifiers matched your search/filter criteria.</p>
+                            <a href="{% url 'dashboard:products' %}" class="btn btn-sm btn-outline-secondary mt-3">Reset Filters</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="admin-card-footer">
+            <span class="small text-muted">
+                Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} purifiers
+            </span>
+            <nav aria-label="Product pagination">
+                <ul class="pagination pagination-sm mb-0">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ current_q }}&brand={{ current_brand }}&category={{ current_category }}&status={{ current_status }}&stock={{ current_stock }}&sort={{ current_sort }}">&laquo; Prev</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&laquo; Prev</span></li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}&q={{ current_q }}&brand={{ current_brand }}&category={{ current_category }}&status={{ current_status }}&stock={{ current_stock }}&sort={{ current_sort }}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ current_q }}&brand={{ current_brand }}&category={{ current_category }}&status={{ current_status }}&stock={{ current_stock }}&sort={{ current_sort }}">Next &raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

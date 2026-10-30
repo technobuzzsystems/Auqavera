@@ -1,0 +1,6 @@
+{% load static %}
+<img src="{% static 'images/kent-logo.png' %}" 
+     alt="{{ alt|default:'KENT — House of Purity' }}" 
+     class="kent-logo-img {{ extra_class|default:'' }}" 
+     style="height: {{ height|default:'60px' }}; width: auto; max-width: 100%; object-fit: contain; display: inline-block; vertical-align: middle;"
+     {% if not lazy %}loading="eager"{% else %}loading="lazy"{% endif %}>
