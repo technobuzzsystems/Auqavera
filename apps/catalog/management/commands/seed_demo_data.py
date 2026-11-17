@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from apps.accounts.models import CustomUser
-from apps.catalog.models import Category, Product
+from apps.catalog.models import Category, Product, ProductImage
 from apps.content.models import Testimonial, FAQ, SiteSetting
 from apps.enquiries.models import ProductEnquiry
 from apps.services.models import ServiceRequest
@@ -324,12 +324,50 @@ class Command(BaseCommand):
             },
         ]
 
+        image_mapping = {
+            "aquavera-crystal-optima-ro": "products/gallery/AQUAVERA_Premium_Water_Purifier.png",
+            "aquavera-pureflow-smart-ro": "products/gallery/AQUAVERA_Smart_Water_Purifier.png",
+            "aquavera-hydroshield-compact-ro": "products/gallery/AQUAVERA_Advanced_Water_Purifier.png",
+            "aquavera-lumina-uv-active": "products/gallery/Aquavera_Pure_Water_Purifier_System.png",
+            "aquavera-rayguard-uv-express": "products/gallery/Aqua_Grand_Plus.webp",
+            "aquavera-ultrapure-flow-uf": "products/gallery/AQUAVERA_Advanced_Water_Purifier.png",
+            "aquavera-clearstream-ultra-uf": "products/gallery/AQUAVERA_Premium_Water_Purifier.png",
+            "aquavera-terragravity-natura": "products/gallery/Aquavera_Pure_Water_Purifier_System.png",
+            "aquavera-titan-commercial-50-lph": "products/gallery/Aqua_Grand_Plus.webp",
+            "aquavera-enterprise-pro-100-lph": "products/gallery/AQUAVERA_Smart_Water_Purifier.png",
+        }
+        gallery_extras = [
+            "products/gallery/angle_front.jpg",
+            "products/gallery/side_view.jpg",
+            "products/gallery/filter_view.jpg",
+        ]
+
         for p in products_data:
-            Product.objects.update_or_create(
+            img_path = image_mapping.get(p['slug'], "products/gallery/AQUAVERA_Premium_Water_Purifier.png")
+            prod_defaults = dict(p)
+            prod_defaults['image'] = img_path
+            prod_obj, _ = Product.objects.update_or_create(
                 slug=p['slug'],
-                defaults=p
+                defaults=prod_defaults
             )
-        self.stdout.write(self.style.SUCCESS(f"[OK] {len(products_data)} Water Purifiers seeded."))
+            if not prod_obj.images.exists():
+                ProductImage.objects.create(
+                    product=prod_obj,
+                    image=img_path,
+                    alt_text=f"{prod_obj.name} - Front View",
+                    is_primary=True,
+                    display_order=1
+                )
+                for idx, extra in enumerate(gallery_extras, start=2):
+                    ProductImage.objects.create(
+                        product=prod_obj,
+                        image=extra,
+                        alt_text=f"{prod_obj.name} - View {idx}",
+                        is_primary=False,
+                        display_order=idx
+                    )
+        self.stdout.write(self.style.SUCCESS(f"[OK] {len(products_data)} Water Purifiers seeded with gallery images."))
+
 
         # 4. Clearly Marked Demo Testimonials
         testimonials_data = [
