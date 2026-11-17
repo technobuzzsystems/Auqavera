@@ -37,17 +37,29 @@ def product_list(request):
     selected_category = None
     if category_slug:
         slug_aliases = {
-            'ro-water-purifiers': ['ro-water-purifiers', 'kent-ro-water-purifiers'],
-            'uv-water-purifiers': ['uv-water-purifiers', 'kent-uv-water-purifiers'],
-            'uf-water-purifiers': ['uf-water-purifiers', 'gravity-water-purifiers', 'kent-gravity-water-purifiers'],
-            'gravity-water-purifiers': ['gravity-water-purifiers', 'kent-gravity-water-purifiers'],
-            'commercial-water-purifiers': ['commercial-water-purifiers', 'kent-commercial-water-purifiers'],
-            'hydrogen-water-products': ['hydrogen-water-products', 'kent-hydrogen-water-products'],
-            'water-guard': ['water-guard', 'kent-water-guard'],
-            'accessories': ['accessories', 'kent-water-purifier-accessories'],
+            'water-purifiers': ['water-purifiers', 'ro-water-purifiers', 'kent-ro-water-purifiers', 'uv-water-purifiers', 'kent-uv-water-purifiers', 'gravity-water-purifiers', 'kent-gravity-water-purifiers', 'commercial-water-purifiers', 'kent-commercial-water-purifiers', 'kent-hydrogen-water-products', 'kent-water-guard', 'kent-water-purifier-accessories'],
+            'ro-water-purifiers': ['water-purifiers', 'ro-water-purifiers', 'kent-ro-water-purifiers'],
+            'uv-water-purifiers': ['water-purifiers', 'uv-water-purifiers', 'kent-uv-water-purifiers'],
+            'uf-water-purifiers': ['water-purifiers', 'uf-water-purifiers', 'gravity-water-purifiers', 'kent-gravity-water-purifiers'],
+            'gravity-water-purifiers': ['water-purifiers', 'gravity-water-purifiers', 'kent-gravity-water-purifiers'],
+            'commercial-water-purifiers': ['water-purifiers', 'commercial-water-purifiers', 'kent-commercial-water-purifiers'],
+            'water-softeners': ['water-softeners', 'kent-water-guard'],
+            'chimneys': ['chimneys'],
+            'gas-stoves': ['gas-stoves'],
+            'kitchen-appliances': ['kitchen-appliances'],
+            'home-appliances': ['home-appliances'],
+            'new-energy': ['new-energy'],
         }
         matching_slugs = slug_aliases.get(category_slug, [category_slug])
         queryset = queryset.filter(category__slug__in=matching_slugs)
+        if category_slug == 'ro-water-purifiers':
+            queryset = queryset.filter(technology__icontains='RO')
+        elif category_slug == 'uv-water-purifiers':
+            queryset = queryset.filter(technology__icontains='UV')
+        elif category_slug == 'gravity-water-purifiers':
+            queryset = queryset.filter(technology__icontains='Gravity')
+        elif category_slug == 'commercial-water-purifiers':
+            queryset = queryset.filter(technology__icontains='Commercial')
         selected_category = Category.objects.filter(slug__in=matching_slugs, is_active=True).first()
 
     # Technology filter
@@ -85,8 +97,8 @@ def product_list(request):
 
     total_count = queryset.count()
 
-    # Pagination: 6 products per page
-    paginator = Paginator(queryset, 6)
+    # Pagination: 12 products per page
+    paginator = Paginator(queryset, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

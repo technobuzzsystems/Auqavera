@@ -1386,3 +1386,84 @@ a:hover {
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   OFFICIAL KENT 7-CATEGORY SUB-NAV BAR (Matching kent.co.in)
+   ========================================================================== */
+.kent-category-subnav {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  position: relative;
+  z-index: 1020;
+}
+.kent-subnav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.kent-subnav-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.kent-subnav-scroll::-webkit-scrollbar {
+  display: none;
+}
+.kent-subnav-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 2.2rem;
+  white-space: nowrap;
+}
+.kent-subnav-item {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+.kent-subnav-link {
+  display: inline-block;
+  padding: 0.85rem 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #4A5568;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+  line-height: 1.4;
+}
+.kent-subnav-link:hover {
+  color: #0C2340;
+}
+.kent-subnav-link.active,
+.kent-subnav-link.active:hover {
+  color: #0C2340;
+  font-weight: 600;
+}
+.kent-subnav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2.5px;
+  background-color: #1A365D;
+  border-radius: 2px 2px 0 0;
+}
+@media (max-width: 767.98px) {
+  .kent-subnav-container {
+    padding: 0 1rem;
+  }
+  .kent-subnav-list {
+    gap: 1.5rem;
+  }
+  .kent-subnav-link {
+    font-size: 0.88rem;
+    padding: 0.75rem 0;
+  }
+}
+

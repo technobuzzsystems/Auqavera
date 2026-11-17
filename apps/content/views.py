@@ -23,7 +23,7 @@ def home_view(request):
         status='published',
         is_active=True,
         is_featured=True
-    ).select_related('category').prefetch_related('images').order_by('-updated_at')[:6]
+    ).select_related('category').prefetch_related('images').order_by('-updated_at')[:12]
     
     categories = Category.objects.filter(is_active=True).order_by('sort_order')
     testimonials = Testimonial.objects.filter(is_active=True)[:3]

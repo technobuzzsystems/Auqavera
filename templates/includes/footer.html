@@ -1,83 +1,80 @@
-{% load static %}
-<footer class="aquavera-footer">
-    <div class="container">
-        <div class="row g-4 mb-4">
-            <!-- Brand Column -->
-            <div class="col-lg-4 col-md-6">
-                <div class="brand-logo-container mb-3">
-                    <a href="{% url 'pages:home' %}" class="d-inline-block text-decoration-none" title="KENT — House of Purity">
-                        {% include 'includes/kent_logo.html' with height="58px" extra_class="footer-brand-kent" %}
-                    </a>
-                </div>
-                <p class="text-secondary small pe-lg-4">
-                    {{ site_settings.tagline|default:"Pure Water. Thoughtfully Designed." }}
-                </p>
-                <p class="text-secondary small">
-                    Water purification solutions designed for everyday homes and workplaces, combining advanced multi-stage filtration, essential mineral balancing, and responsive customer care.
-                </p>
-                
-            </div>
-
-            <!-- Quick Links -->
-            <div class="col-lg-2 col-md-6 col-6">
-                <h5>Categories</h5>
-                <ul class="list-unstyled d-flex flex-column gap-2 small">
-                    <li><a href="{% url 'catalog:product_list' %}?category=ro-water-purifiers">RO Purifiers</a></li>
-                    <li><a href="{% url 'catalog:product_list' %}?category=uv-water-purifiers">UV Purifiers</a></li>
-                    <li><a href="{% url 'catalog:product_list' %}?category=uf-water-purifiers">UF Purifiers</a></li>
-                    <li><a href="{% url 'catalog:product_list' %}?category=gravity-water-purifiers">Gravity Purifiers</a></li>
-                    <li><a href="{% url 'catalog:product_list' %}?category=commercial-water-purifiers">Commercial RO</a></li>
-                    <li><a href="{% url 'catalog:product_list' %}?brand=KENT" class="fw-semibold text-info"><i class="bi bi-check-circle-fill text-info me-1"></i> KENT Purifiers</a></li>
-                </ul>
-            </div>
-
-            <!-- Customer Care -->
-            <div class="col-lg-2 col-md-6 col-6">
-                <h5>Support</h5>
-                <ul class="list-unstyled d-flex flex-column gap-2 small">
-                    <li><a href="{% url 'services:service_request_form' %}">Book Service</a></li>
-                    <li><a href="{% url 'catalog:product_finder' %}">Product Finder</a></li>
-                    <li><a href="{% url 'catalog:product_compare' %}">Compare Models</a></li>
-                    <li><a href="{% url 'pages:about' %}">About AQUAVERA</a></li>
-                    <li><a href="{% url 'pages:contact' %}">Contact Care</a></li>
-                </ul>
-            </div>
-
-            <!-- Newsletter & Inquiries -->
-            <div class="col-lg-4 col-md-6">
-                <h5>Stay Hydrated with Knowledge</h5>
-                <p class="small text-secondary">Subscribe for seasonal water testing advice and purifier maintenance tips.</p>
-                
-                <form action="{% url 'pages:newsletter_subscribe' %}" method="POST" class="mb-3">
-                    {% csrf_token %}
-                    <input type="text" name="honeypot" style="display:none;" tabindex="-1" autocomplete="off">
-                    <div class="input-group">
-                        <input type="email" name="email" class="form-control" placeholder="Enter your email" required aria-label="Newsletter email">
-                        <button class="btn btn-aquavera" type="submit">Subscribe</button>
-                    </div>
-                </form>
-
-                <div class="mt-3 small text-secondary">
-                    <div><i class="bi bi-telephone-fill text-info me-2"></i> {{ site_settings.support_phone|default:"+91 1800 200 4567" }}</div>
-                    <div><i class="bi bi-envelope-fill text-info me-2"></i> {{ site_settings.support_email|default:"support@aquavera.com" }}</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer Bottom -->
-        <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center text-secondary">
-            <div>
-                &copy; 2026 {{ site_settings.website_name|default:"AQUAVERA" }}. All rights reserved.
-            </div>
-            <div class="d-flex gap-3 mt-2 mt-md-0">
-                <a href="{% url 'pages:about' %}">About Us</a>
-                <span>•</span>
-                <a href="{% url 'pages:contact' %}">Support & Inquiries</a>
-                <span>•</span>
-                <a href="{% url 'pages:contact' %}">Terms & Privacy</a>
-                <span>•</span>
-                <a href="{% url 'dashboard:login' %}" class="text-secondary"><i class="bi bi-shield-lock me-1"></i> Admin Portal</a>
-            </div>
-        </div>
-    </div>
-</footer>
+{% load static %}
+<footer class="aquavera-footer">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <!-- Brand Column -->
+            <div class="col-lg-4 col-md-6">
+                <div class="brand-logo-container mb-3">
+                    <a href="{% url 'pages:home' %}" class="d-inline-block text-decoration-none" title="KENT — House of Purity">
+                        {% include 'includes/kent_logo.html' with height="58px" extra_class="footer-brand-kent" %}
+                    </a>
+                </div>
+                <p class="text-secondary small pe-lg-4">
+                    {{ site_settings.tagline|default:"Pure Water. Thoughtfully Designed." }}
+                </p>
+                <p class="text-secondary small">
+                    Water purification solutions designed for everyday homes and workplaces, combining advanced multi-stage filtration, essential mineral balancing, and responsive customer care.
+                </p>
+                
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6 col-6">
+                <h5>Categories</h5>
+                <ul class="list-unstyled d-flex flex-column gap-2 small">
+                    {% for cat in nav_categories %}
+                        <li><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Customer Care -->
+            <div class="col-lg-2 col-md-6 col-6">
+                <h5>Support</h5>
+                <ul class="list-unstyled d-flex flex-column gap-2 small">
+                    <li><a href="{% url 'services:service_request_form' %}">Book Service</a></li>
+                    <li><a href="{% url 'catalog:product_finder' %}">Product Finder</a></li>
+                    <li><a href="{% url 'catalog:product_compare' %}">Compare Models</a></li>
+                    <li><a href="{% url 'pages:about' %}">About AQUAVERA</a></li>
+                    <li><a href="{% url 'pages:contact' %}">Contact Care</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter & Inquiries -->
+            <div class="col-lg-4 col-md-6">
+                <h5>Stay Hydrated with Knowledge</h5>
+                <p class="small text-secondary">Subscribe for seasonal water testing advice and purifier maintenance tips.</p>
+                
+                <form action="{% url 'pages:newsletter_subscribe' %}" method="POST" class="mb-3">
+                    {% csrf_token %}
+                    <input type="text" name="honeypot" style="display:none;" tabindex="-1" autocomplete="off">
+                    <div class="input-group">
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email" required aria-label="Newsletter email">
+                        <button class="btn btn-aquavera" type="submit">Subscribe</button>
+                    </div>
+                </form>
+
+                <div class="mt-3 small text-secondary">
+                    <div><i class="bi bi-telephone-fill text-info me-2"></i> {{ site_settings.support_phone|default:"+91 1800 200 4567" }}</div>
+                    <div><i class="bi bi-envelope-fill text-info me-2"></i> {{ site_settings.support_email|default:"support@aquavera.com" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center text-secondary">
+            <div>
+                &copy; 2026 {{ site_settings.website_name|default:"AQUAVERA" }}. All rights reserved.
+            </div>
+            <div class="d-flex gap-3 mt-2 mt-md-0">
+                <a href="{% url 'pages:about' %}">About Us</a>
+                <span>•</span>
+                <a href="{% url 'pages:contact' %}">Support & Inquiries</a>
+                <span>•</span>
+                <a href="{% url 'pages:contact' %}">Terms & Privacy</a>
+                <span>•</span>
+                <a href="{% url 'dashboard:login' %}" class="text-secondary"><i class="bi bi-shield-lock me-1"></i> Admin Portal</a>
+            </div>
+        </div>
+    </div>
+</footer>
